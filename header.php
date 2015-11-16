@@ -25,7 +25,6 @@
 	<?php } ?>
 	
 	<!-- links -->
-	<link rel="shortcut icon" href="<?php echo THEME_DIR; ?>/favicon.ico" />
 	<link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS2 Feed" href="<?php bloginfo('rss2_url'); ?>" />
 	<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 	<meta name="google-site-verification" content="YZf8f0PRHZfL62L9Ja-_Nx_G7T4tv2j6JxIjRqyvTR0" />
