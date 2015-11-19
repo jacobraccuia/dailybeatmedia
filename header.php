@@ -75,7 +75,14 @@
 
 				<div class="navbar-header">
 					<div id="veggie" class="toggle-menu menu-left push-body">
-						<i class="veggieburger"></i>
+						<div class="veggieburger">	
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
 					</div>
 					<a class="navbar-brand" href="<?php echo home_url(); ?>">
 						<img src="<?php echo THEME_DIR; ?>/images/svg/db_logo.svg" />
@@ -114,15 +121,43 @@
 </div>
 
 <nav id="cabinet" class="cbp-spmenu-left">
-	<h2><span>Channels</span></h2>
-	<ul class="sites">
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-	</ul>
-	<h2><span>Corporate</span</h2>
+	<div class="spacer"></div>
+	<?php
 
-</nav>
-<div class="cabinet-overlay"></div>
+	$channels = array(
+		'1' => array('beatmersive', 'Beatmersive', 'http://beatmersive.com'),
+		'3' => array('headliners', 'Headliners Tribune', 'http://dailybeatmedia.com'),
+		'2' => array('fnt', 'Fresh New Tracks', 'http://freshnewtracks.com'),
+		'4' => array('rr', 'Raver Rafting', 'http://raverrafting.daily-beat.com'),
+		'5' => array('trc', 'Toronto Rave Community', 'http://trc.daily-beat.com'),
+		);		
+
+	$corporate = array(
+		'1' => array('dbm', 'Daily Beat Media', 'http://dailybeatmedia.com')
+		);
+
+		?>	
+
+		<h2><span>Channels</span></h2>
+		<ul class="sites">
+			<?php foreach($channels as $key => $logo) {
+				echo '<li><a href="' . $logo[2] .'" title="' . $logo[1] . '">';
+				echo '<span class="svg svg-icon svg-' . $logo[0] . '-icon"></span><span class="svg svg-logo svg-' . $logo[0] . '-grey"></span>';		
+				echo '</a></li>';
+				echo '<li class="divider"></li>';
+			}
+			?>
+		</ul>
+
+		<h2><span>Corporate</span></h2>
+		<ul class="sites">
+			<?php foreach($corporate as $key => $logo) {
+				echo '<li><a href="' . $logo[2] .'" title="' . $logo[1] . '">';
+				echo '<span class="svg svg-icon svg-' . $logo[0] . '-icon"></span><span class="svg svg-logo svg-' . $logo[0] . '-grey"></span>';		
+				echo '</a></li>';
+				echo '<li class="divider"></li>';
+			}
+			?>
+		</ul>
+	</nav>
+	<div class="cabinet-overlay"></div>
