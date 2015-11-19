@@ -98,15 +98,15 @@ input {}
 .push-body-toright { left:200px; }
 
 #cabinet.menu-open { left:0px; }
-#cabinet { background:#2b2b2b; position:fixed; width:200px; height:100%; top:0; z-index:1000; overflow-y:scroll; left:-200px; background-image:-webkit-linear-gradient(top, #2b2b2b, #000000); background-image:linear-gradient(to bottom, #2b2b2b, #000000); }
+#cabinet { background:#2b2b2b; position:fixed; width:200px; height:100%; top:0; z-index:1000; overflow-y:scroll; left:-200px; background-image:-webkit-linear-gradient(top, #2b2b2b, #000000); background-image:linear-gradient(to bottom, #2b2b2b, #000000); padding-top:48px; }
 
-#cabinet h2 { height:25px; width:100%; background:black; background-image:-webkit-linear-gradient(left, #2b2b2b, #000000); background-image:linear-gradient(to right, #2b2b2b, #000000); line-height:25px; padding:2px 0px; }
-#cabinet h2 span { text-transform:uppercase; font-size:15px; font-weight:400; color:#5784E0; line-height:20px;
-  background: -webkit-linear-gradient(left, #00E2CF, #5784E0 70%);
-  background: linear-gradient(to right, #00E2CF, #5784E0 70%);
+#cabinet h2 { width:100%; background:black; background-image:-webkit-linear-gradient(left, #2b2b2b, #000000); background-image:linear-gradient(to right, #2b2b2b, #000000); line-height:30px; height:30px; padding:0px 0px 0px 7px; }
+#cabinet h2 span { text-transform:uppercase; font-size:15px; font-weight:400; color:#00E2CF; line-height:20px;
+  background: -webkit-gradient(linear, 0 0, 100% 100%, from(#00E2CF), to(#5784E0));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
+
 
 #cabinet ul.sites { list-style-type:none; }
 #cabinet ul.sites li { height:45px; width:100%; }
