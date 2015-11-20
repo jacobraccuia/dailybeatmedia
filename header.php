@@ -74,7 +74,7 @@
 				<div class="nav-border"></div>
 
 				<div class="navbar-header">
-					<div id="veggie" class="toggle-menu menu-left push-body">
+					<div id="veggie" class="toggle-menu menu-left push">
 						<div class="veggieburger">	
 							<span></span>
 							<span></span>

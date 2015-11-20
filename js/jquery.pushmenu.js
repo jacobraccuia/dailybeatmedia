@@ -10,15 +10,13 @@
     $.fn.jPushMenu = function(customOptions) {
         var o = $.extend({}, $.fn.jPushMenu.defaultOptions, customOptions);
 
-        $('body').addClass(o.pushBodyClass);
-
         // Add class to toggler
         $(this).addClass('jPushMenuBtn');
 
         $(this).click(function(e) {
             e.stopPropagation();
 
-            $('html, body').addClass('no-scroll');
+         //   $('html, body').addClass('no-scroll');
 
             var target     = '',
             push_direction = '';
@@ -28,26 +26,15 @@
                 target         = '.cbp-spmenu-left';
                 push_direction = 'toright';
             }
-            else if ($(this).is('.' + o.showRightClass)) {
-                target         = '.cbp-spmenu-right';
-                push_direction = 'toleft';
-            }
-            else if ($(this).is('.' + o.showTopClass)) {
-                target = '.cbp-spmenu-top';
-            }
-            else if ($(this).is('.' + o.showBottomClass)) {
-                target = '.cbp-spmenu-bottom';
-            }
 
-            if (target == '') {
-                return;
-            }
+            if (target == '') { return; }
 
             $(this).toggleClass(o.activeClass);
             $(target).toggleClass(o.menuOpenClass);
 
-            if ($(this).is('.' + o.pushBodyClass) && push_direction != '') {
-                $('body').toggleClass(o.pushBodyClass + '-' + push_direction);
+            if ($(this).is('.toggle-menu') && push_direction != '') {
+             $('body').toggleClass('push-toright');
+             $('html, body').toggleClass('no-scroll');
             }
 
             // Disable all other buttons
@@ -61,6 +48,7 @@
                 $('.jPushMenuBtn,body,#cabinet')
                     .removeClass('disabled ' + o.activeClass + ' ' + o.menuOpenClass + ' ' + o.pushBodyClass + '-toleft ' + o.pushBodyClass + '-toright');
                 $('html, body').removeClass('no-scroll');
+                $('body').focus();
             }
         }
 
@@ -84,7 +72,7 @@
     * do not directly edit here, use function parameter when call jPushMenu.
     */
     $.fn.jPushMenu.defaultOptions = {
-        pushBodyClass      : 'push-body',
+        pushBodyClass      : 'push',
         showLeftClass      : 'menu-left',
         showRightClass     : 'menu-right',
         showTopClass       : 'menu-top',
