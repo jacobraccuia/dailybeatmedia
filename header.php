@@ -4,12 +4,12 @@
 <!--[if IE 8]>    <html class="no-js ie8 oldie" <?php language_attributes(); ?>> <![endif]-->
 <!--[if gt IE 8]><!--> <html <?php language_attributes(); ?>> <!--<![endif]-->
 <head>
-	<!-- meta tags -->
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta charset="<?php bloginfo('charset'); ?>" />
-	<!--<meta name="author" content="Name">-->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-touch-fullscreen" content="yes">
+
 	<?php if(is_single()) { ?>
 	<?php if(has_post_thumbnail()) { 	
 		$thumb_id = get_post_thumbnail_id();
@@ -69,60 +69,94 @@
 	<body <?php body_class(); ?>>
 
 		<div class="navbar-wrapper">
-			<nav class="navbar navbar-default navbar-static-top" id="navbar">
+
+			<nav class="navbar navbar-default navbar-fixed-top" id="navbar">
 				<div id="page-progress"></div>
 				<div class="nav-border"></div>
 
 				<div class="navbar-header">
-					<div id="veggie" class="toggle-menu menu-left push-body">
-						<i class="veggieburger"></i>
+					<div id="veggie" class="toggle-menu menu-left push">
+						<div class="veggieburger">	
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
 					</div>
 					<a class="navbar-brand" href="<?php echo home_url(); ?>">
 						<img src="<?php echo THEME_DIR; ?>/images/svg/db_logo.svg" />
 					</a>
 
 					<ul class="navbar-extras">
-            	<?php /* <li class="site-dropdown">
-            		<div data-toggle="channels">
-            			Sites <span class="sites-open">+</span><span class="sites-close">-</span>
-            		</div>
-            		<?php db_channel_guide(); ?>
-            	</li> */ ?>
-            	<li class="navbar-mobile search-wrapper">
-            		<ul>
-            			<li class="header-search">
-            				<?php get_search_form(); ?>
-            			</li>
-            			<li class="h-icon search" data-toggle="search-slide">
-            				<i class="fa fa-times fa-fw"></i>
-            				<i class="fa fa-search fa-fw"></i>
-            			</li>
-            		</ul>
-            	</li>
-            	<li class="h-icon divider">&nbsp;</li>
-            	<li class="h-icon facebook"><a href="https://www.facebook.com/groups/torontoravecommunity/" target="_blank"><i class="fa fa-fw fa-facebook"></i></li>
-            	<li class="h-icon twitter"><a href="https://twitter.com/torontorc" target="_blank"><i class="fa fa-fw fa-twitter"></i></a></li>
-            	<li class="h-icon instagram"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-instagram"></i></a></li>
-            	<li class="h-icon soundcloud"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-soundcloud"></i></a></li>
-            	<li class="h-icon youtube"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-youtube-play"></i></a></li>
-            	<li class="h-icon divider">&nbsp;</li>
-            	<li class="h-icon beatsxtra"><i class="svg svg-beatsxtra"></i></li>
-            </ul>
-        </div>
+						<li class="navbar-mobile search-wrapper">
+							<ul>
+								<li class="header-search">
+									<?php get_search_form(); ?>
+								</li>
+								<li class="h-icon search" data-toggle="search-slide">
+									<i class="fa fa-times fa-fw"></i>
+									<i class="fa fa-search fa-fw"></i>
+								</li>
+							</ul>
+						</li>
+						<li class="h-icon divider">&nbsp;</li>
+						<li class="h-icon facebook"><a href="https://www.facebook.com/groups/torontoravecommunity/" target="_blank"><i class="fa fa-fw fa-facebook"></i></li>
+						<li class="h-icon twitter"><a href="https://twitter.com/torontorc" target="_blank"><i class="fa fa-fw fa-twitter"></i></a></li>
+						<li class="h-icon instagram"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-instagram"></i></a></li>
+						<li class="h-icon soundcloud"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-soundcloud"></i></a></li>
+						<li class="h-icon youtube"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-youtube-play"></i></a></li>
+						<li class="h-icon divider">&nbsp;</li>
+						<li class="h-icon beatsxtra"><i class="svg svg-beatsxtra"></i></li>
+					</ul>
+				</div>
 
-    </nav>
-</div>
+			</nav>
+		</div>
 
-<nav id="cabinet" class="cbp-spmenu-left">
-	<h2><span>Channels</span></h2>
-	<ul class="sites">
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-		<li></li>
-	</ul>
-	<h2><span>Corporate</span</h2>
+		<nav id="cabinet" class="cbp-spmenu-left">
+		<?php
 
-</nav>
-<div class="cabinet-overlay"></div>
+			$channels = array(
+				'1' => array('beatmersive', 'Beatmersive', 'http://beatmersive.com'),
+				'3' => array('headliners', 'Headliners Tribune', 'http://dailybeatmedia.com'),
+				'2' => array('fnt', 'Fresh New Tracks', 'http://freshnewtracks.com'),
+				'4' => array('rr', 'Raver Rafting', 'http://raverrafting.daily-beat.com'),
+				'5' => array('trc', 'Toronto Rave Community', 'http://trc.daily-beat.com'),
+				'10' => array('beatmersive', 'Beatmersive', 'http://beatmersive.com'),
+				'33' => array('headliners', 'Headliners Tribune', 'http://dailybeatmedia.com'),
+				'22' => array('fnt', 'Fresh New Tracks', 'http://freshnewtracks.com'),
+				'43' => array('rr', 'Raver Rafting', 'http://raverrafting.daily-beat.com'),
+				'54' => array('trc', 'Toronto Rave Community', 'http://trc.daily-beat.com'),
+				);		
+
+			$corporate = array(
+				'1' => array('dbm', 'Daily Beat Media', 'http://dailybeatmedia.com')
+				);
+
+				?>	
+
+				<h2><span>Channels</span></h2>
+				<ul class="sites">
+					<?php foreach($channels as $key => $logo) {
+						echo '<li><a href="' . $logo[2] .'" title="' . $logo[1] . '">';
+						echo '<span class="svg svg-icon svg-' . $logo[0] . '-icon"></span><span class="svg svg-logo svg-' . $logo[0] . '-grey"></span>';		
+						echo '</a></li>';
+						echo '<li class="divider"></li>';
+					}
+					?>
+				</ul>
+
+				<h2><span>Corporate</span></h2>
+				<ul class="sites">
+					<?php foreach($corporate as $key => $logo) {
+						echo '<li><a href="' . $logo[2] .'" title="' . $logo[1] . '">';
+						echo '<span class="svg svg-icon svg-' . $logo[0] . '-icon"></span><span class="svg svg-logo svg-' . $logo[0] . '-grey"></span>';		
+						echo '</a></li>';
+						echo '<li class="divider"></li>';
+					}
+					?>
+				</ul>
+			</nav>
+			<div id="cabinet-overlay"></div>

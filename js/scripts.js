@@ -1,7 +1,6 @@
 jQuery(document).ready(function($) {
-	
 
-	$('.navbar-wrapper').height($("#navbar").height()); // IMPORTANT - this prevents jumping of page on scroll	
+
 	$('#navbar').affix({
 		offset: { top: 0 }
 	});
@@ -212,9 +211,6 @@ jQuery(document).ready(function($) {
 
 		}, 'json'); 
 	});
-
-
-
 
 
 	// twitter API

@@ -43,9 +43,6 @@ function my_enqueue_scripts() {
 	wp_enqueue_style('featherlight_css', '//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.css');
 	wp_enqueue_style('jacob_css', THEME_DIR . '/style.css');
 
-		wp_enqueue_script('prefix-free', 'https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js');
-
-
 }
 
 // register post thumbnails
