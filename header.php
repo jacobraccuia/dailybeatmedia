@@ -123,12 +123,7 @@
 				'3' => array('headliners', 'Headliners Tribune', 'http://dailybeatmedia.com'),
 				'2' => array('fnt', 'Fresh New Tracks', 'http://freshnewtracks.com'),
 				'4' => array('rr', 'Raver Rafting', 'http://raverrafting.daily-beat.com'),
-				'5' => array('trc', 'Toronto Rave Community', 'http://trc.daily-beat.com'),
-				'10' => array('beatmersive', 'Beatmersive', 'http://beatmersive.com'),
-				'33' => array('headliners', 'Headliners Tribune', 'http://dailybeatmedia.com'),
-				'22' => array('fnt', 'Fresh New Tracks', 'http://freshnewtracks.com'),
-				'43' => array('rr', 'Raver Rafting', 'http://raverrafting.daily-beat.com'),
-				'54' => array('trc', 'Toronto Rave Community', 'http://trc.daily-beat.com'),
+				'5' => array('trc', 'Toronto Rave Community', 'http://trc.daily-beat.com')
 				);		
 
 			$corporate = array(
