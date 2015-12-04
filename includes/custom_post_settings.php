@@ -2,6 +2,8 @@
 
 /* featured premiere */
 
+
+
 // add custom post type
 add_action('init', 'db_custom_post_types', 1);	
 function db_custom_post_types() {
@@ -106,14 +108,13 @@ function db_custom_post_types() {
 			'show_ui' => true, 
 			'show_in_menu' => true,
 			'query_var' => true,
-			'taxonomies' => array('category'),
 			'menu_icon' => 'dashicons-format-audio',
 			'rewrite' => false,
 			'capability_type' => 'page',
 			'has_archive' => true, 
 			'hierarchical' => true,
 			'menu_position' => null,
-			'supports' => array('title', 'thumbnail', 'editor', 'excerpt', 'page-attributes', 'comments')
+			'supports' => array('title', 'thumbnail', 'excerpt', 'page-attributes', 'comments')
 			); 
 
 		register_post_type('artists', $args);
@@ -292,15 +293,35 @@ function db_artist($post) {
 
 	?>
 
+	<style>
+		pre { background:#EEE; padding:5px 15px; margin:0px; max-height:1000px; overflow-y:scroll; }
+		.string { color:green; }
+		.number { color:dark orange; }
+		.boolean { color:red; }
+		.null { color:blue; }
+		.key { color:purple; font-weight:bold; }
+		.songkick-button.update { background:#CCFFC4; }
+		.songkick-button { width:150px; height:27px; border:1px solid #999; border-radius:2px; line-height:27px; padding:2px 10px; text-align:center; display:inline; font-size:13px; background:#D1FFFC; margin-right:5px; cursor:pointer; font-weight:bold; }
+		.songkick-button:hover { background:#C6C6FF; }
+		#songkick_results { margin:15px 0px; width:90%; }
+		#songkick_results div { font-weight:bold; color:green; margin-bottom:10px; }
+	</style>
+
 	<div class="field">
 		<label for="artist_name">Artist:</label>
-		<input style="padding:5px; width:700px;" autocomplete="off" class="" name="artist_name" type="text" value="<?php echo $artist_name; ?>" />
+		<input style="padding:5px; width:700px;" autocomplete="off" id="artist_name" name="artist_name" type="text" value="<?php echo $artist_name; ?>" />
 	</div>
 	<div class="field">
 		<label for="artist_id">Artist ID: <em>be careful editing me</em></label>
-		<input style="padding:5px; width:700px;" autocomplete="off" class="" name="artist_id" type="text" value="<?php echo $artist_id; ?>" />
+		<input style="padding:5px; width:100px;" autocomplete="off" id="artist_id" name="artist_id" type="text" value="<?php echo $artist_id; ?>" />
 	</div>
-
+	<div class="field">
+		<input type="hidden" id="artist_tour_dates" name="artist_tour_dates" value="<?php echo $artist_tour_dates; ?>" />
+	</div>
+	<br/>
+	<div class="songkick-button update" data-call='update'>Update Tour Dates</div><em>artist id required</em><br/>
+	<div class="songkick-button" data-call='search'>Search for Artist ID</div><em>artist name required</em>
+	<div id="songkick_results"></div>
 
 	<?php 
 }
@@ -315,7 +336,7 @@ function db_save_post() {
 		$id = $post->ID;
 
 		foreach($_POST as $key => $val) {
-			if(substr($key, 0, 3) == 'db_') {
+			if(substr($key, 0, 3) == 'db_' || substr($key, 0, 7) == 'artist_') {
 				update_post_meta($id, $key, trim($val));
 			}
 		}
@@ -325,8 +346,19 @@ function db_save_post() {
 
 /* end meta box functions */
 
+add_action('admin_enqueue_scripts', 'db_load_scripts');
+function db_load_scripts($hook) {
+
+	if($hook == 'post.php' || $hook == 'post-new.php') {
+		global $post;
+		if($post->post_type == 'artists') {
+			wp_enqueue_script('jquery-artists', THEME_DIR . '/js/admin/jquery-artists.js', array('jquery'));
+		}
+	}
+}
 
 
+/*
 
 require_once('songkick/SongkickAPIExchange.php'); 
 
@@ -334,8 +366,8 @@ $settings = array('api_key' => '4sT0rY7JO9H5KnnE');
 $url = 'http://api.songkick.com/api/3.0/artists/' . $artist_id . '/calendar.json';
 
 $songkick = new SongkickAPIExchange($settings);
-$results = $songkick->buildURL($url, $api_key)->performRequest();
-
+$results = $songkick->buildURL($url)->performRequest();
+*/
 
 
 
