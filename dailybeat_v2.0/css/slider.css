@@ -1,0 +1,79 @@
+/* responsive slider! sweet. http://responsiveslides.com/ */
+
+.rslides {
+	position:relative;
+	list-style:none;
+	overflow:hidden;
+	width:100%;
+	padding:0;
+	margin:0;
+}
+
+.rslides li {
+	-webkit-backface-visibility: hidden;
+	position: absolute;
+	display: none;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+
+.rslides li:first-child {
+	position: relative;
+	display: block;
+	float: left;
+}
+
+.rslides img {
+	display: block;
+	height: auto;
+	float: left;
+	width: 100%;
+	border: 0;
+}
+
+.rslides_nav.prev {
+    left:15px;
+    right:auto;
+	background:url('images/slider/left.png') no-repeat transparent;
+}
+
+.rslides_nav.next {
+    left: auto;
+    right: 15px;
+	background:url('images/slider/right.png') no-repeat transparent;
+}
+a.rslides_nav:focus { outline:#000!important; }
+.rslides_nav {
+    height: 61px;
+    left: 0;
+    margin-top: -20px;
+    overflow: hidden;
+    position: absolute;
+    text-decoration: none;
+	text-indent:9999999px;
+    top: 50%;
+    width: 31px;
+    z-index: 3;
+}
+
+ul.rslides_tabs { position:absolute; bottom:5px; width:100%; margin:0px auto; z-index:5; text-align:center; display:none; }
+
+.rslides_tabs li {
+	display:inline;
+	float:none;
+	padding:1px 2px;
+	background:rgba(0,0,0,.6);
+}
+
+.rslides_tabs a {	
+	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3) inset;
+    display: inline-block;
+    height: 9px;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 9px;
+}
+.rslides_here a { background:none repeat scroll 0 0 rgba(255, 255, 255, 0.8); }
