@@ -119,6 +119,7 @@
 		<?php
 
 			$channels = array(
+				'0' => array('attack', 'Attack', 'http://daily-beat.com'),
 				'1' => array('beatmersive', 'Beatmersive', 'http://beatmersive.com'),
 				'3' => array('headliners', 'Headliners Tribune', 'http://dailybeatmedia.com'),
 				'2' => array('fnt', 'Fresh New Tracks', 'http://freshnewtracks.com'),

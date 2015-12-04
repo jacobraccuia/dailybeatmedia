@@ -1,6 +1,7 @@
 <?php
 
 require_once('includes/wp_bootstrap_navwalker.php');
+require_once('includes/custom_post_settings.php');
 require_once('includes/post_queries.php');
 //require_once('now-feed/now-feed.php');
 require_once('admin/admin_functions.php');
@@ -31,13 +32,18 @@ function my_enqueue_scripts() {
 	wp_enqueue_script('modernizr_js', THEME_DIR . '/js/modernizr.js');
 	wp_enqueue_script('history_js_', THEME_DIR . '/js/html5/jquery.history.js');
 	wp_enqueue_script('jquery_stickem', THEME_DIR . '/js/jquery.stickem.js');
+	wp_enqueue_script('jquery_sticky', THEME_DIR . '/js/jquery.sticky.js');
 	wp_enqueue_script('jquery_push', THEME_DIR . '/js/jquery.pushmenu.js');
+	wp_enqueue_script('images_loaded', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js');
+
+	if(is_single()) {
+		wp_enqueue_script('single_scripts', THEME_DIR . '/js/single_scripts.js', array('jquery'));
+	}
 
 	wp_enqueue_script('ajax_page_load', THEME_DIR . '/js/ajax_page_load.js');	
 	wp_enqueue_script('dailybeat_js', THEME_DIR . '/js/scripts.js', array('jquery'));
 	wp_localize_script('dailybeat_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php')));
 	wp_localize_script('dailybeat_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php'), 'postCommentNonce' => wp_create_nonce('myajax-post-comment-nonce'),));
-
 
 	wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');	
 	wp_enqueue_style('featherlight_css', '//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.css');
@@ -56,81 +62,7 @@ register_nav_menus(array(
 	'footer_menu' => 'Footer Menu',
 	));
 
-/* featured premiere */
 
-// add custom post type
-add_action('init', 'db_custom_post_types', 1);	
-function db_custom_post_types() {
-	$labels = array(
-		'name' => 'Featured Premieres',
-		'singular_name' => 'Featured Premieres',
-		'add_new' => 'Add New',
-		'add_new_item' => 'Add New Featured Premieres',
-		'edit_item' => 'Edit Featured Premieres',
-		'new_item' => 'New Featured Premieres',
-		'all_items' => 'All Premieres',
-		'view_item' => 'View Premiere',
-		'search_items' => 'Search Premieres',
-		'not_found' =>  'No featured premieres found',
-		'not_found_in_trash' => 'No featured premieres found in Trash', 
-		'parent_item_colon' => '',
-		'menu_name' => 'Featured Premieres'
-		);
-	
-	$args = array(
-		'labels' => $labels,
-		'public' => true,
-		'publicly_queryable' => true,
-		'show_ui' => true, 
-		'show_in_menu' => true,
-		'query_var' => true,
-		'taxonomies' => array('category'),
-		'menu_icon' => 'dashicons-format-audio',
-		'rewrite' => array('slug' => 'dbfirst'),
-		'capability_type' => 'page',
-		'has_archive' => true, 
-		'hierarchical' => true,
-		'menu_position' => null,
-		'supports' => array('title', 'thumbnail', 'editor', 'excerpt', 'page-attributes', 'comments')
-		); 
-
-	register_post_type('premiere', $args);
-
-	$labels = array(
-		'name' => 'Beatmersive',
-		'singular_name' => 'Beatmersive',
-		'add_new' => 'Add New',
-		'add_new_item' => 'Add New Video',
-		'edit_item' => 'Edit Video Post',
-		'new_item' => 'New Video Post',
-		'all_items' => 'All Beatmersive Videos',
-		'view_item' => 'View Beatmersive Post',
-		'search_items' => 'Search Videos',
-		'not_found' =>  'No videos found',
-		'not_found_in_trash' => 'No featured videos found in Trash', 
-		'parent_item_colon' => '',
-		'menu_name' => 'Beatmersive'
-		);
-	
-	$args = array(
-		'labels' => $labels,
-		'public' => true,
-		'publicly_queryable' => true,
-		'show_ui' => true, 
-		'show_in_menu' => true,
-		'query_var' => true,
-		'taxonomies' => array('category'),
-		'menu_icon' => 'dashicons-video-alt',
-		'rewrite' => array('slug' => 'beatmersive'),
-		'capability_type' => 'page',
-		'has_archive' => true, 
-		'hierarchical' => true,
-		'menu_position' => null,
-		'supports' => array('title', 'thumbnail', 'editor', 'excerpt', 'page-attributes', 'comments')
-		); 
-
-	register_post_type('beatmersive', $args);
-}
 
 // add roles to body class
 add_filter('admin_body_class', 'wpa66834_role_admin_body_class');
@@ -141,219 +73,58 @@ function wpa66834_role_admin_body_class($classes) {
 	return trim($classes);
 }
 
-/* meta box functions */
-
-// add meta box
-add_action('admin_init', 'db_admin_init');
-function db_admin_init(){
-	add_meta_box('db_meta', 'Extra Information', 'db_meta', 'post', 'normal', 'high');
-	add_meta_box('db_meta', 'Extra Information', 'db_meta', 'premiere', 'normal', 'high');
-	add_meta_box('db_meta', 'Extra Information', 'db_meta_beatmersive', 'beatmersive', 'normal', 'high');
-	add_meta_box('db_splash_meta', 'Splash', 'db_splash_meta', 'page', 'normal', 'high');
-}
-
-function db_splash_meta($post) {
-	$db_background_color = get_post_meta(get_the_ID(), 'db_background_color', true);
-	$db_splash_link = get_post_meta(get_the_ID(), 'db_splash_link', true);
-	?>
-	<div class="field">
-		<label for="soundcloud">Background Color (include #):</label>
-		<input style="padding:5px; width:700px;" autocomplete="off" class="" name="db_background_color" type="text" value="<?php echo $db_background_color; ?>" />
-	</div>
-	<div class="field">
-		<label for="soundcloud">Splash href link:</label>
-		<input style="padding:5px; width:700px;" autocomplete="off" class="" name="db_splash_link" type="text" value="<?php echo $db_splash_link; ?>" />
-	</div>
-	<?php }
-
-
-	function db_columns() {
-		return array(
-			'db_soundcloud',
-			'db_soundcloud_color',
-			'db_featured_title',
-			'db_premiere_title',
-			'db_ad_size',
-			'db_subtitle',
-			'db_blog_id',
-			'db_views',
-			'db_is_video',
-			'db_video_url',
-			'db_beatmersive_hyperlink'
-			);
-	}
-
-	function db_meta_beatmersive($post) {
-
-		$post_meta = get_post_custom();
-
-	// assign all columns to variable
-		$db_columns = db_columns();
-
-	// in case value isn't set in database, set required variables to ''
-		foreach($db_columns as $column) { ${$column} = ''; }
-
-	// assign all fields
-		foreach($post_meta as $key => $meta) {
-		if(array_key_exists($key, array_flip($db_columns))) { // if we want this key
-			if(isset($key) && !empty($key)) { ${$key} = trim($meta[0]); } else ${$key} = '';
-		}
-	}
-	?>
-
-
-	<div class="field">
-		<label for="db_beatmersive_hyperlink">Hyperlink for video.</label>
-		<input style="padding:5px; width:700px;" autocomplete="off" class="" name="db_beatmersive_hyperlink" type="text" value="<?php echo $db_beatmersive_hyperlink; ?>" />
-	</div>
-
-	<?php
-}
-
-// display form field
-function db_meta($post) {
-
-	$post_meta = get_post_custom();
-
-	// assign all columns to variable
-	$db_columns = db_columns();
-
-	// in case value isn't set in database, set required variables to ''
-	foreach($db_columns as $column) { ${$column} = ''; }
-
-	// assign all fields
-	foreach($post_meta as $key => $meta) {
-		if(array_key_exists($key, array_flip($db_columns))) { // if we want this key
-			if(isset($key) && !empty($key)) { ${$key} = trim($meta[0]); } else ${$key} = '';
-		}
-	}
-
-
-	?>
-	<style>
-		#category-adder h4 { display:none; }
-		#postexcerpt { display:none; }
-		.field { margin-bottom:5px; }
-		.role-administrator #category-adder h4, .role-administrator #postexcerpt { display:block; } 
-
-	</style>
-
-	Page Views: <?php echo $db_views; ?>
-	<div class="field">
-		<label for="soundcloud">SoundCloud Link:</label>
-		<input style="padding:5px; width:700px;" autocomplete="off" class="" name="db_soundcloud" type="text" value="<?php echo $db_soundcloud; ?>" />
-	</div>
-	<div class="field">
-		<label for="soundcloud">SoundCloud HEX Color (# is required):</label>
-		<input style="padding:5px; width:700px;" autocomplete="off" class="" name="db_soundcloud_color" type="text" value="<?php echo $db_soundcloud_color; ?>" />
-	</div>
-	<div class="field">
-		<label for="soundcloud">Featured Title (optional.  this will replace the current title for a shorter title):</label>
-		<input style="padding:5px; width:700px;" autocomplete="off" class="" name="db_featured_title" type="text" value="<?php echo $db_featured_title; ?>" />
-	</div>
-	<div class="field">
-		<label for="soundcloud">SubTitle for Featured Posts. (optional.  this is a subtitle...):</label>
-		<input style="padding:5px; width:700px;" autocomplete="off" class="" name="db_subtitle" type="text" value="<?php echo $db_subtitle; ?>" />
-	</div>
-	<div class="field">
-		<label for="soundcloud">Premiere Title (optional):</label>
-		<input style="padding:5px; width:700px;" autocomplete="off" class="" name="db_premiere_title" type="text" value="<?php echo $db_premiere_title; ?>" />
-	</div>
-	<div class="field">
-		<div style="float:left; margin-top:8px;">
-			<label for="soundcloud">Video Post:</label>
-			<input autocomplete="off" name="db_is_video" type="hidden" value="0">
-			<input autocomplete="off" name="db_is_video" type="checkbox" value="1" <?php if($db_is_video == 1) echo 'checked="checked"'; ?>>
-		</div>
-		<div>
-			<label for="soundcloud">Video URL (features the video):</label>
-			<input style="padding:5px; width:700px;" autocomplete="off" class="" name="db_video_url" type="text" value="<?php echo $db_video_url; ?>" />
-		</div>
-	</div>
-	<div class="field">
-		<label for="ads">Ad Size (optional):</label>
-		<select name="db_ad_size" style="padding:5px; width:700px;">
-			<option value="300x250" <?php if($db_ad_size == "300x250") echo "selected"; ?>>300 x 250 (square)</option>
-			<option value="300x600" <?php if($db_ad_size == "300x600") echo "selected"; ?>>300 x 600 (rectangle)</option>
-		</select>
-	</div>
-	<div> views : <?php echo $db_views; ?></div>
-	<?php }
-
-// save field
-	add_action('save_post', 'db_save_post');
-	function db_save_post() {
-		global $post;
-
-		if(isset($post->ID)) {
-			$id = $post->ID;
-			
-			foreach($_POST as $key => $val) {
-				if(substr($key, 0, 3) == 'db_') {
-					update_post_meta($id, $key, trim($val));
-				}
-			}
-
-		}
-	}
-
-	/* end meta box functions */
-
-
 
 
 // SoundCloud Player
-	function soundcloud_player($link, $title) {
-		echo '<a href="' . $link . '" class="sc-player">' . $title . '</a>';
-	}
+function soundcloud_player($link, $title) {
+	echo '<a href="' . $link . '" class="sc-player">' . $title . '</a>';
+}
 
 // full width soundcloud player
-	function full_soundcloud_player($link, $title, $soundcloud_color = "") {
-		echo '<div class="full-width-soundcloud" data-sc-color="' . $soundcloud_color . '"><a href="' . $link . '" class="sc-player">' . $title . '</a></div>';
-	}
+function full_soundcloud_player($link, $title, $soundcloud_color = "") {
+	echo '<div class="full-width-soundcloud" data-sc-color="' . $soundcloud_color . '"><a href="' . $link . '" class="sc-player">' . $title . '</a></div>';
+}
 
 // filter the content
 //add_filter('the_content', 'filter_the_content');
-	function filter_the_content($content) {
+function filter_the_content($content) {
 
-		if (strpos($content,'iframe') !== false) {
-			str_replace('iframe', 'iframe class="youtube"', $content);
-		}
-
-		return $content;
+	if (strpos($content,'iframe') !== false) {
+		str_replace('iframe', 'iframe class="youtube"', $content);
 	}
+
+	return $content;
+}
 
 
 
 ////////// FORCE USERS TO ENTER EXCERPT AND GOOGLE SEO \\\\\\\\\\\\\\\\\\\\\\\\
 
-
-
-	function zuus_player() {
+function zuus_player() {
 
 	// count files in folder
-		$directory = get_template_directory() . '/images/zuus_player/';
-		$files = glob($directory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
+	$directory = get_template_directory() . '/images/zuus_player/';
+	$files = glob($directory . '*.{jpg,jpeg,png,gif}', GLOB_BRACE);
 
-		$image = '';
-		if($files !== false) { 
-			$file = array_rand($files);
-			$image = basename($files[$file]);
-		}
-
-		if($image != '') {
-			echo '<div class="zuus_player">';
-			echo '<img class="img-responsive" alt="zuus_player" src="' .  THEME_DIR . '/images/zuus_player/' . $image .'" />';
-			echo '</div>';
-		}
-
+	$image = '';
+	if($files !== false) { 
+		$file = array_rand($files);
+		$image = basename($files[$file]);
 	}
 
+	if($image != '') {
+		echo '<div class="zuus_player">';
+		echo '<img class="img-responsive" alt="zuus_player" src="' .  THEME_DIR . '/images/zuus_player/' . $image .'" />';
+		echo '</div>';
+	}
+
+}
+
 //add_action('wp_footer', 'add_zuus_to_footer');
-	function add_zuus_to_footer() {
-		echo '<div class="zuus_overlay"><div class="zuus_content"><div id="zuus-widget"></div></div>
-		<div class="close">close</div>
-	</div>';	
+function add_zuus_to_footer() {
+	echo '<div class="zuus_overlay"><div class="zuus_content"><div id="zuus-widget"></div></div>
+	<div class="close">close</div>
+</div>';	
 }
 
 add_filter('the_content', 'remove_spaces');
@@ -456,33 +227,32 @@ function author_biography($author_id = 0) {
 		$author_id = get_the_author_meta('ID');
 	}
 
-	$author_username = get_the_author_meta('display_name', $author_id);
+	$author_username = explode(' ', get_the_author_meta('display_name', $author_id));
 
 	?>
 	<div class="author-bio-wrapper">
-		<div class="row">
-			<div class="col-xs-2 tight-right">
-				<div class="author-image"><a href="<?php echo get_author_posts_url($author_id); ?>"><?php echo get_wp_user_avatar($author_id, 'medium'); ?></a></div>
-			</div>
-			<div class="col-xs-10">
-				<div class="author-title"><h3 class="section_title"><strong><?php echo $author_username; ?></strong></h3></div>
-				<div class="author-connect">
-					<ul>
-						<?php if(get_the_author_meta('twitter', $author_id) != "") { ?>
-						<li class="twitter-bio"><a href="http://twitter.com/intent/user?screen_name=<?php echo get_the_author_meta('twitter', $author_id); ?>"><i class="fa fa-fw fa-twitter"></i></a></li>
-						<?php } if(get_the_author_meta('linkedin', $author_id) != "") { ?>
-						<li class="linkedin-bio"><a href="<?php echo get_the_author_meta('linkedin', $author_id); ?>" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
-						<?php } ?>
-					</ul>
-				</div>
-				<?php if(get_the_author_meta('job_title', $author_id) != "") { ?>
-				<div class="author-job-title"><?php echo get_the_author_meta('job_title', $author_id); ?></div>
-				<?php } if(get_the_author_meta('description', $author_id) != "") { ?>
-				<div class="author-biography"><?php echo get_the_author_meta('description', $author_id); ?></div>
-				<?php } ?>
-			</div>	
+		<div class="author-image"><a href="<?php echo get_author_posts_url($author_id); ?>"><?php echo get_wp_user_avatar($author_id, 'thumbnail'); ?></a></div>
+		<div class="author-title">
+			<h3><?php
+				$i = 0; // put br inside authors name - Jacob<br/>Raccuia
+				foreach($author_username as $name) {
+					if($i > 0) { echo '<br/>'; }
+					echo $name;
+					$i++;
+				}
+				?>
+			</h3>
 		</div>
-	</div>
+		<div class="author-connect">
+			<ul>
+				<?php if(get_the_author_meta('twitter', $author_id) != "") { ?>
+				<li class="twitter-bio"><a href="http://twitter.com/intent/user?screen_name=<?php echo get_the_author_meta('twitter', $author_id); ?>"><i class="fa fa-fw fa-twitter"></i></a></li>
+				<?php } if(get_the_author_meta('linkedin', $author_id) != "") { ?>
+				<li class="linkedin-bio"><a href="<?php echo get_the_author_meta('linkedin', $author_id); ?>" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+				<?php } ?>
+			</ul>
+		</div>
+	</div>	
 	<?php	
 }
 
@@ -538,13 +308,13 @@ function db_ads_meta_functions() {
 	$db_ad_location = get_post_meta($post->ID, 'db_ad_location', true);
 
 	if(!isset($db_ad_location)) { $db_ad_location = 0; }
-	
+
 	?>
 	<label for="ad">Ad Hyperlink ( where do you want it to go )</label>
 	<input type="text" name="db_ad_hyperlink" value="<?php if(isset($db_ad_permalink)) { echo $db_ad_permalink; } ?>" />
 	<br/>
-	
-	
+
+
 	<label for="location">Ad Location</label>
 	<select name="db_ad_location">
 		<option <?php if($db_ad_location == 0) { echo 'selected'; } ?>>Please select location:</option>
@@ -569,7 +339,7 @@ function db_ad_save_post() {
 	if(isset($_POST['db_ad_hyperlink'])) {
 		update_post_meta($post->ID, 'db_ad_hyperlink', trim($_POST['db_ad_hyperlink']));
 	}
-	
+
 	if(isset($_POST['db_ad_inline'])) {
 		update_post_meta($post->ID, 'db_ad_inline', trim($_POST['db_ad_inline']));
 	}
@@ -608,10 +378,10 @@ function allow_contributor_uploads() {
 function make_bitly_url($url, $login = 'o_6e0qt9hksv', $apikey = 'R_6558905de3a882e85191efa8344751de', $format = 'xml', $version = '2.0.1') {
 	//create the URL
 	$bitly = 'http://api.bit.ly/shorten?version='.$version.'&longUrl='.urlencode($url).'&login='.$login.'&apiKey='.$apikey.'&format='.$format;
-	
+
 	//get the url - could also use cURL here
 	$response = file_get_contents($bitly);
-	
+
 	//parse depending on desired format
 	if(strtolower($format) == 'json') {
 		$json = @json_decode($response,true);

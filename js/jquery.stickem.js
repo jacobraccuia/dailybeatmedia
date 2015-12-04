@@ -12,7 +12,7 @@
  *		onStick: null,
  *		onUnstick: null
  *	});
- */
+*/
 
 ;(function($, window, document, undefined) {
 
@@ -98,6 +98,8 @@
 				}
 			} else {
 				item.$elem.removeClass(_self.config.stickClass + ' ' + _self.config.endStickClass);
+				console.log('1 wh' . _self.windowHeight);
+				console.log('eh' . item.elemHeight);
 			}
 		},
 
@@ -125,10 +127,14 @@
 				for(var i = 0, len = _self.items.length; i < len; i++) {
 					var item = _self.items[i];
 
+
+					if(item.$container.height() != item.containerInnerHeight) {
+						item.scrollFinish = item.containerStart - _self.config.start + (item.$container.height() - item.elemHeight);
+					}
+
 					//If it's stuck, and we need to unstick it, or if the page loads below it
 					if((item.isStuck && (pos < item.containerStart || pos > item.scrollFinish)) || pos > item.scrollFinish) {
 						item.$elem.removeClass(_self.config.stickClass);
-
 						//only at the bottom
 						if(pos > item.scrollFinish) {
 							item.$elem.addClass(_self.config.endStickClass);
@@ -142,29 +148,29 @@
 						}
 
 					//If we need to stick it
-					} else if(item.isStuck === false && pos > item.containerStart && pos < item.scrollFinish) {
-							item.$elem.removeClass(_self.config.endStickClass).addClass(_self.config.stickClass);
-							item.isStuck = true;
+				} else if(item.isStuck === false && pos > item.containerStart && pos < item.scrollFinish) {
+					item.$elem.removeClass(_self.config.endStickClass).addClass(_self.config.stickClass);
+					item.isStuck = true;
 
 							//if supplied fire the onStick callback
 							if(_self.config.onStick) {
 								_self.config.onStick(item);
 							}
+						}
 					}
 				}
+			},
+
+			setWindowHeight: function() {
+				var _self = this;
+
+				_self.windowHeight = _self.$win.height() - _self.config.offset;
 			}
-		},
+		};
 
-		setWindowHeight: function() {
-			var _self = this;
+		Stickem.defaults = Stickem.prototype.defaults;
 
-			_self.windowHeight = _self.$win.height() - _self.config.offset;
-		}
-	};
-
-	Stickem.defaults = Stickem.prototype.defaults;
-
-	$.fn.stickem = function(options) {
+		$.fn.stickem = function(options) {
 		//Create a destroy method so that you can kill it and call it again.
 		this.destroy = function() {
 			this.each(function() {

@@ -27,14 +27,11 @@
 		<li class="svg svg-db"></li>
 	</ul>
 </div>
-<?php 
+<?php
 global $broken_switch_posts, $reason, $exclude_posts; 
 echo ($broken_switch_posts === true) ? ':(' : ':)'; ?>
 <br/> <?php echo $reason; ?> 
 <br/> Manual Now Feed Calls: insta - <?php echo get_transient('manual_call_insta'); ?>, twitter - <?php echo get_transient('manual_call_twitter'); ?>
-		<br/> <?php // print_pre($exclude_posts);
-		?><br/><br/>
-		<?php wp_footer(); ?>	
-
-	</body>
-	</html>
+<?php wp_footer(); ?>
+</body>
+</html>
