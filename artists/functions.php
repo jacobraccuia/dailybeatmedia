@@ -155,6 +155,20 @@ function move_to_top(&$array, $key) {
 	$array = $temp + $array;
 }
 
+function get_blog_by_name($name) {
+	global $blog_list;
+	if(!isset($blog_list)) {
+		$blog_list = wp_get_sites();
+	}
+
+	foreach($blog_list as $key => $val) {
+		if(strpos($val['domain'], $name) !== false) {
+			return $val['blog_id'];
+		}
+	}
+	return null;
+}
+
 add_filter('user_contactmethods', 'add_user_fields');
 function add_user_fields($profile_fields) {
 
