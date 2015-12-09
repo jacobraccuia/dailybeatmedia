@@ -551,8 +551,8 @@ delete?.video-wrapper article { padding:12px 0px; /* the padding removed from it
 .single-artist-widget h2 span { font-weight:600; display:block; font-size:20px; color:#333; }
 
 .single-artist-widget a:hover { color:#FE626A; text-decoration:underline; }
-.single-artist-widget .artist-image { height:150px; width:150px; margin:0px 0px 15px; border-radius:100%; clear:both; overflow:hidden; float:left; margin-bottom:20px; }
-.artist-image img { width:100%; height:auto; }
+.single-artist-widget .artist-image { height:150px; width:150px; margin:0px 0px 15px; border-radius:100%; clear:both; overflow:hidden; float:left; margin-bottom:20px;  }
+.artist-image img { width:100%; height:auto; opacity:.8; }
 
 .single-artist-widget h4 { margin:15px 0px 20px; color:#AAA; letter-spacing:.5px; font-weight:400; text-transform:uppercase; font-size:14px; }
 

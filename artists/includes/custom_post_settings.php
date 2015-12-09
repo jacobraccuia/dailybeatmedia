@@ -56,7 +56,10 @@ function db_artist_columns() {
 	return array(
 		'artist_name',
 		'artist_id',
-		'artist_tour_dates'
+		'artist_tour_dates',
+		'artist_twitter',
+		'artist_instagram',
+		'artist_soundcloud',
 		);
 }
 
@@ -92,14 +95,22 @@ function db_artist($post) {
 		#songkick_results { margin:15px 0px; width:90%; }
 		#songkick_results div { font-weight:bold; color:green; margin-bottom:10px; }
 		textarea { width:600px; display:block; height:100px; }
+		input { display:block; width:250px; padding:5px; }
 	</style>
 
 	<div class="field">
 		<label for="artist_name">Artist:</label>
-		<input style="padding:5px; width:700px;" autocomplete="off" id="artist_name" name="artist_name" type="text" value="<?php echo $artist_name; ?>" />
-		<br/>
+		<input autocomplete="off" id="artist_name" name="artist_name" type="text" value="<?php echo $artist_name; ?>" />
 		<label for="artist_id">Artist ID:<em> be careful editing me</em></label>
-		<input style="padding:5px; width:100px;" autocomplete="off" id="artist_id" name="artist_id" type="text" value="<?php echo $artist_id; ?>" />
+		<input style="width:100px;" autocomplete="off" id="artist_id" name="artist_id" type="text" value="<?php echo $artist_id; ?>" />
+		<label>Artist Twitter:</label>
+		<input autocomplete="off" name="artist_twitter" type="text" value="<?php echo $artist_twitter; ?>" />
+		<label>Artist Instagram:</label>
+		<input autocomplete="off" name="artist_instagram" type="text" value="<?php echo $artist_instagram; ?>" />
+		<label>Artist Soundcloud:</label>
+		<input autocomplete="off" name="artist_soundcloud" type="text" value="<?php echo $artist_soundcloud; ?>" />
+		<br/>
+		<br/>
 		<br/>
 		<label>Artist Tour Dates:</label>
 		<textarea id="artist_tour_dates" name="artist_tour_dates"><?php echo $artist_tour_dates; ?></textarea>
