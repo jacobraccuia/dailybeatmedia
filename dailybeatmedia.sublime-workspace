@@ -1,0 +1,959 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"sti",
+				"sticky_social_feed"
+			],
+			[
+				"las",
+				"lastScrollTop"
+			],
+			[
+				"col-fixed",
+				"col-fixed-left"
+			],
+			[
+				"stic",
+				"sticky_sharing"
+			],
+			[
+				"sticky_s",
+				"sticky_social_feed"
+			],
+			[
+				"resize",
+				"resize_iframes"
+			],
+			[
+				"getE",
+				"getElementsByTagName"
+			],
+			[
+				"dailybeat",
+				"dailybeat_v3"
+			],
+			[
+				"list-style",
+				"list-style-type"
+			],
+			[
+				"json",
+				"json_encode"
+			],
+			[
+				"now_fee",
+				"now_feed_loops"
+			],
+			[
+				"now-f",
+				"now-feed-popup-6"
+			],
+			[
+				"manu",
+				"manual_call_insta"
+			],
+			[
+				"itunes",
+				"itunes_file"
+			],
+			[
+				"exclud",
+				"exclude_posts"
+			],
+			[
+				"swtich",
+				"switch_to_blog"
+			],
+			[
+				"text-",
+				"text-transform"
+			],
+			[
+				"fe",
+				"main_featured_id"
+			],
+			[
+				"main_fe",
+				"main_featured_id"
+			],
+			[
+				"target",
+				"target_href"
+			],
+			[
+				"pag",
+				"page-progress"
+			],
+			[
+				"length",
+				"lengthComputable"
+			],
+			[
+				"query",
+				"query_count"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/Users/Jacob/Documents/Web Development/THR Plugins/abc-investors/admin/functions.php",
+			"settings":
+			{
+				"buffer_size": 8971,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "dailybeat_v3.0/functions.php",
+			"settings":
+			{
+				"buffer_size": 16009,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "dailybeat_v3.0/includes/custom_post_settings.php",
+			"settings":
+			{
+				"buffer_size": 9179,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "dailybeat_v3.0/js/admin/jquery-posts.js",
+			"settings":
+			{
+				"buffer_size": 1391,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "artists/includes/post_queries.php",
+			"settings":
+			{
+				"buffer_size": 13658,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/Jacob/Documents/Web Development/THR Plugins/abc-investors/admin/admin.php",
+			"settings":
+			{
+				"buffer_size": 4009,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/Jacob/Documents/Web Development/THR Plugins/abc-investors/admin/js/jquery-investors.js",
+			"settings":
+			{
+				"buffer_size": 4582,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "packa",
+		"selected_items":
+		[
+			[
+				"packa",
+				"Package Control: Disable Package"
+			],
+			[
+				"enable",
+				"Package Control: Enable Package"
+			],
+			[
+				"colo",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"enabl",
+				"Package Control: Enable Package"
+			],
+			[
+				"ENABL",
+				"Package Control: Enable Package"
+			],
+			[
+				"DISABL",
+				"Package Control: Disable Package"
+			],
+			[
+				"COLO",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"DISBLA",
+				"Package Control: Disable Package"
+			],
+			[
+				"COLOR",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"aaa",
+				"z:AAAPackageDev: Convert to YAML and Rearrange Syntax Definition"
+			],
+			[
+				"rearr",
+				"z:AAAPackageDev: Convert to YAML and Rearrange Syntax Definition"
+			],
+			[
+				"rearran",
+				"z:AAAPackageDev: Convert to YAML and Rearrange Syntax Definition"
+			],
+			[
+				"convert",
+				"z:AAAPackageDev: Convert to YAML and Rearrange Syntax Definition"
+			],
+			[
+				"i",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"color",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"",
+				"Package Control: Remove Package"
+			],
+			[
+				"sublime",
+				"SublimeLinter: Next Error"
+			],
+			[
+				"inst",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"col",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"paca",
+				"Package Control: Install Package"
+			],
+			[
+				"colors",
+				"Colorsublime: Browse Themes"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Enable Package"
+			],
+			[
+				"package control:in",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 584.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"mavensmate",
+			"Package Control: Install Package",
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes"
+	],
+	"file_history":
+	[
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/artists/includes/post_types.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/includes/post_queries.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/functions.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/artists/functions.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/artists/includes/custom_post_settings.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/admin/admin_functions.php",
+		"/Users/Jacob/Documents/Web Development/THR Plugins/abc-investors/functions.php",
+		"/Users/Jacob/Documents/Web Development/THR Plugins/abc-investors/js/ajax.js",
+		"/Users/Jacob/Documents/Web Development/THR Plugins/abc-investors/js/jquery.investors.js",
+		"/Users/Jacob/Documents/Web Development/THR Plugins/abc-tree/admin/functions.php",
+		"/Users/Jacob/Documents/Web Development/THR Plugins/abc-tree/admin/admin.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/header.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/home.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/js/admin/jquery-artists.js",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/includes/custom_post_settings.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/js/jquery.sticky.js",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/js/single_scripts.js",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/js/scripts.js",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/footer.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/single.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/js/jquery.stickem.js",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/src/css/style.css",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/gulpfile.js",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/songkick/SongkickAPIExchange.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/artists/admin/admin_functions.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/artists/style.css",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/artists/style.css",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/gulpfile.js",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/author.php",
+		"/Users/Jacob/Documents/Web Development/abc-tree/admin/admin.php",
+		"/Users/Jacob/Documents/Web Development/abc-tree/functions.php",
+		"/Users/Jacob/Documents/Web Development/abc-tree/admin/js/jquery-leaf.js",
+		"/Users/Jacob/Documents/Web Development/abc-tree/admin/functions.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/plugins/db-network/now-feed/now-feed.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/songkick/TwitterAPIExchange.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/plugins/db-network/now-feed/TwitterAPIExchange.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/plugins/db-network/now-feed/InstagramAPIExchange.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/index.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/images/svg/logos/icon/attack.svg",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/trc/style.css",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/71eced6f-53d6-4929-9363-ab4148b1e2ee/dailybeat/wp-content/themes/trc/header.php",
+		"/Applications/Reason 8/Reason.app/Contents/Resources/Authorizer.pkg",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/trc/single.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/.htaccess",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-blog-header.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/js/jquery.pushmenu.js",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/searchform.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/bootstrap/bootstrap.min.css",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/js/nonbounce.js",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/images/svg/logos/logo/trc.svg",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/plugins/db-network/functions.php",
+		"/Users/Jacob/Downloads/DailyBeat_Site_Sidebar_BurgerActive-12.svg",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/favicon/favicon.ico",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/style.css",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/style.css",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/styles_backup.css",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/css/style.css",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/README.md",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/style_keep.css",
+		"/Users/Jacob/Documents/Wordpress/Daily Beat Server/index.php",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/package.json",
+		"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content/themes/dailybeat_v3.0/page.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/js/scripts.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/js/jquery.pushmenu.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/functions.php",
+		"/Users/Jacob/Documents/Wordpress/ABC websites/Boardroom/js/scripts.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/header.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/css_MAIN.css",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/css_MAIN.css",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/js/jsMain.js",
+		"/Users/Jacob/Documents/Wordpress/ABC websites/Boardroom/Live Site/The Board Room v2.0.html",
+		"/Users/Jacob/Documents/Wordpress/boardroom2/js/scripts.js",
+		"/Users/Jacob/Documents/Wordpress/boardroom2/js/offcanvas.js",
+		"/Users/Jacob/Downloads/DailyBeatHeaderAssets/DailyBeat_Site_Header_TwitHover-12.svg",
+		"/Users/Jacob/Downloads/DailyBeatHeaderAssets/DailyBeat_Site_Header_Twit-07.svg",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/includes/svg_includes.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/71eced6f-53d6-4929-9363-ab4148b1e2ee/dev/wp-content/themes/dailybeat_v3.0/functions.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/71eced6f-53d6-4929-9363-ab4148b1e2ee/dev/wp-content/themes/dailybeat_v3.0/single.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/71eced6f-53d6-4929-9363-ab4148b1e2ee/dev/wp-content/themes/dailybeat_v3.0/js/scripts.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/71eced6f-53d6-4929-9363-ab4148b1e2ee/dev/wp-content/themes/dailybeat_v3.0/style.css",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/71eced6f-53d6-4929-9363-ab4148b1e2ee/dev/wp-content/themes/dailybeat_v3.0/header.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/71eced6f-53d6-4929-9363-ab4148b1e2ee/dailybeat/wp-content/themes/dailybeat_v2.0/header.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/css_MAIN2.css",
+		"/Users/Jacob/Downloads/DailyBeat_Site_HeaderLogo.svg",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/trc/style.css",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/trc/single.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/71eced6f-53d6-4929-9363-ab4148b1e2ee/dev/wp-content/themes/dailybeat_v3.0/footer.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/e8f0e7d3-4028-4f94-a7e1-54961912b25c/dev/wp-content/plugins/db-network/functions.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/71eced6f-53d6-4929-9363-ab4148b1e2ee/dev/wp-content/themes/dailybeat_v3.0/includes/post_queries.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/js/jsMain.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/folio5.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/folio6.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/folio7.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/folio8.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/old_folio_files/folio2.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/folio2.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/folio2.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/folio4.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/folio3.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/folio1.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/jacobraccuia.com/html/awd/js/folio.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/71eced6f-53d6-4929-9363-ab4148b1e2ee/dailybeat/wp-content/themes/trc/footer.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/d0f8e9b7-eb6c-4757-ba23-2c503ecf321f/domains/therival.news/html/index.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/e8f0e7d3-4028-4f94-a7e1-54961912b25c/dev/wp-content/debug.log",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/home.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/a40bd493-6b8b-4287-b188-2ef18d8fdeac/domains/jacobraccuia.com/html/collection/wp-content/plugins/abc-records/admin/includes/artists.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/admin/admin_functions.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/includes/post_types.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/a40bd493-6b8b-4287-b188-2ef18d8fdeac/domains/jacobraccuia.com/html/awd/css_MAIN.css",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/fa07bc59-7829-4874-81b0-bb0abb57b753/dev/wp-content/themes/dailybeat_v3.0/includes/post_queries.php",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/a40bd493-6b8b-4287-b188-2ef18d8fdeac/domains/jacobraccuia.com/html/awd/folio2.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/js/folio.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/a40bd493-6b8b-4287-b188-2ef18d8fdeac/domains/jacobraccuia.com/html/awd/mobile/css_MAIN.css",
+		"/Users/Jacob/Documents/Wordpress/ABC Work/Boardroom/js/scripts.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/a40bd493-6b8b-4287-b188-2ef18d8fdeac/domains/jacobraccuia.com/html/awd/js/folio.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/a40bd493-6b8b-4287-b188-2ef18d8fdeac/domains/jacobraccuia.com/html/awd/jquery.bxslider.css",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/a40bd493-6b8b-4287-b188-2ef18d8fdeac/domains/jacobraccuia.com/html/awd/js/jsMain.js",
+		"/Users/Jacob/Downloads/jquery.bxslider/jquery.bxslider.min.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/a40bd493-6b8b-4287-b188-2ef18d8fdeac/domains/jacobraccuia.com/html/awd/js/jquery.bxslider.min.js",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/folio1.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/index.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/folio3.html",
+		"/Users/Jacob/Desktop/whittaker/test folio page",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/contact.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/press.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/about.html",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/42a52ea8-f233-48f8-85a8-c4c5f8be6005/css_MAIN2.css",
+		"/private/var/folders/rp/p4_v4lf11gqcf25862w9xqt40000gn/T/a40bd493-6b8b-4287-b188-2ef18d8fdeac/domains/thr-llc.com/html/wp-content/plugins/abc-tree/admin/functions.php"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"/Users/Jacob/Documents/Web Development/Daily Beat Server/wp-content",
+			"/Users/Jacob/Documents/Web Development/Daily Beat Server",
+			"/Users/Jacob/Documents/Wordpress/abc-directory",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"reset_blog()",
+			" for=\"soundcloud\"",
+			"for=\"soundcloud\"",
+			"\"",
+			"this->url",
+			"getGetfield",
+			"site",
+			"scroller",
+			"scroll",
+			"stick",
+			"now_feed",
+			"now_Feed",
+			"containerstart",
+			"sticky",
+			"sticky-bott",
+			"now-feed-container",
+			"now-feed-containe",
+			"        echo '<div class=\"now-feed-container ' . $unique_class .'\">';\n",
+			"getnowfeed",
+			"first-l",
+			"divider",
+			"author",
+			"sharing",
+			"page-pro",
+			"site wide",
+			"get_plugin_data",
+			"wp_widget",
+			"author",
+			"authro",
+			"single",
+			"navbar-wrapp",
+			"elem",
+			"\"",
+			"no-sc",
+			"no-scroll",
+			"z",
+			".veggieburger.menu-active",
+			"\n.",
+			"#veggie",
+			": ",
+			"open",
+			".veggieburger",
+			": ",
+			"#nav-icon2",
+			"svg-icon",
+			"grey",
+			"/cabinet/logo",
+			"/logo",
+			"favicon<\\?php echo THEME_DIR; \\?>/",
+			"/favicon<?php echo THEME_DIR; ?>/",
+			"/favicon",
+			"bx-wrapp",
+			"bx-wr",
+			"linear-gr",
+			"nav",
+			"10",
+			"sticky",
+			"ont-face",
+			"0C2D83",
+			"00E2CF",
+			"7_florida",
+			"6_westvillage",
+			"5_uppereastside",
+			"4_lowerfifthave",
+			"3_summerfamily",
+			"2_greenwich",
+			"strip",
+			"#strip",
+			"/mobile",
+			"content",
+			"/mobile",
+			"wich/",
+			"bxslider",
+			"forwar",
+			"ul#",
+			"imageChan",
+			"dragAllImages",
+			".svg-trc",
+			"blog_list",
+			"loops",
+			"dragAllImages",
+			"imageChange",
+			"forw",
+			"imAG",
+			"masterImageWidth",
+			"curSlide",
+			"masterImageWidth",
+			"#forward",
+			"forwardClick",
+			"#folioImgHolder",
+			"innerHolder",
+			"top: 54px;",
+			"innerHold",
+			"><img src=\"",
+			"drag",
+			"folioLoad",
+			"folioImg2",
+			"blog",
+			"print",
+			"blog_id",
+			"-\\*",
+			"-*",
+			"get_stan",
+			"slider",
+			"lsider",
+			"webfont",
+			"animation",
+			"logo",
+			"max-width",
+			"offset",
+			"sticky",
+			"\\$\\i\\+",
+			"\\$\\i",
+			"\\$i",
+			"$i",
+			"time",
+			"set_instagram_cache",
+			"set_twitter_backup_cache",
+			"set_instagram_cache",
+			"uso",
+			"classes",
+			"&$",
+			"&",
+			"banner",
+			"instagram",
+			"twitter",
+			".twitter-icon",
+			"tiwtt"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"",
+			"'",
+			".menu-active .veggieburger",
+			".veggieburger",
+			":",
+			"menu-active",
+			"#veggie",
+			":",
+			".veggieburger",
+			"icon",
+			"/logos/grey",
+			"/cabinet/logo",
+			"",
+			"<?php echo THEME_DIR; ?>/favicon",
+			"20",
+			"354B7A",
+			"30E3D6",
+			"8_nyc",
+			"7_florida",
+			"6_westvillage",
+			"5_uppereastside",
+			"4_lowerfifthave",
+			"3_summerfamily",
+			"1_parkave",
+			".strip",
+			"",
+			"wich/mobile/",
+			"wich/mobile",
+			"",
+			" style=\"background-image: url('",
+			"});\n",
+			"				",
+			"}\n",
+			"	\n		/* http://meyerweb.com/eric/tools/css/reset/ \n   		v2.0 | 20110126\n  		License: none (public domain)\n		*/\n\n		html, body, div, span, applet, object, iframe,\n			h1, h2, h3, h4, h5, h6, p, blockquote, pre,\n			a, abbr, acronym, address, big, cite, code,\n			del, dfn, em, img, ins, kbd, q, s, samp,\n			small, strike, strong, sub, sup, tt, var,\n			b, u, i, center,\n			dl, dt, dd, ol, ul, li,\n			fieldset, form, label, legend,\n			table, caption, tbody, tfoot, thead, tr, th, td,\n			article, aside, canvas, details, embed, \n			figure, figcaption, footer, header, hgroup, \n			menu, nav, output, ruby, section, summary,\n				time, mark, audio, video {\n					margin: 0;\n					padding: 0;\n					border: 0;\n					font-size: 100%;\n					font: inherit;\n					vertical-align: baseline;\n							}\n				/* HTML5 display-role reset for older browsers */\n				article, aside, details, figcaption, figure, \n				footer, header, hgroup, menu, nav, section {\n					display: block;\n				}\n			body {\n				line-height: 1;\n			}",
+			"}\n",
+			".web-intents",
+			"svg",
+			"div",
+			"h3",
+			"",
+			"right",
+			"",
+			"post",
+			"class=\"fa-spin ",
+			"class=\"fa-pulse ",
+			"ss=\"col-md-8 x3\">\n					<div class=\"post\">\n						\n						<a class=\"featured-image-link\" href=\"<?php the_permalink(); ?>\">\n							<div class=\"featured-image cat-border\"><div style=\"background-image:url('<?php echo $thumb_url; ?>');\"></div></div>\n							<div class=\"category-tag cat-background\"><?php echo $category->name; ?></div>\n						</a>					\n						</div>\n					</div>\n					<div class=\"col-md-4 x2\">\n\n					</di",
+			"col-xxl",
+			"",
+			"id",
+			"EEE",
+			"006000"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Users/Jacob/Documents/Web Development/THR Plugins/abc-investors/admin/functions.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8971,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								419,
+								474
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "dailybeat_v3.0/functions.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 16009,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4594,
+								4597
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1551.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "dailybeat_v3.0/includes/custom_post_settings.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9179,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3692,
+								3692
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1463.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "dailybeat_v3.0/js/admin/jquery-posts.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1391,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								474,
+								474
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Jacob_Theme (SL).tmTheme",
+							"syntax": "Packages/JavaScript Ultimate/JavaScript (DOM).tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "artists/includes/post_queries.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 13658,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2589,
+								2589
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1165.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/Users/Jacob/Documents/Web Development/THR Plugins/abc-investors/admin/admin.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4009,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2594,
+								2594
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1368.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/Users/Jacob/Documents/Web Development/THR Plugins/abc-investors/admin/js/jquery-investors.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4582,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3553,
+								3553
+							]
+						],
+						"settings":
+						{
+							"color_scheme": "Packages/User/Color Highlighter/themes/Jacob_Theme (SL).tmTheme",
+							"syntax": "Packages/JavaScript Ultimate/JavaScript (DOM).tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1012.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.MavensMate-OutputPanel":
+	{
+		"height": 188.0
+	},
+	"output.aaa_package_dev":
+	{
+		"height": 112.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.package_dev":
+	{
+		"height": 112.0
+	},
+	"pinned_build_system": "",
+	"project": "dailybeatmedia.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 250.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

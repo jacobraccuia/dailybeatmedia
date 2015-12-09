@@ -32,6 +32,7 @@ class SongkickAPIExchange {
         }
 
         $this->url = $url . '?apikey=' . $this->api_key;
+        return $this;
     }
 
     
