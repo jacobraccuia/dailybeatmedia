@@ -13,14 +13,14 @@ $id = get_the_ID();
 
 $category = get_primary_category($id);
 
-        // author
 $author_id = get_the_author_meta('ID');
 $author_username = get_the_author_meta('display_name');
+
+$artist_id = get_post_meta($id, 'db_featured_artist_id', true);
 
 $exclude_posts = array_merge(array($id), $exclude_posts);
 
 $permalink = get_permalink();
-
 
 /* if(is_single()) { ?>
 <div style="position:fixed; margin:0px auto; width:100%;">
@@ -64,7 +64,7 @@ $permalink = get_permalink();
 	<section class="single-body">
 
 		<div class="col-fixed col-fixed-left pull-left" style="height:1800px;">
-			<?php echo author_biography(); ?>
+			<?php echo single_author_widget(); ?>
 			<div class="divider"></div>
 			<div id="sticky_sharing">
 				<h4 class="sharing">Social</h4>
@@ -85,6 +85,11 @@ $permalink = get_permalink();
 		</div>
 
 		<div class="col-fixed col-fixed-right pull-right">
+			<?php
+				if($artist_id > 0) {
+					echo single_artist_widget($artist_id);
+				}
+			?>
 		</div>
 
 		<div class="col-offset-center">
@@ -93,7 +98,7 @@ $permalink = get_permalink();
 				<?php the_content(); ?>
 			</div>
 		</div>
-		<div style="Clear:both;"></div>
+		<div style="clear:both;"></div>
 	</section>
 
 </div> <!-- close content -->
