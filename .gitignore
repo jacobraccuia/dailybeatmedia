@@ -12,6 +12,11 @@ wp-content/upgrade/
 wp-content/uploads/
 wp-content/wp-cache-config.php
 
+dailybeatmedia.sublime-project
+dailybeatmedia.sublime-workspace
+
+
+
 # Compiled source #
 ###################
 *.com
