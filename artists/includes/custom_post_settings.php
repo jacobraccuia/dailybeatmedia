@@ -91,16 +91,18 @@ function db_artist($post) {
 		.songkick-button:hover { background:#C6C6FF; }
 		#songkick_results { margin:15px 0px; width:90%; }
 		#songkick_results div { font-weight:bold; color:green; margin-bottom:10px; }
+		textarea { width:600px; display:block; height:100px; }
 	</style>
 
 	<div class="field">
 		<label for="artist_name">Artist:</label>
 		<input style="padding:5px; width:700px;" autocomplete="off" id="artist_name" name="artist_name" type="text" value="<?php echo $artist_name; ?>" />
 		<br/>
-		<label for="artist_id">Artist ID: <em>be careful editing me</em></label>
+		<label for="artist_id">Artist ID:<em> be careful editing me</em></label>
 		<input style="padding:5px; width:100px;" autocomplete="off" id="artist_id" name="artist_id" type="text" value="<?php echo $artist_id; ?>" />
-
-			<textarea style="display:none;" id="artist_tour_dates" name="artist_tour_dates"><?php echo $artist_tour_dates; ?></textarea>
+		<br/>
+		<label>Artist Tour Dates:</label>
+		<textarea id="artist_tour_dates" name="artist_tour_dates"><?php echo $artist_tour_dates; ?></textarea>
 	</div>
 	<br/>
 	<div class="songkick-button update" data-call='update'>Update Tour Dates</div><em>artist id required</em><br/>
@@ -149,20 +151,6 @@ function db_load_scripts($hook) {
 		}
 	}
 }
-
-
-/*
-
-require_once('songkick/SongkickAPIExchange.php'); 
-
-$settings = array('api_key' => '4sT0rY7JO9H5KnnE');
-$url = 'http://api.songkick.com/api/3.0/artists/' . $artist_id . '/calendar.json';
-
-$songkick = new SongkickAPIExchange($settings);
-$results = $songkick->buildURL($url)->performRequest();
-*/
-
-
 
 
 ?>

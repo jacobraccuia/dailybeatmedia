@@ -1,7 +1,7 @@
 <?php
 
 require_once('now-feed/now-feed.php');
-
+require_once('songkick/songkick.php');
 
 // add all appropriate styles and scripts
 add_action('wp_enqueue_scripts', 'db_enqueue_scripts');
@@ -74,6 +74,19 @@ function db_save_all_posts($post_id) {
 	update_post_meta($post_id, 'db_blog_id', trim($blogID));
 }
 
+function get_blog_by_name($name) {
+    global $blog_list;
+    if(!isset($blog_list)) {
+        $blog_list = wp_get_sites();
+    }
+
+    foreach($blog_list as $key => $val) {
+        if(strpos($val['domain'], $name) !== false) {
+            return $val['blog_id'];
+        }
+    }
+    return null;
+}
 
 function db_channel_guide() {
 	

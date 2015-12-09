@@ -189,20 +189,6 @@ function move_to_top(&$array, $key) {
 	$array = $temp + $array;
 }
 
-function get_blog_by_name($name) {
-	global $blog_list;
-	if(!isset($blog_list)) {
-		$blog_list = wp_get_sites();
-	}
-
-	foreach($blog_list as $key => $val) {
-		if(strpos($val['domain'], $name) !== false) {
-			return $val['blog_id'];
-		}
-	}
-	return null;
-}
-
 add_filter('user_contactmethods', 'add_user_fields');
 function add_user_fields($profile_fields) {
 
@@ -256,20 +242,21 @@ function single_author_widget($author_id = 0) {
 	<?php	
 }
 
-function single_artist_widget($artist_id) {
+function single_artist_widget($id) {
 
 	$blogID = get_blog_by_name('artists');
 	min_switch_to_blog($blogID);
 
-	$artist = get_post($artist_id);
+	$artist = get_post($id);
 
-	$thumb_url =  wp_get_attachment_image_src( get_post_thumbnail_id($artist_id), array(300,300))[0];
+	$thumb_url =  wp_get_attachment_image_src( get_post_thumbnail_id($id), array(300,300))[0];
 
-	$post_meta = get_post_custom($artist_id);
+	$post_meta = get_post_custom($id);
 
 	function artist_columns() {
 		return array(
 			'artist_name',
+			'artist_id',
 			'artist_tour_dates'
 			);
 	}
@@ -294,35 +281,45 @@ function single_artist_widget($artist_id) {
 	?>
 	<div class="single-artist-widget">
 		<h2>Featured Artist <span><?php echo $artist_name; ?></span></h2>
-		<div class="artist-image"><img src="<?php echo $thumb_url; ?>" /> </div>
-		<h4>Upcoming Tour Dates</h4>
-		<ul class="tour-dates">
-			<?php
-			foreach($tour_dates->resultsPage->results->event as $date) {
+		<div class="artist-image"><img src="<?php echo $thumb_url; ?>" /></div>
+		<?php 
+		if(count($tour_dates->resultsPage->results->event) > 0) { 
+			?>
+			<h4>Upcoming Tour Dates</h4>
+			<ul class="tour-dates">
+				<?php
+				$i = 0;
+				foreach($tour_dates->resultsPage->results->event as $date) {
 					$venue = $date->venue->displayName;
 
-					// stripping separately just in case
+						// stripping separately just in case
 					$display = strstr($date->displayName, ' (', true);
-					$display = strstr($display, ' at ', true);
-				
-					$permalink = $date->uri;
+						$display = strstr($display, ' at ', true);
 
-					if($display == '') { continue; }
+						$permalink = $date->uri;
 
-					$start = DateTime::createFromFormat('Y-m-d', $date->start->date);
-					$start_date = $start->format('M dS, Y');
+						if($display == '') { continue; }
+
+						$start = DateTime::createFromFormat('Y-m-d', $date->start->date);
+						$start_date = $start->format('M dS, Y');
 
 
-					echo '<li>';
-					echo '<div class="date">' . $start_date . '</div>';
-					echo '<a href="' . $permalink . '">' . $display . '</a>';
-					echo '<div class="location">at ' . $venue . '</div>';
-					echo '</li>';
-				} 
-				?>
-			</ul>
+						echo '<li>';
+						echo '<div class="date">' . $start_date . '</div>';
+						echo '<a href="' . $permalink . '">' . $display . '</a>';
+						echo '<div class="location">at ' . $venue . '</div>';
+						echo '</li>';
+						$i++;
+						if($i > 4) { break; }
+					} 
+					?>
+				</ul>
+				<?php 
+			}
+			if($i > 4) {
+			?>
 			<a class="view-all" href="http://www.songkick.com/artists/<?php echo $artist_id; ?>" target="_blank">View All Tour Dates</a>
-
+			<?php } ?>
 		</div>
 
 		<?php 	
