@@ -557,7 +557,7 @@ delete?.video-wrapper article { padding:12px 0px; /* the padding removed from it
 .single-artist-widget h4 { margin:15px 0px 20px; color:#AAA; letter-spacing:.5px; font-weight:400; text-transform:uppercase; font-size:14px; }
 
 ul.tour-dates { list-style:none; margin:0px 0px; padding-right:10px; }
-.tour-dates li { margin-bottom:20px; padding:2px 0px 15px; font-size:13px; overflow:hidden; display:-webkit-box; display:flex; border-bottom:1px solid #d7d7d7; }
+.tour-dates li { margin-bottom:20px; padding:2px 0px 15px; font-size:13px; overflow:hidden; display:-webkit-box; display:flex; border-bottom:1px solid #B9B9B9; }
 .tour-dates li:last-child { border-bottom:0px solid #FE626A; }
 
 .tour-dates li > div { align-self:center; } /* center vertically */
