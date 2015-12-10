@@ -307,13 +307,16 @@ function single_artist_widget($id) {
 						if($display == '') { continue; }
 
 						$start = DateTime::createFromFormat('Y-m-d', $date->start->date);
-						$start_date = $start->format('M dS, Y');
+						$start_month = $start->format('M');
+						$start_day = $start->format('d');
 
 
 						echo '<li>';
-						echo '<div class="date">' . $start_date . '</div>';
+						echo '<div class="date"><div class="month">' . $start_month . '</div>' . $start_day . '</div>';
+						echo '<div class="details">';
 						echo '<a href="' . $permalink . '">' . $display . '</a>';
 						echo '<div class="location">at ' . $venue . '</div>';
+						echo '</div>';
 						echo '</li>';
 						$i++;
 						if($i > 4) { break; }
