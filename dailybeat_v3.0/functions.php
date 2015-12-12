@@ -319,10 +319,9 @@ function single_artist_widget($id) {
 						if($display == '') { continue; }
 
 						$start = DateTime::createFromFormat('Y-m-d', $date->start->date);
-						
 						$start_month = $start->format('M');
 						$start_day = $start->format('d');
-						
+
 						echo '<li>';
 						echo '<div class="date"><div class="month">' . $start_month . '</div>' . $start_day . '</div>';
 						echo '<div class="details">';

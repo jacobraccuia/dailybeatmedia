@@ -574,7 +574,9 @@ ul.tour-dates { list-style:none; margin:0px 0px; padding-right:10px; }
 .tour-dates li:last-child { border-bottom:0px solid $pink; }
 
 .tour-dates li > div { align-self:center; } /* center vertically */
+.tour-dates li > div { align-self:center; } /* center vertically */
 .tour-dates .details { width:152px; overflow:hidden; }
+
 .tour-dates .date { color:#333; font-size:20px; float:left; margin-right:15px; height:55px; width:50px; position:relative; background:white; text-align:center; padding-top:23px; font-weight:500; }
 .tour-dates .month { position:absolute; top:0px; background:$pink; text-align:center; text-transform:uppercase; font-size:12px; width:100%; height:18px; line-height:20px; overflow:hidden; color:white; }
 
