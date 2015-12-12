@@ -75,17 +75,35 @@ function db_save_all_posts($post_id) {
 }
 
 function get_blog_by_name($name) {
-    global $blog_list;
-    if(!isset($blog_list)) {
-        $blog_list = wp_get_sites();
-    }
+	global $blog_list;
+	if(!isset($blog_list)) {
+		$blog_list = wp_get_sites();
+	}
 
-    foreach($blog_list as $key => $val) {
-        if(strpos($val['domain'], $name) !== false) {
-            return $val['blog_id'];
-        }
-    }
-    return null;
+	foreach($blog_list as $key => $val) {
+		if(strpos($val['domain'], $name) !== false) {
+			return $val['blog_id'];
+		}
+	}
+	return null;
+}
+
+function social_media($brand, $url) {
+	switch($brand) {
+		case 'twitter';
+		return '<a href="http://twitter.com/' . $url . '" target="_blank"><i class="fa fa-fw fa-twitter"></i></a>';
+		case 'instagram';
+		return '<a href="http://instagram.com/' . $url . '" target="_blank"><i class="fa fa-fw fa-instagram"></i></a>';
+		case 'facebook';
+		return '<a href="http://facebook.com/' . $url . '" target="_blank"><i class="fa fa-fw fa-facebook"></i></a>';
+		case 'soundcloud';
+		return '<a href="http://soundcloud.com/' . $url . '" target="_blank"><i class="fa fa-fw fa-soundcloud"></i></a>';
+		case 'linkedin';
+		return '<a href="http://www.linkedin.com/in/' . $url . '" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a>';
+		break;
+		default:
+		return;
+	}
 }
 
 function db_channel_guide() {
@@ -123,12 +141,7 @@ function db_channel_guide() {
 
 	</div>
 	
-	
-	
-	
-	<?php
-	
-	
+	<?php	
 }
 
 function db_search() { ?>
