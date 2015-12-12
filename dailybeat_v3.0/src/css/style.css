@@ -550,25 +550,36 @@ delete?.video-wrapper article { padding:12px 0px; /* the padding removed from it
 
 .single-content .wp-caption-text { position:absolute; bottom:0px; right:0px; color:#DDD; padding:8px 15px 5px; background:rgba(0,0,0,.2); font-size:12px; text-transform:uppercase; font-weight:300; letter-spacing:1.5px; line-height:18px; }
 
+/****************************/
 /* artist feature on single */
 
-.single-artist-widget h2 { font-size:14px; text-transform:uppercase; letter-spacing:.5px; font-weight:400; color:#AAA; margin-bottom:10px; display:inline-block; }
+.single-artist-widget h2 { clear:both; font-size:14px; text-transform:uppercase; letter-spacing:.5px; font-weight:400; color:#AAA; margin-bottom:10px; display:inline-block; }
 .single-artist-widget h2 span { font-weight:600; display:block; font-size:20px; color:#333; }
 
+.artist-sponsor { font-size:12px; letter-spacing:.5px; text-transform:uppercase; color:#AAA; padding-bottom:5px; margin-bottom:15px; border-bottom:2px solid $pink; text-align:right; }
+.artist-sponsor img { display:inline-block; height:9px; width:auto; }
+
 .single-artist-widget a:hover { color:$pink; text-decoration:underline; }
-.single-artist-widget .artist-image { height:150px; width:150px; margin:0px 0px 15px; border-radius:100%; clear:both; overflow:hidden; float:left; margin-bottom:20px;  }
+.single-artist-widget .artist-image { height:150px; width:150px; margin:0px 0px 15px; border-radius:100%; clear:both; overflow:hidden; margin-bottom:20px;  }
 .artist-image img { width:100%; height:auto; opacity:.8; }
 
 .single-artist-widget h4 { margin:15px 0px 20px; color:#AAA; letter-spacing:.5px; font-weight:400; text-transform:uppercase; font-size:14px; }
 
+.single-artist-widget ul.social { display:block; list-style-type:none; width:150px; text-align:center; margin:15px 0px 0px; }
+.single-artist-widget ul.social li { display:inline-block; font-size:16px; margin:0px 2px; }
+
 ul.tour-dates { list-style:none; margin:0px 0px; padding-right:10px; }
-.tour-dates li { margin-bottom:20px; padding:2px 0px 15px; font-size:13px; overflow:hidden; display:flex; border-bottom:1px solid #C4C4C4; }
+
+.tour-dates li { margin-bottom:20px; padding:2px 0px 15px; font-size:13px; overflow:hidden; display:flex; border-bottom:1px solid #CCC; }
 .tour-dates li:last-child { border-bottom:0px solid $pink; }
 
 .tour-dates li > div { align-self:center; } /* center vertically */
+.tour-dates li > div { align-self:center; } /* center vertically */
 .tour-dates .details { width:152px; overflow:hidden; }
-.tour-dates .date { color:#333; font-size:20px; font-weight:400; float:left; margin-right:15px; height:55px; width:50px; position:relative; background:white; text-align:center; padding-top:23px; }
-.tour-dates .month { position:absolute; top:0px; background:$pink; text-align:center; text-transform:uppercase; font-size:12px; width:100%; height:18px; line-height:20px; font-weight:500; overflow:hidden; color:white; }
+
+.tour-dates .date { color:#333; font-size:20px; float:left; margin-right:15px; height:55px; width:50px; position:relative; background:white; text-align:center; padding-top:23px; font-weight:500; }
+.tour-dates .month { position:absolute; top:0px; background:$pink; text-align:center; text-transform:uppercase; font-size:12px; width:100%; height:18px; line-height:20px; overflow:hidden; color:white; }
+
 .tour-dates a { font-weight:500; }
 
 .single-artist-widget .view-all { color:#999; float:right; font-size:10px; text-transform:uppercase; }

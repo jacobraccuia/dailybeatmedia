@@ -60,6 +60,7 @@ function db_artist_columns() {
 		'artist_twitter',
 		'artist_instagram',
 		'artist_soundcloud',
+		'artist_sponsor',
 		);
 }
 
@@ -109,6 +110,8 @@ function db_artist($post) {
 		<input autocomplete="off" name="artist_instagram" type="text" value="<?php echo $artist_instagram; ?>" />
 		<label>Artist Soundcloud:</label>
 		<input autocomplete="off" name="artist_soundcloud" type="text" value="<?php echo $artist_soundcloud; ?>" />
+		<label>Artist Sponsor:</label>
+		<input autocomplete="off" name="artist_sponsor" type="text" value="<?php echo $artist_sponsor; ?>" />
 		<br/>
 		<br/>
 		<br/>

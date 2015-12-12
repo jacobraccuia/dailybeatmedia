@@ -32,7 +32,7 @@ function my_enqueue_scripts() {
 	wp_enqueue_script('modernizr_js', THEME_DIR . '/js/modernizr.js');
 	wp_enqueue_script('history_js_', THEME_DIR . '/js/html5/jquery.history.js');
 	wp_enqueue_script('jquery_stickem', THEME_DIR . '/js/jquery.stickem.js');
-	wp_enqueue_script('jquery_sticky', THEME_DIR . '/js/jquery.sticky.js');
+//	wp_enqueue_script('jquery_sticky', THEME_DIR . '/js/jquery.sticky.js');
 	wp_enqueue_script('jquery_push', THEME_DIR . '/js/jquery.pushmenu.js');
 	wp_enqueue_script('images_loaded', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js');
 
@@ -257,7 +257,11 @@ function single_artist_widget($id) {
 		return array(
 			'artist_name',
 			'artist_id',
-			'artist_tour_dates'
+			'artist_tour_dates',
+			'artist_twitter',
+			'artist_soundcloud',
+			'artist_instagram',
+			'artist_sponsor'
 			);
 	}
 
@@ -265,12 +269,12 @@ function single_artist_widget($id) {
 	$artist_columns = artist_columns();
 	
 	// in case value isn't set in database, set required variables to ''
-	foreach($artist_columns as $column) { ${$column} = ""; }
+	foreach($artist_columns as $column) { ${$column} = ''; }
 
 	// assign all fields
 	foreach($post_meta as $key => $meta) {
 		if(array_key_exists($key, array_flip($artist_columns))) { // if we want this key
-			if(isset($key) && !empty($key)) { ${$key} = trim($meta[0]); } else ${$key} = "";
+			if(isset($key) && !empty($key)) { ${$key} = trim($meta[0]); } else ${$key} = '';
 		}
 	}	
 
@@ -280,8 +284,16 @@ function single_artist_widget($id) {
 
 	?>
 	<div class="single-artist-widget">
+		<?php if($artist_sponsor != '') { ?>
+		<div class="artist-sponsor">Presented by <img src="<?php echo $artist_sponsor; ?>" /></div>
+			<?php } ?>
 		<h2>Featured Artist <span><?php echo $artist_name; ?></span></h2>
 		<div class="artist-image"><img src="<?php echo $thumb_url; ?>" /></div>
+		<ul class="social">
+			<?php if($artist_instagram != '') { echo '<li class="instagram">' . social_media('instagram', $artist_instagram) . '</li>'; } ?>
+			<?php if($artist_twitter != '') { echo '<li class="twitter">' . social_media('twitter', $artist_twitter) . '</li>'; } ?>
+			<?php if($artist_soundcloud != '') { echo '<li class="soundcloud">' . social_media('soundcloud', $artist_soundcloud) . '</li>'; } ?>
+		</ul>
 		<?php 
 		if(
 			isset($tour_dates) &&
@@ -309,7 +321,6 @@ function single_artist_widget($id) {
 						$start = DateTime::createFromFormat('Y-m-d', $date->start->date);
 						$start_month = $start->format('M');
 						$start_day = $start->format('d');
-
 
 						echo '<li>';
 						echo '<div class="date"><div class="month">' . $start_month . '</div>' . $start_day . '</div>';
