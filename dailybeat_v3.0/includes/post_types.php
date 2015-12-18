@@ -32,12 +32,14 @@ function classic_post($blogID = 1, $args = array()) {
 			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(350, 350); ?>');"></div>
 		</a>
 		<div class="post-info">
+			<?php if($blogID > 1 && $show_via === true) { ?>
+			<div class="via-bar">Toronto Rave Community <?php // echo blog_svg($blogID); ?></div>
+			<?php } ?>
 			<a href="<?php the_permalink(); ?>">
 				<h3 class="<?php echo $external; ?>"><?php the_title(); ?></h3>
 			</a>
 			<h6 class="post-meta">
 				<span class="timestamp"><?php the_timestamp(); ?></span> - <span class="author"><?php the_author_posts_link(); ?></span>
-				<?php if($blogID > 1 && $show_via === true) { ?> via <?php echo blog_svg($blogID); } ?>
 			</h6>
 		</div>
 	</article>
