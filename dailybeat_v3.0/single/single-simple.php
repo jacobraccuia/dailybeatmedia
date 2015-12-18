@@ -38,8 +38,8 @@ $permalink = get_permalink();
 	<section class="single-body">
 
 		<div class="col-fixed col-fixed-left pull-left">
-			<?php echo single_author_widget(); ?>
-			<div class="divider"></div>
+			<?php  /*<?php echo single_author_widget(); ?>
+			<div class="divider"></div> */ ?>	
 			<div id="sticky_sharing">
 				<h4 class="sharing">Social</h4>
 				<ul class="share">
@@ -58,10 +58,10 @@ $permalink = get_permalink();
 			</div>
 		</div>
 
-		<div class="col-fixed col-fixed-right pull-right">
+	<!--	<div class="col-fixed col-fixed-right pull-right">
 			
 		</div>
-
+-->
 		<div class="col-offset-center">
 
 			<div class="single-content" style="height:1500px;">

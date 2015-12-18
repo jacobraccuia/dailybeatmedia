@@ -5,33 +5,82 @@
 	//}
 ?>
 
-<div id="footer-wrapper">
-	<footer class="container">
-		<div class="row">
-			<div class="col-md-4"></div>
-			<div class="col-md-4"></div>
-			<div class="col-md-4"></div>
-		</div>
-		<div class="row">
-
-			<div class="col-md-12">
-				<p class="copyright">Passionately supporting the electronic community since 2012. DAILY BEAT MEDIA, LLC &copy; 2012 - 2015</p>
+<footer id="footer-wrapper">
+	<div class="footer-border"></div>
+	<ul class="external-links">
+		<li><a href="http://dailybeatmedia.com"><div class="svg dbm-badge"></div></a></li>
+		<li><a href="#"><div class="svg skull"></div></a></li>
+		<li><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><div class="rick"></div></a></li>
+	</ul>
+	<div class="col-md-3 col-logo">
+		<a href="http://dailybeatmedia.com"><div class="svg logo"></div></a>
+		<div class="copy">&copy;2016 Daily Beat Media All Rights Reserved</div>
+	</div>
+	<div class="col-md-9 col-links">
+		<div class="col-channels">
+			<h2>Channels</h2>
+			<div class="divider"></div>
+			<div class="col-md-4">
+				<ul class="links">
+					<li><a href="http://daily-beat.com">Daily Beat</a></li>
+					<li><a href="http://beatsmersive.com">Beatsmersive</a></li>
+					<li><a href="">BeatsXtra</a></li>
+				</ul>
+			</div>
+			<div class="col-md-4">
+				<ul class="links">
+					<li><a href="#">Attack Mag</a></li>
+					<li><a href="#">Raver Rafting</a></li>
+					<li><a href="#">TRC</a></li>
+				</ul>
+			</div>
+			<div class="col-md-4">
+				<ul class="links">
+					<li><a href="#">Headliners Tribune</a></li>
+					<li><a href="#">Fresh New Tracks</a></li>
+				</ul>
 			</div>
 		</div>
-	</footer>
-	<ul class="brand-wrapper">
-		<li class="svg svg-dbm"></li>
-		<li class="svg svg-trc"></li>
-		<li class="svg svg-rr"></li>
-		<li class="svg svg-beatsxtra"></li>
-		<li class="svg svg-db"></li>
-	</ul>
-</div>
-<?php
+		<div class="col-info">
+			<h2>Info</h2>
+			<div class="divider"></div>
+			<div class="row">
+				<div class="col-md-6">
+					<ul class="links">
+						<li><a href="#">About</a></li>
+						<li><a href="#">Advertising</a></li>
+						<li><a href="#">Careers</a></li>
+					</ul>
+				</div>
+				<div class="col-md-6">
+					<ul class="links">
+						<li><a href="#">Contact</a></li>
+						<li><a href="#">Press Inquiries</a></li>
+						<li><a href="#">Submissions</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-corporate">
+			<h2>Corporate</h2>
+			<div class="divider"></div>
+			<div class="row">
+				<div class="col-xs-12">
+					<ul class="links">
+						<li><a href="http://dailybeatmedia.com">Daily Beat Media</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<?php /* tests...????
 global $broken_switch_posts, $reason, $exclude_posts; 
 echo ($broken_switch_posts === true) ? ':(' : ':)'; ?>
 <br/> <?php echo $reason; ?> 
 <br/> Manual Now Feed Calls: insta - <?php echo get_transient('manual_call_insta'); ?>, twitter - <?php echo get_transient('manual_call_twitter'); ?>
+<?php */ ?>
 <?php wp_footer(); ?>
 </body>
 </html>
