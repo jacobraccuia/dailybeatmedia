@@ -232,8 +232,7 @@ article:hover .featured-image { opacity:1; }
 article a:hover { color:#354B7A; }
 
 .featured-image { overflow:hidden; position:relative; width:100%; clear:both; background-repeat:no-repeat; background-size:cover; background-position:center center;
-  background-size:cover;
-}
+  background-size:cover; }
 
 .caption { position:absolute; padding:55px 20px 15px 20px; bottom:0px; right:0px; width:100%; z-index:4; text-shadow:2px 2px 5px rgba(0, 0, 0, .9);
   pointer-events:none;
@@ -300,9 +299,9 @@ article a:hover { color:#354B7A; }
 .banner-ad { margin:inherit auto; } 
 .banner-ad img { margin:0px auto; width:90%; }
 
-
-
 .post-info { margin:0px; padding:0px; background:white; position:relative; z-index:5; }
+
+.hashtag { margin:20px 0px; font-size:40px; color:#DDD; letter-spacing:.5px; font-weight:600; position:absolute; bottom:0px; left:0px; }
 
 /* post types */
 .post-wrapper { background:white; padding:12px 0px; margin-bottom:15px; }
@@ -311,11 +310,11 @@ article a:hover { color:#354B7A; }
 .full-width-wrapper { padding:0px!important; }
 .full-width-wrapper > div { padding-left:0px; padding-right:0px; }
 
-.trending-post .post-info { margin:-55px 20px 0px; padding:15px; }
+.trending-post .post-info { margin:-55px 20px 10px; padding:15px 20px; }
 .trending-post .featured-image { height:300px; }
   
-.classic-post .post-info { margin:-35px 15px 0px; padding:10px 12px; }
-.classic-post .featured-image { height:180px; }
+.classic-post .post-info { margin:0px; padding:10px 12px; }
+.classic-post .featured-image { height:175px; }
 .classic-post .caption { bottom:0px; left:0px; padding:40px 0px 10px 15px; }
 
 .vintage-post .post-info { margin:0px; padding:10px 5px; }
@@ -365,6 +364,10 @@ delete?.video-wrapper article { padding:12px 0px; /* the padding removed from it
 
 /* standard posts */
 .standard-wrapper { margin-top:0px; }
+
+
+.via-bar { margin:0px 0px 5px; font-size:11px; display:block; }
+.via-bar:before { background-color:$pink; content:" "; display:inline-block; height:9px; width:9px; margin-right:8px; vertical-align:-1px; }
 
 
 /* music feed */
@@ -618,7 +621,7 @@ ul.brand-wrapper { display:block; width:100%; background:white; height:30px; lis
 }
 
 
-.svg-trc { background-image:url(images/svg/torontorc_logo.svg); background-color:black; width:98px; height:15px; }
+.svg-trc { background-image:url(images/svg/torontorc_logo.svg); background-color:black; width:90px; height:11px; }
 .svg-db { background-image:url(images/svg/db_logo.svg); width:50px; height:14px; }
 .svg-dbm { background-image:url(images/svg/dbm_logo.svg); width:55px; }
 .svg-rr { background-image:url(images/svg/raverrafting_logo_teal.svg); width:84px; height:15px; }

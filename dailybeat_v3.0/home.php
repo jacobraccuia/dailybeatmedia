@@ -80,6 +80,7 @@ get_header();
 						}
 
 						?>
+							<div class="hashtag">#AVICII</div>
 
 					</div>
 

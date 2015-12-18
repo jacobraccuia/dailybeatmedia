@@ -317,6 +317,7 @@ function get_standard_post_feature($args = array()) {
 	reset_blog();
 }
 
+// trending posts! ( the top area.... )
 function get_trending_posts($args = array()) {
 	global $post, $exclude_posts;
 
@@ -365,14 +366,15 @@ function get_trending_posts($args = array()) {
 		if($i == 1) {
 			?>
 
-			<div class="col-lg-8 col-md-12">
+			<div class="col-lg-12 col-md-12">
 				<?php trending_post($blogID); ?>
+
 			</div>
 
 			<?php
 		} 
 
-		if($i == 2) {
+		if($i > 1 && $i < 5) {
 			?>
 
 			<div class="col-lg-4 col-md-12">
@@ -380,15 +382,17 @@ function get_trending_posts($args = array()) {
 					<div class="col-lg-12 col-md-6">
 						<?php classic_post($blogID); ?>
 					</div>
-
-					<?php
+				</div>
+			</div>
+			<?php
 					// just in case there are only posts
-					if($i == $post_count) {
-						echo '</div></div>';
-					}
-				}
+				//	if($i == $post_count) {
+						//echo '</div></div>';
+				//	}
+				//		echo '</div></div>';
+		}
 
-
+/*
 				if($i == 3) {
 					?>
 					<div class="col-lg-12 col-md-6">
@@ -412,7 +416,7 @@ function get_trending_posts($args = array()) {
 			<?php
 			break; // so no additional loops once we run out of posts!
 		}
-
+*/
 		$i++;
 	}
 
@@ -511,7 +515,7 @@ function get_spotlight_posts() {
 		$result_count = count($results);
 
 		while(list($key, $post) = each($results)) {
-		
+
 			// remove day old posts
 			if(strtotime($post['date_added']) < strtotime('-1 day')) { unset($results[$key]); }
 
