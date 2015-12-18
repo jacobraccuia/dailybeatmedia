@@ -92,8 +92,12 @@ $permalink = get_permalink();
 			<div class="single-content">
 				<?php the_content(); ?>
 			</div>
+
+			<div class="related-posts">
+				<h2>Related Posts</h2>
+			</div>
 		</div>
-		<div style="Clear:both;"></div>
+		<div style="clear:both;"></div>
 	</section>
 
 </div> <!-- close content -->
