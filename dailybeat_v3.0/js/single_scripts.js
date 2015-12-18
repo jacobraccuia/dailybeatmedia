@@ -11,62 +11,45 @@ jQuery(document).ready(function($) {
 	});
 
 
-	function sticky_social_feed() {
+	//resize_media(sticky_social_feed);
 
-//	  sticky.destroy();
-	if(typeof sticky !== 'undefined') { sticky.destroy(); }
-
-/*
-		$('#sticky_sharing').sticky({
-			topSpacing: $('#navbar').height() + $('#wpadminbar').height(),
-			//bottomSpacing: $('#footer-wrapper').height(),
-			className: 'sticky',
-			parentContainer: $('.single-body .col-fixed-left'),
-		});
-
-
-	/*/	
-
-
-	sticky = $('.single-body').stickem({
-			item: $('#sticky_sharing'),
-			container: '.col-fixed-left',
-			offset: $('#navbar').height() + $('#wpadminbar').height() + 20,
-			bottomOffset: 0, // if the item ends too soon or early, add this offset.. hacked stickem file..
-			stickClass: 'sticky',
-			endStickClass: 'sticky-bottom',
-			start: $('#sticky_sharing').offset().top - $('.single-body').offset().top,
-		});
-/**/
-		$(window).scroll().resize(); // trigger scroll to keep element in place.
-	}
-
-	
-	//sticky_social_feed();
-
-	$('.single-body').imagesLoaded(function() {
+	$(window).load(function() {
 		resize_media(sticky_social_feed);
 	});
 
 	$(window).resize(function() {
-		resize_iframes();
-
-		var height = $('.single-content').height();
-		$('.col-fixed-left').height(height);
-
-//		sticky_social_feed();
+		resize_media(sticky_social_feed);
 	});
 
+	
+	function sticky_social_feed() {
 
+		var height = $('.single-body .col-offset-center').height();
+//		var right_col_height = $('.single-body .col-fixed-right').outerHeight();
+
+//		if(right_col_height > height) {
+//			height = right_col_height;
+//		}
+
+		// set left column to max height for sticky 
+		$('.col-fixed-left').height(height);
+
+		sticky = $('.single-body').stickem({
+			item: $('#sticky_sharing'),
+			container: '.col-fixed-left',
+			offset: $('#navbar').height() + $('#wpadminbar').height() + 20,
+			bottomOffset: 25, // if the item ends too soon or early, add this offset.. hacked stickem file..
+			stickClass: 'sticky',
+			endStickClass: 'sticky-bottom',
+			start: $('#sticky_sharing').offset().top - $('.single-body').offset().top,
+		});
+
+		$(window).scroll(); // trigger scroll to keep element in place.
+	}
 
 	function resize_media(callback) {
 		resize_iframes();
 		resize_images();
-
-
-		var height = $('.single-content').height();
-		$('.col-fixed-left').height(height);
-
 		callback();
 	}
 
@@ -109,7 +92,7 @@ jQuery(document).ready(function($) {
 	            height = height * ratio;    // Reset height to match scaled image
 	        }
 	    });
-	}
+}
 
 
 

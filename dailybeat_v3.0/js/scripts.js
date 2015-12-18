@@ -34,6 +34,9 @@ jQuery(document).ready(function($) {
 	$('.toggle-menu').jPushMenu();
 
 
+
+if($('body').hasClass('home')) {
+
 	/* <<<<<<<<<<<<<< NOW FEED >>>>>>>>>>>>>> **/
 	/***  update now feed every 3.3 minutes  ***/ 
 
@@ -161,7 +164,7 @@ jQuery(document).ready(function($) {
 		});
 
 	}
-
+} // end home conditional
 
 
 	/* <<<<<<<<<<<<<< UPDATE POSTS >>>>>>>>>>>>>> **/
