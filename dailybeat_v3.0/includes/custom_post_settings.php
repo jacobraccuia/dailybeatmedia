@@ -43,6 +43,42 @@ function db_custom_post_types() {
 
 	register_post_type('premiere', $args);
 
+
+	$labels = array(
+		'name' => 'Exclusive',
+		'singular_name' => 'Exclusive',
+		'add_new' => 'Add New',
+		'add_new_item' => 'Add New Exclusive',
+		'edit_item' => 'Edit Exclusive',
+		'new_item' => 'New Exclusive',
+		'all_items' => 'All Exclusives',
+		'view_item' => 'View Exclusive',
+		'search_items' => 'Search Exclusives',
+		'not_found' =>  'No exclusives found',
+		'not_found_in_trash' => 'No exclusives found in Trash', 
+		'parent_item_colon' => '',
+		'menu_name' => 'Exclusive'
+		);
+
+	$args = array(
+		'labels' => $labels,
+		'public' => true,
+		'publicly_queryable' => true,
+		'show_ui' => true, 
+		'show_in_menu' => true,
+		'query_var' => true,
+		'taxonomies' => array('category'),
+		'menu_icon' => 'dashicons-format-chat',
+		'rewrite' => array('slug' => 'exclusive'),
+		'capability_type' => 'page',
+		'has_archive' => true, 
+		'hierarchical' => true,
+		'menu_position' => null,
+		'supports' => array('title', 'thumbnail', 'editor', 'excerpt', 'page-attributes', 'comments')
+		); 
+
+	register_post_type('exclusive', $args);
+
 	$labels = array(
 		'name' => 'Beatmersive',
 		'singular_name' => 'Beatmersive',
@@ -125,7 +161,8 @@ function db_featured_artist($post) {
 		echo '<li data-name="' . $artist_name . '" data-id="' . $artist->ID . '"></li>';
 	}
 
-	reset_blog();
+	restore_current_blog();
+//	reset_blog();
 
 	echo '</ul>';
 }
@@ -206,7 +243,7 @@ function db_meta($post) {
 	foreach($db_columns as $column) { ${$column} = ''; }
 
 	// assign all fields
-	foreach($post_meta as $key => $meta) {
+	foreach((array) $post_meta as $key => $meta) {
 		if(array_key_exists($key, array_flip($db_columns))) { // if we want this key
 			if(isset($key) && !empty($key)) { ${$key} = trim($meta[0]); } else ${$key} = '';
 		}

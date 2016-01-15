@@ -27,30 +27,24 @@ get_header();
 	<section class="news">
 
 		<div class="col-fixed col-fixed-left pull-left">
-			<h2></h2>
-
-			<?php $i = 1; while($i < 21) { ?>
-			<div class="track track-<?php echo $i; ?>">
-				<div class="track-meta">
-					<h4><?php echo $i; ?></h4>
-					<div class="album-art">
-						<img src="http://i2.wp.com/hasitleaked.com/wp-content/uploads/2015/07/gallery_11320_2_132156.jpg?fit=320%2C320" />
-					</div>
-				</div>
-				<div class="track-info-wrapper">
-					<div class="track-info">
-						<div class="song">Come Back remix ft. Kanye & Drake</div>
-						<div class="artist">Deafheaven</div>
-					</div>
-				</div>
+			<div class="col-header col-header-fnt">
+				<div class="bar"></div>
+				<div class="logo fnt"><i class="svg svg-fnt"></i><span>Top40</span></div>
+				<div class="bar right"></div>
 			</div>
-			<?php $i++; } ?>
-
+			<div class="top-home-fnt">
+				<?php get_fresh_new_tracks(array('posts_per_page' => 20, 'sticky_wrapper' => true)); ?>
+			</div>
 		</div>
 
 
 
 		<div class="col-fixed col-fixed-right pull-right sticky-wrapper">
+			<div class="col-header">
+				<div class="bar"></div>
+				<div class="logo dblive"><span>DB</span>Live</div>
+				<div class="bar right"></div>
+			</div>
 			<?php 
 			$feed = new NowFeed();	
 			$feed->getNowFeed(array('limit' => 12, 'ad' => true, 'image_cutoff' => 4, 'unique_class' => 'top-home-nowfeed'));
@@ -59,29 +53,16 @@ get_header();
 
 		<div class="col-offset-center">
 			<div class="row">
-				<div class="col-xs-12">
+				<div class="col-xs-12 home-center-content">
 
-					<div class="row post-wrapper trending-wrapper">
-
+					<div class="row post-wrapper top-post-wrapper full-width-wrapper">
 						<?php  
-
-
-						$tags = get_option('trending_post_tags');
-						$trending_logo = get_option('trending_logo');
-
 						$args = array(
-							'tags' => $tags,
-							'trending_logo' => $trending_logo,
-							'list_post_title' => '<i class="svg-trending"></i>TRENDING',
+							'list_post_title' => '<i class="svg-trending"></i>RECENT HEADLINES',
 							);
 
-						if($tags && $tags != '') {
-							get_trending_posts($args);
-						}
-
+						get_top_posts($args);
 						?>
-							<div class="hashtag">#AVICII</div>
-
 					</div>
 
 					<div class="row post-wrapper full-width-wrapper video-wrapper">
@@ -90,7 +71,7 @@ get_header();
 
 					<div class="row post-wrapper rr-wrapper">
 						<div class="col-xs-12">		
-							<div class="trending-topic"><span class="svg <?php echo 'svg-rr'; //$svg; ?>"></span><span class="trending-slogan">WE ARE THE SCENE</span></div>
+							<div class="trending-topic"><span class="svg svg-icon svg-rr-icon-color"></span><span class="trending-slogan rr">Raver Rafting<span>WE ARE THE SCENE</span></span></div>
 						</div>
 
 						<?php get_brand_posts('raver'); ?>
@@ -99,7 +80,7 @@ get_header();
 
 					<div class="row post-wrapper trc-wrapper">
 						<div class="col-xs-12">		
-							<div class="trending-topic"><span class="svg <?php echo 'svg-trc'; //$svg; ?>"></span><span class="trending-slogan">Toronto's Home for all Things Nightlife</span></div>
+							<div class="trending-topic"><span class="svg svg-icon svg-trc-icon-color"></span><span class="trending-slogan trc">Toronto Rave Community<span>Toronto's Home for all Things Nightlife</span></span></div>
 						</div>
 
 						<?php get_brand_posts('trc'); ?>
@@ -109,7 +90,11 @@ get_header();
 		</div>
 	</section>
 
-	<section class="video-wrapper beatmersive">
+	<section class="video-wrapper beatmersive post-wrapper">
+		<div class="col-xs-12">		
+		<div class="trending-topic"><span class="svg svg-icon svg-beatmersive-icon-color"></span><span class="trending-slogan beatmersive">Beatmersive<span>360&deg; Immersive Virtual Reality Experience</span></span></div>
+		</div>
+
 		<?php get_beatmersive_posts(); ?>
 	</section>
 
@@ -117,12 +102,9 @@ get_header();
 	<section class="news_continued">
 
 		<div class="col-fixed col-fixed-left pull-left">
-			<h2></h2>
+			<?php get_fresh_new_tracks(array('offset' => 20, 'posts_per_page' => 20)); ?>
 
 
-			<article class="post">
-				<div class="featured-image" style="background-image:url('<?php echo THEME_DIR; ?>/images/music-ad.jpg');"></div>
-			</article>
 		</div>
 
 		<div class="col-fixed col-fixed-right pull-right">
@@ -134,57 +116,29 @@ get_header();
 		<div class="row">
 			<div class="col-xs-12">
 
-				<div class="row post-wrapper rr-wrapper">
-					<div class="col-xs-12">		
-						<div class="trending-topic"><span class="svg <?php echo 'svg-rr'; //$svg; ?>"></span><span class="trending-slogan">HEADLINERS TRIBUNE</span></div>
+				<div class="row post-wrapper ht-wrapper">
+					<div class="col-xs-12">
+						<div class="trending-topic"><span class="svg svg-icon svg-headliners-icon-color"></span><span class="trending-slogan ht">HEADLINERS TRIBUNE</span></div>
 					</div>
 
-					<?php get_brand_posts('daily-beat'); ?>
+					<?php get_variant_posts('headliners'); ?>
 
 				</div>
 
 				<div class="row post-wrapper trc-wrapper">
 					<div class="col-xs-12">		
-						<div class="trending-topic"><span class="svg <?php echo 'svg-trc'; //$svg; ?>"></span><span class="trending-slogan">DAILY BEAT PREMIERE OR SOMETHING</span></div>
+						<div class="trending-topic"><span class="svg svg-icon svg-attack-icon-color"></span><span class="trending-slogan a">Attack</span></div>
 					</div>
 
-					<?php get_brand_posts('trc'); ?>
-				</div>
-
-				<div class="row post-wrapper trending-wrapper">
-
-					<?php  
-
-					$tags = get_option('trending2_post_tags');
-					$trending_logo = get_option('trending2_logo');
-
-					$args = array(
-						'tags' => $tags,
-						'trending_logo' => $trending_logo,
-						);
-
-					if($tags && $tags != '') {
-						get_trending_posts($args);
-					}
-
-					?>
+					<?php get_brand_posts('attack'); ?>
 				</div>
 
 				<div class="row">
-					<div id="standard-posts" class="col-xs-12">
+					<div class="col-xs-12">
 						<?php get_standard_loop(); ?>	
 					</div>
-					<div class="col-xs-12">
-						<?php global $exclude_posts; ?>
-						<script>exclude_posts = '<?php echo json_encode($exclude_posts); ?>';</script>
-						<form id="load-more" method="POST" data-target="#standard-posts" action="#">
-							<div class="load-posts">
-								View More Posts
-								<i class="fa fa-spinner fa-spin"></i>
-							</div>					
-						</form>
-					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
@@ -194,4 +148,26 @@ get_header();
 
 </div>
 
-<?php get_footer(); ?>
+<?php get_footer(); ?><?php
+
+
+
+
+
+/*    this code will get the trending post from the section.  currently not in use.
+
+$tags = get_option('trending_post_tags');
+$trending_logo = get_option('trending_logo');
+
+$args = array(
+	'tags' => $tags,
+//	'trending_logo' => $trending_logo,
+	'list_post_title' => '<i class="svg-trending"></i>TRENDING',
+	);
+
+if($tags && $tags != '') {
+	get_trending_posts($args);
+}
+
+*/
+?>

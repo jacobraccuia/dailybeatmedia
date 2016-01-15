@@ -9,7 +9,7 @@
  *
  */
 
-get_header(); ?>
+get_header(); /* ?>
 
 <div class="container main">
 	<div class="row">
@@ -25,4 +25,4 @@ get_header(); ?>
 
 
 
-<?php get_footer(); ?>
+<?php */ get_footer(); ?>

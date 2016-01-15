@@ -4,7 +4,7 @@
 global $exclude_posts;
 $exclude_posts = array();
 
-for($i = 1; $i <= 4; $i++) {
+for($i = 1; $i <= 8; $i++) {
 	$exclude_posts[$i] = array(0);
 }
 
@@ -25,18 +25,63 @@ function classic_post($blogID = 1, $args = array()) {
 	$external = '';
 	if($blogID > 1) { $external = 'external-link'; }
 
+	$blog_name = blog_name($blogID);
+	$short_blog_name = short_blog_name($blog_name);
+
 	?>
 
 	<article class="classic-post">
 		<a href="<?php the_permalink(); ?>">
 			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(350, 350); ?>');"></div>
 		</a>
+		<?php if(1 == 1) { ?>
+		<div class="via-bar <?php echo $short_blog_name; ?>"><?php echo $blog_name; ?></div>
+		<?php } ?>
 		<div class="post-info">
-			<?php if($blogID > 1 && $show_via === true) { ?>
-			<div class="via-bar">Toronto Rave Community <?php // echo blog_svg($blogID); ?></div>
-			<?php } ?>
 			<a href="<?php the_permalink(); ?>">
-				<h3 class="<?php echo $external; ?>"><?php the_title(); ?></h3>
+				<h3 class="dotdotdot <?php echo $external; ?>"><?php the_title(); ?></h3>
+			</a>
+			<h6 class="post-meta">
+				<span class="timestamp"><?php the_timestamp(); ?></span> - <span class="author"><?php the_author_posts_link(); ?></span>
+			</h6>
+		</div>
+	</article>
+
+	<?php
+}
+
+// variant post layout
+function variant_post($blogID = 1, $args = array()) {
+	min_switch_to_blog($blogID);
+	$id = get_the_ID();
+	exclude_this_post($blogID, $id);
+
+	$defaults = array(
+		'show_via' => true,
+		);
+
+	// merge arguments with defaults && set keys as variables
+	$args = array_merge($defaults, $args);
+	foreach($args as $key => $val) { ${$key} = $val; }
+
+	$external = '';
+	if($blogID > 1) { $external = 'external-link'; }
+
+	$blog_name = blog_name($blogID);
+	$short_blog_name = short_blog_name($blog_name);
+
+	?>
+
+	<article class="variant-post">
+		<a href="<?php the_permalink(); ?>">
+			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(350, 350); ?>');"></div>
+		</a>
+		<?php if(1 == 1) { ?>
+		<div class="via-bar <?php echo $short_blog_name; ?>"><?php echo $blog_name; ?></div>
+		<?php } ?>
+		<div class="post-info">
+			<a href="<?php the_permalink(); ?>">
+				<h3 class="dotdotdot <?php echo $external; ?>"><?php the_title(); ?></h3>
 			</a>
 			<h6 class="post-meta">
 				<span class="timestamp"><?php the_timestamp(); ?></span> - <span class="author"><?php the_author_posts_link(); ?></span>
@@ -48,7 +93,8 @@ function classic_post($blogID = 1, $args = array()) {
 
 }
 
-function trending_post($blogID = 1) {
+function trending_post($blogID = 1, $trending_post_content = '') {
+
 	min_switch_to_blog($blogID);
 	$id = get_the_ID();
 	exclude_this_post($blogID, $id);
@@ -62,16 +108,21 @@ function trending_post($blogID = 1) {
 			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(700, 700); ?>');"></div>
 		</a>
 		<div class="post-info">
+			<div class="col-md-7 left-story">
+				<h6 class="post-meta">
+					<span class="timestamp"><?php the_timestamp(); ?></span> - <span class="author"><?php the_author_posts_link(); ?></span>
+					<?php if($blogID > 1) { ?> via <?php echo blog_svg($blogID); } ?>
+				</h6>
+				<a href="<?php the_permalink(); ?>">
+					<h1 class="<?php echo $external; ?>"><?php the_title(); ?></h1>
+				</a>
 
-			<h6 class="post-meta">
-				<span class="timestamp"><?php the_timestamp(); ?></span> - <span class="author"><?php the_author_posts_link(); ?></span>
-				<?php if($blogID > 1) { ?> via <?php echo blog_svg($blogID); } ?>
-			</h6>
-			<a href="<?php the_permalink(); ?>">
-				<h1 class="<?php echo $external; ?>"><?php the_title(); ?></h1>
-			</a>
-
-			<div class="post-excerpt"><?php the_excerpt(); ?></div>
+				<div class="post-excerpt"><?php the_excerpt(); ?></div>
+			</div>
+			<div class="col-md-5 right-story">
+				<?php if($trending_post_content != '') { echo $trending_post_content; } ?>
+			</div>
+			<div style="clear:both;"></div>
 		</div>
 	</article>
 
@@ -159,22 +210,21 @@ function video_post($blogID = 1, $args = array()) {
 	<?php
 }
 
-function full_story_post($blogID = 1) {
+function exclusive_post($blogID = 1) {
 	min_switch_to_blog($blogID);
 	$id = get_the_ID();
 	exclude_this_post($blogID, $id);
 
 	$external = '';
 	if($blogID > 1) { $external = 'external-link'; }
-
 	?>
 
-	<article class="full-story-post">
+	<article class="exclusive-post">
 		<a href="<?php the_permalink(); ?>">
 			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(900, 900); ?>');">
 				<div class="spotlight-bg"></div>
 
-				
+
 			</div>
 		</a>
 		<div class="caption">
@@ -191,14 +241,52 @@ function list_post($blogID = 1) {
 	$id = get_the_ID();
 	exclude_this_post($blogID, $id);
 
-
 	$external = '';
 	if($blogID > 1) { $external = 'external-link'; }
 
 	?>
+	<a href="<?php the_permalink(); ?>" class="dotdotdot <?php echo $external; ?>"><?php the_title(); ?></a>
 
-	<a href="<?php the_permalink(); ?>" class="<?php echo $external; ?>"><?php the_title(); ?></a>
+	<?php
+}
 
+function fresh_new_track($blogID, $rank) {
+
+	$id = get_the_ID();
+	exclude_this_post($blogID, $id);
+
+	$artist = get_post_meta($id, 'track_artist_name', true);
+	$track = get_post_meta($id, 'track_name', true);
+	$remixer = get_post_meta($id, 'track_remixer', true);
+	$track_url = get_post_meta($id, 'track_url', true);
+
+	if($remixer != '') {
+		$track .= ' (' . $remixer . ' Remix)';
+	}
+
+	?>
+	<div class="track track-<?php echo $rank; ?>">
+		<div class="track-meta">
+			<h4><span><?php echo $rank; ?></span></h4>
+			<div class="album-art" data-play="true" data-track="<?php echo $track_url; ?>">
+				<img src="<?php echo get_thumb_url(75, 75); ?>" title="<?php echo $artist; ?> - <?php echo $track; ?>"/>
+				<div class="video-overlay">
+					<span class="fa-stack">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-play-circle fa-stack-1x"></i>
+					</span>
+				</div>
+			</div>
+		</div>		
+		<a href="<?php the_permalink(); ?>" target="_blank">
+			<div class="track-info-wrapper">
+				<div class="track-info">
+					<div class="song"><?php echo $track; ?></div>
+					<div class="artist"><?php echo $artist; ?></div>
+				</div>
+			</div>
+		</a>
+	</div>
 	<?php
 }
 
@@ -281,6 +369,23 @@ function blog_svg($blogID = 1, $link = 1) {
 
 }
 
+function blog_name($blogID = 1) {
+	$blog_details = get_blog_details($blogID);
+	return $blog_details->blogname;
+}
+
+function short_blog_name($blog_name) {
+	$words = explode(' ', $blog_name);
+	$acronym = '';
+
+	foreach($words as $w) {
+		$acronym .= $w[0];
+	}
+
+	return strtolower($acronym);
+}
+
+
 
 function exclude_this_post($blogID, $post_id) {
 	global $exclude_posts;
@@ -296,7 +401,7 @@ function exclude_this_post($blogID, $post_id) {
 
 function min_switch_to_blog($blogID) {
 	if($blogID == $GLOBALS['blog_id']) { return true; }
-	
+
 	//switch_to_blog($blogID);
 	//return true;
 

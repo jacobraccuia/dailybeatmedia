@@ -17,7 +17,7 @@ function get_standard_loop($args = array()) {
 
 	$i = 0;
 	while($i < $loops) {
-		?>
+	/*	?>
 		<div class="row post-wrapper full-width-wrapper video-wrapper">
 			<?php get_video_post(); ?>
 		</div>
@@ -26,10 +26,10 @@ function get_standard_loop($args = array()) {
 		</div>
 		<div class="row post-wrapper vintage-wrapper">
 			<?php get_vintage_posts(); ?>
-		</div>
+		</div> */ ?>
 		<div class="row post-wrapper full-width-wrapper full-story-wrapper">
-			<?php get_full_story_post(); ?>
-		</div>
+			<?php get_exclusive_posts(); ?>
+		</div><?php /*
 		<div class="row post-wrapper trending-wrapper">
 			<?php get_standard_post_feature(); ?>
 		</div>
@@ -111,6 +111,29 @@ function get_brand_posts($blog_name) {
 	reset_blog();
 }
 
+function get_variant_posts($blog_name) {
+	global $exclude_posts;
+
+	$blogID = get_blog_by_name($blog_name);
+	switch_to_blog($blogID);
+
+	$exclude = $exclude_posts[$blogID];
+	$args = array(
+		'posts_per_page' => 2,
+		'post_status' => 'publish',
+		'post__not_in' => $exclude,
+		'post_type' => 'post',
+		);
+
+	$featured_query = new WP_Query($args);
+	while($featured_query->have_posts()) { $featured_query->the_post();
+		echo '<div class="col-md-6">';
+		echo variant_post($blogID, array('show_via' => false));
+		echo '</div>';
+	}
+
+	reset_blog();
+}
 
 function get_vintage_posts($args = array()) {
 	global $post, $exclude_posts;
@@ -148,9 +171,43 @@ function get_vintage_posts($args = array()) {
 
 		$i++;
 	}
-
 }
 
+function get_related_posts($args = array()) {
+	global $post, $exclude_posts;
+
+	$defaults = array(
+		'posts_per_page' => 1,
+		'tags' => ''
+		);
+
+	// merge arguments with defaults && set keys as variables
+	$args = array_merge($defaults, $args);
+	foreach($args as $key => $val) { ${$key} = $val; }
+
+	$args = array(
+		'posts_per_page' => $posts_per_page,
+		'post_status' => 'publish',
+		'post__not_in' => $exclude_posts,
+		'post_type' => 'post',
+		'tag' => 'avicii, edm',
+		'orderby' => 'date',
+		'order' => 'DESC',
+		);
+
+	$query = new WP_Query();
+	$network_query = $query->posts = network_query_posts($args);
+	$post_count = $query->post_count = count($network_query);
+
+	while($query->have_posts()) { $query->the_post();
+		$blogID = $post->BLOG_ID;
+
+		echo '<div class="col-md-4">';
+	//	echo classic_post($blogID, array('show_via' => false));
+		echo '</div>';
+
+	}
+}
 function get_video_post($args = array()) {
 	global $post, $exclude_posts;
 
@@ -190,11 +247,11 @@ function get_video_post($args = array()) {
 	reset_blog();
 }
 
-function get_full_story_post($args = array()) {
+function get_exclusive_posts($args = array()) {
 	global $post, $exclude_posts;
 
 	$defaults = array(
-		'posts_per_page' => 1
+		'posts_per_page' => 1,
 		);
 
 // merge arguments with defaults && set keys as variables
@@ -204,26 +261,19 @@ function get_full_story_post($args = array()) {
 	$args = array(
 		'posts_per_page' => $posts_per_page,
 		'post_status' => 'publish',
-		'post__not_in' => $exclude_posts,
-		'post_type' => 'post',
+		'post__not_in' => $exclude_posts[1],
+		'post_type' => 'exclusive',
 		'orderby' => 'date',
 		'order' => 'DESC',
 		);
-
-	$query = new WP_Query();
-	$network_query = $query->posts = network_query_posts($args);
-	$post_count = $query->post_count = count($network_query);
-
+	$query = new WP_Query($args);
 	while($query->have_posts()) { $query->the_post();
 
-		$blogID = $post->BLOG_ID;
-
+		$blogID = 1;
 		echo '<div class="col-xs-12">';
-		echo full_story_post($blogID);
+		echo exclusive_post($blogID);
 		echo '</div>';
 	}
-
-	reset_blog();
 
 }
 
@@ -317,6 +367,116 @@ function get_standard_post_feature($args = array()) {
 	reset_blog();
 }
 
+function get_top_posts($args = array()) {
+	global $post, $exclude_posts;
+
+	$defaults = array(
+		'list_post_title' => 'Recent Headlines'
+		);
+
+	// merge arguments with defaults && set keys as variables
+	$args = array_merge($defaults, $args);
+	foreach($args as $key => $val) { ${$key} = $val; }
+
+	$args = array(
+		'posts_per_page' => 1,
+		'post_status' => 'publish',
+		'post__not_in' => $exclude_posts,
+		'post_type' => 'exclusive',
+		);
+
+	$query = new WP_Query($args);
+	while($query->have_posts()) { $query->the_post();
+
+		$id = get_the_ID();
+		exclude_this_post(1, $id);
+
+		$thumb_caption = '';
+		$thumb_id = get_post_thumbnail_id($post->ID);
+		$thumb_image = get_posts(array('p' => $thumb_id, 'post_type' => 'attachment'));
+
+		if($thumb_image && isset($thumb_image[0])) {
+			$thumb_caption = $thumb_image[0]->post_excerpt.'</span>';
+		}
+
+
+		?>
+
+		<article class="top-post">
+			<a href="<?php the_permalink(); ?>">
+				<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(700, 700); ?>');"></div>
+				<div class="wp-caption-text"><?php echo $thumb_caption; ?></div>
+			</a>
+			<div class="post-info">
+				<div class="col-md-7 left-story">
+					<a href="<?php the_permalink(); ?>">
+						<h1><?php the_title(); ?></h1>
+					</a>
+					<div class="post-excerpt"><?php the_excerpt(); ?></div>
+					<div class="author-title"><h3>written by <?php the_author_posts_link(); ?></h3></div>
+
+				</div>
+				<div class="col-md-5 right-story">
+
+					<?php
+
+					$args = array(
+						'posts_per_page' => 4,
+						'post_status' => 'publish',
+						'post__not_in' => $exclude_posts,
+						'post_type' => 'post',
+						'orderby' => 'date',
+						'order' => 'DESC',
+						);
+
+					$recent_query = new WP_Query();
+					$network_query = $recent_query->posts = network_query_posts($args);
+					$post_count = $recent_query->post_count = count($network_query);
+
+					$i = 1;
+					while($recent_query->have_posts()) { $recent_query->the_post();
+
+						$blogID = $post->BLOG_ID;
+
+						if($i == 1) {
+							?>
+							<div class="headline-list">
+								<h4><?php echo $list_post_title; ?></h4>
+								<ul>
+									<?php }
+
+									if($i >= 1 && $i <= 4) {
+										echo '<li>';
+										echo list_post($blogID);
+										echo '</li>';
+									}
+
+									if($i == 4 || $i == $post_count) { ?>
+								</ul>
+							</div>
+							<?php
+							break; // so no additional loops once we run out of posts!
+						}
+
+						$i++;
+					}
+
+					wp_reset_query();
+					reset_blog();
+
+					?>
+
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+		</article>
+
+		<?php
+
+	}
+
+}
+
 // trending posts! ( the top area.... )
 function get_trending_posts($args = array()) {
 	global $post, $exclude_posts;
@@ -374,7 +534,7 @@ function get_trending_posts($args = array()) {
 			<?php
 		} 
 
-		if($i > 1 && $i < 5) {
+		if($i == 2) {
 			?>
 
 			<div class="col-lg-4 col-md-12">
@@ -382,17 +542,15 @@ function get_trending_posts($args = array()) {
 					<div class="col-lg-12 col-md-6">
 						<?php classic_post($blogID); ?>
 					</div>
-				</div>
-			</div>
-			<?php
-					// just in case there are only posts
-				//	if($i == $post_count) {
-						//echo '</div></div>';
-				//	}
-				//		echo '</div></div>';
-		}
 
-/*
+					<?php
+					// just in case there are only posts
+					if($i == $post_count) {
+						echo '</div></div>';
+					}
+				}
+
+
 				if($i == 3) {
 					?>
 					<div class="col-lg-12 col-md-6">
@@ -416,7 +574,7 @@ function get_trending_posts($args = array()) {
 			<?php
 			break; // so no additional loops once we run out of posts!
 		}
-*/
+
 		$i++;
 	}
 
@@ -476,6 +634,96 @@ function get_beatmersive_posts() {
 		echo '</div>';
 	}
 
+}
+
+function get_fresh_new_tracks($args = array()) {
+	global $exclude_posts;
+
+	$defaults = array(
+		'offset' => 0,
+		'posts_per_page' => 20,
+		'sticky_wrapper' => true,
+		);
+
+	// merge arguments with defaults && set keys as variables
+	$args = array_merge($defaults, $args);
+	foreach($args as $key => $val) { ${$key} = $val; }
+
+	$blogID = get_blog_by_name('freshnewtracks');
+	switch_to_blog($blogID);
+
+	$exclude = $exclude_posts[$blogID];
+	$args = array(
+		'posts_per_page' => $posts_per_page,
+		//'offset' => $offset,
+		'post_status' => 'publish',
+		'post__not_in' => $exclude,
+		'post_type' => 'tracks',
+		);
+
+	$rank = 1 + $offset;
+
+	$open = false; // whether or not to close div
+
+	$query = new WP_Query($args);
+	while($query->have_posts()) { $query->the_post();
+		if($sticky_wrapper && $rank == 15) {
+			$open = true;
+			echo '<div class="fnt-sticky-wrapper">';
+		}
+		echo fresh_new_track($blogID, $rank);
+		$rank++;
+	}
+
+	if($sticky_wrapper && $open) { 
+		echo '</div>';
+	}
+
+	reset_blog();
+}
+
+// maybe eventually merge with fresh new tracks content call so we don't make two calls for same data
+function get_fnt_for_player($args = array()) {
+	global $exclude_posts;
+
+	$defaults = array(
+		'offset' => 0,
+		'posts_per_page' => 10,
+	);
+
+	// merge arguments with defaults && set keys as variables
+	$args = array_merge($defaults, $args);
+	foreach($args as $key => $val) { ${$key} = $val; }
+
+	$blogID = get_blog_by_name('freshnewtracks');
+	switch_to_blog($blogID);
+
+	$exclude = $exclude_posts[$blogID];
+	$args = array(
+		'posts_per_page' => $posts_per_page,
+		//'offset' => $offset,
+		'post_status' => 'publish',
+		'post_type' => 'tracks',
+		);
+
+	$query = new WP_Query($args);
+	while($query->have_posts()) { $query->the_post();
+
+		$id = get_the_ID();
+
+		$artist = get_post_meta($id, 'track_artist_name', true);
+		$track = get_post_meta($id, 'track_name', true);
+		$remixer = get_post_meta($id, 'track_remixer', true);
+		$track_url = get_post_meta($id, 'track_url', true);
+
+		if($remixer != '') {
+			$track .= ' (' . $remixer . ' Remix)';
+		}
+		echo '<a href="' . $track_url . '" data-track="' . $track . '" data-artist="' . $artist . '" class="sc-player">' . $track . '</a>';
+	
+	}
+
+	reset_blog();
 }
 
 function get_spotlight_posts() {

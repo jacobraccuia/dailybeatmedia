@@ -12,26 +12,23 @@ remove_action('wp_head', 'wp_generator');
 // add all appropriate styles and scripts
 add_action('wp_enqueue_scripts', 'my_enqueue_scripts');
 function my_enqueue_scripts() {
-
-	wp_enqueue_style('google-fonts', 'http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900,700,600,300,400italic');
-	wp_enqueue_style('google-font2', 'http://fonts.googleapis.com/css?family=Roboto:400,700');
-	wp_enqueue_style('google-font3', 'http://fonts.googleapis.com/css?family=Lato:400,900,700,400');
-	
+		
 	wp_enqueue_script('bootstrap_js', THEME_DIR . '/bootstrap/bootstrap.min.js', array('jquery'));
 	wp_enqueue_style('bootstrap_css', THEME_DIR . '/bootstrap/bootstrap.min.css');
 	wp_enqueue_style('bootstrap_css_mods', THEME_DIR . '/bootstrap/bootstrap_style_modifications.css');
 	
 	// soundcloud shit
-/*	wp_enqueue_script('waveform_js', THEME_DIR . '/soundcloud/waveform.js', array('jquery'));
+	wp_enqueue_script('waveform_js', THEME_DIR . '/soundcloud/waveform.js', array('jquery'));
 	wp_enqueue_script('soundcloud_api_js', THEME_DIR . '/soundcloud/soundcloud.player.api.js', array('jquery'));
 	wp_enqueue_script('soundcloud_player_js', THEME_DIR . '/soundcloud/sc-player.js', array('jquery'));
 	wp_enqueue_style('soundcloud_css', THEME_DIR . '/soundcloud/sc-player.css');
-*/
+
 	wp_enqueue_script('twitter_web_intents', '//platform.twitter.com/widgets.js');
 	wp_enqueue_script('featherlist_js', '//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.js');
 	wp_enqueue_script('modernizr_js', THEME_DIR . '/js/modernizr.js');
 	wp_enqueue_script('history_js_', THEME_DIR . '/js/html5/jquery.history.js');
 	wp_enqueue_script('jquery_stickem', THEME_DIR . '/js/jquery.stickem.js');
+	wp_enqueue_script('jquery_dotdotdot', THEME_DIR . '/js/jquery.dotdotdot.min.js');
 //	wp_enqueue_script('jquery_sticky', THEME_DIR . '/js/jquery.sticky.js');
 	wp_enqueue_script('jquery_push', THEME_DIR . '/js/jquery.pushmenu.js');
 	wp_enqueue_script('images_loaded', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js');

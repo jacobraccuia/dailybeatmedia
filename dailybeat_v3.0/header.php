@@ -108,7 +108,7 @@
 						<li class="h-icon soundcloud"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-soundcloud"></i></a></li>
 						<li class="h-icon youtube"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-youtube-play"></i></a></li>
 						<li class="h-icon divider">&nbsp;</li>
-						<li class="h-icon beatsxtra"><i class="svg svg-beatsxtra"></i></li>
+						<li class="h-icon beatsxtra" id="player_button"><i class="svg svg-beatsxtra"></i></li>
 					</ul>
 				</div>
 
@@ -156,3 +156,18 @@
 				</ul>
 			</nav>
 			<div id="cabinet-overlay"></div>
+
+
+		<div id="player">
+
+
+
+	        <div class="sc-player">
+	        	<?php get_fnt_for_player(); ?>
+	        </div>
+
+	        <ul id="tracklist">
+	        	
+	        </ul>
+
+		</div>

@@ -33,59 +33,94 @@ jQuery(document).ready(function($) {
 	
 	$('.toggle-menu').jPushMenu();
 
-
-
-if($('body').hasClass('home')) {
-
-	/* <<<<<<<<<<<<<< NOW FEED >>>>>>>>>>>>>> **/
-	/***  update now feed every 3.3 minutes  ***/ 
-
-	// call the now feed, sticky it when the images are loaded
-	now_feed(sticky_now_feed);
-
-	$(window).load(function() {
-		sticky_now_feed();
+	/* truncate meeeee */
+	$('.post-wrapper .post-info h3').dotdotdot({
+		watch: "window"
 	});
 
-	$(window).resize(function() {
-		sticky_now_feed();
+	$('#player_button').on('click', function() {
+		if($(this).hasClass('open')) {
+			$(this).removeClass('open');
+			$('#player').slideUp();
+			return false;
+		}
+
+		$(this).addClass('open');
+		$('#player').slideDown();
+
 	});
 
-	function now_feed_ajax() {
-		setTimeout(function() {
-			$.post(
-				DB_Ajax_Call.ajaxurl, {
-					action : 'update_now_feed',
-					postCommentNonce : DB_Ajax_Call.postCommentNonce,
-				},
-				function(response) {
+	/* music playaaa */
 
-					var top = response.top;
-					var bottom = response.bottom
+	$('[data-play]').on('click', function() {
+		var player = $('#player .sc-player');
+		var track = $(this).data('track');
+		if(track != '') {
 
-					var top_now_feed = $('.top-home-nowfeed');
-					var bottom_now_feed = $('.bottom-home-nowfeed');
+			var song = player.find('.sc-trackslist a[href="' + track + '"]');
+			if(song.length < 1) {
+				$.scPlayer.loadTrackUrlAndPlay(player, track);
+			} else {
+				song.parent().click();
+			}
 
-					destroy = $('section.news').stickem().destroy();
+//			$('#player .sc-player').remove();
 
-					top_now_feed.html(top);
-					bottom_now_feed.html(bottom);
+	//		var $myPlayer  = $.scPlayer({
+	//			links: [{url: track, title: track}]
+	//		}, '#player-wrapper');
 
-					now_feed(sticky_now_feed);
+////			$myPlayer.appendTo($('#player-wrapper'));
 
-				}, 'json');
+///			$('#player-holder').scPlayer({
+//		  links: [{url: track, title: 'Title'}]
+	//		});
+
+//			$('#player .sc-player').after('<div id="player-holder"></div>');
+
+}
+});
+
+	if($('body').hasClass('home')) {
+
+		/* <<<<<<<<<<<<<< NOW FEED >>>>>>>>>>>>>> **/
+		/***  update now feed every 3.3 minutes  ***/ 
+
+		function now_feed_ajax() {
+			setTimeout(function() {
+				$.post(
+					DB_Ajax_Call.ajaxurl, {
+						action : 'update_now_feed',
+						postCommentNonce : DB_Ajax_Call.postCommentNonce,
+					},
+					function(response) {
+
+						var top = response.top;
+						var bottom = response.bottom
+
+						var top_now_feed = $('.top-home-nowfeed');
+						var bottom_now_feed = $('.bottom-home-nowfeed');
+
+						destroy = $('section.news').stickem().destroy();
+
+						top_now_feed.html(top);
+						bottom_now_feed.html(bottom);
+
+						now_feed(sticky_now_feed);
+
+					}, 'json');
 		}, 3100 * 60); // every 3.3 minutes // so it doesn't update before cron
-	}
+		}
 
 
-	function now_feed(callback) {
-		var top_now_feed = $('.top-home-nowfeed');
-		var bottom_now_feed = $('.bottom-home-nowfeed');
+		function now_feed(callback) {
+			var top_now_feed = $('.top-home-nowfeed');
+			var bottom_now_feed = $('.bottom-home-nowfeed');
 
-		var news_height = $('section.news').height();
+			var news_height = $('section.news').height();
 
-		var i = 0;	
-		function check_feed_height() {
+			var i = 0;	
+			function check_feed_height() {
 			if(i > 10) { return; } // just in case all hell breaks loose..
 
 			var now_feed_height = top_now_feed.prop('scrollHeight');
@@ -112,17 +147,19 @@ if($('body').hasClass('home')) {
 	function sticky_now_feed() {
 		if($('.top-home-nowfeed').length < 1) { return; }
 		
-		var news_height = $('section.news').height();
-		$('.top-home-nowfeed').height(news_height);
+		var news_height = $('section.news .home-center-content').height();
+		var col_header_height = $('.top-home-nowfeed').siblings('.col-header').height();
+
+		$('.top-home-nowfeed').height(news_height - col_header_height);
 
 		sticky = $('section.news').stickem({
 			item: $('.top-home-nowfeed .widget').last(),
 			container: '.top-home-nowfeed',
 			offset: $('#navbar').height() + $('#wpadminbar').height() + 20,
-			bottomOffset: -28, // if the item ends too soon or early, add this offset.. hacked stickem file..
+			bottomOffset: -29, // if the item ends too soon or early, add this offset.. hacked stickem file..
 			stickClass: 'sticky',
 			endStickClass: 'sticky-bottom',
-			start: $('.top-home-nowfeed .widget:nth-last-child(2)').offset().top - $('.news').offset().top + $('.top-home-nowfeed .widget:nth-last-child(2)').outerHeight(true)
+			start: $('.top-home-nowfeed .widget:nth-last-child(2)').offset().top - $('.news').offset().top + $('.top-home-nowfeed .widget:nth-last-child(2)').height() + 2
 		});
 
 		$(window).scroll(); // trigger scroll to keep element in place.
@@ -164,19 +201,56 @@ if($('body').hasClass('home')) {
 		});
 
 	}
+
+	//call the now feed, sticky it when the images are loaded
+	now_feed(sticky_now_feed);
+
+	$(window).load(function() {
+		sticky_now_feed();
+		sticky_fnt();
+	});
+
+	$(window).resize(function() {
+		sticky_now_feed();
+		sticky_fnt();
+	});
+
+
+	function sticky_fnt() {
+
+		if($('.fnt-sticky-wrapper').length < 1) { return false; }
+		var col_header_height = $('.top-home-fnt').siblings('.col-header').height();
+
+		var news_height = $('section.news .home-center-content').height();
+		$('.top-home-fnt').height(news_height - col_header_height);
+
+		sticky = $('section.news').stickem({
+			item: $('.fnt-sticky-wrapper'),
+			container: '.top-home-fnt',
+			offset: $('#navbar').height() + $('#wpadminbar').height() + 20,
+			bottomOffset: 0, // if the item ends too soon or early, add this offset.. hacked stickem file..
+			stickClass: 'sticky',
+			endStickClass: 'sticky-bottom',
+			start: $('.fnt-sticky-wrapper').offset().top - $('.news').offset().top - $('.col-header-fnt').height()
+		});
+
+		$(window).scroll(); // trigger scroll to keep element in place.
+	}
+
+
 } // end home conditional
 
 
-	/* <<<<<<<<<<<<<< UPDATE POSTS >>>>>>>>>>>>>> **/
-	/***  triggered on button click  ***/ 
+/* <<<<<<<<<<<<<< UPDATE POSTS >>>>>>>>>>>>>> **/
+/***  triggered on button click  ***/ 
 
-	$('form .load-posts').on('click', function() {
-		$('#load-more').submit();
-	});
+$('form .load-posts').on('click', function() {
+	$('#load-more').submit();
+});
 
-	running = 0;
-	$('#load-more').on('submit', function(e) {
-		e.preventDefault();
+running = 0;
+$('#load-more').on('submit', function(e) {
+	e.preventDefault();
 
 		// abort old AJAX request if it's still running
 		if(running == 1) { ajax_request.abort(); }

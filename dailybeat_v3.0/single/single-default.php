@@ -16,7 +16,7 @@ $author_username = get_the_author_meta('display_name');
 
 $artist_id = get_post_meta($id, 'db_featured_artist_id', true);
 
-$exclude_posts = array_merge(array($id), $exclude_posts);
+exclude_this_post(1, $id);
 
 $permalink = get_permalink();
 
@@ -84,9 +84,9 @@ $permalink = get_permalink();
 
 		<div class="col-fixed col-fixed-right pull-right">
 			<?php
-				if($artist_id > 0) {
-					echo single_artist_widget($artist_id);
-				}
+			if($artist_id > 0) {
+				echo single_artist_widget($artist_id);
+			}
 			?>
 		</div>
 
@@ -95,6 +95,20 @@ $permalink = get_permalink();
 			<div class="single-content">
 				<?php the_content(); ?>
 			</div>
+
+			<div class="related-posts">
+				<h2>Related Posts</h2>
+				<?php
+				$tag_ids = '';
+				$tags = get_the_tags();
+				foreach((array) $tags as $tag) {
+					$tag_ids = $tag->name . ',';
+				}
+
+				$x = 'edm, avicii';
+				get_standard_posts(array('tags' => $x)); ?>
+			</div>
+			
 		</div>
 		<div style="clear:both;"></div>
 	</section>

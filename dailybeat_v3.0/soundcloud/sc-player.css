@@ -1,7 +1,7 @@
 .sc-player { width:100%; height:100%; position:relative; margin:0px; color:#666; font-size:12px; font-weight:600; }
 .sc-player ol, .sc-player li { margin:0; padding:0; list-style-position:inside; }
 /* Artworks */
-.sc-player .sc-artwork-list { display:none; }
+.sc-player .sc-artwork-list { display:block; width:100%; height:auto; overflow:hidden; }
 .sc-player .sc-artwork-list li { list-style-type:none; display:none; }
 .sc-player .sc-artwork-list li.active { list-style-type:none; display:block; }
 .sc-player .sc-artwork-list li img, .sc-player .sc-artwork-list li div { list-style-type:none; width:100%; height:100%; }
@@ -14,9 +14,18 @@
 /* tracks */
 
 /* Track listings*/
-.sc-player ol.sc-trackslist { display:block;position:relative; height:32px; overflow:hidden; }
-.sc-player ol.sc-trackslist li { cursor:pointer; list-style:none; padding:7px 0px 7px 15px; text-transform:uppercase; height:23px; overflow:hidden; }
-.sc-trackslist li a { line-height:17px; }
+.sc-trackslist { display:block; position:relative; overflow:hidden; }
+.sc-trackslist li { cursor:pointer; list-style:none; padding:7px 15px 7px 15px; text-transform:uppercase; overflow:hidden; letter-spacing:.5px; display:table; width:100%; }
+.sc-trackslist li a { line-height:17px; float:left; display:block; }
+.sc-trackslist .artist-name { font-weight:400; color:#DDD; }
+
+.sc-player li.divider { cursor:default; padding:0px; height:2px; }
+
+.sc-info { padding:10px 25px; }
+.sc-info h3 { text-align:center; margin-bottom:0px;}
+.sc-info h4, .sc-info p, .sc-info-close { display:none; }
+
+.sc-player .playlist-header { height:32px; line-height:35px; abackground:black; font-size:13px; margin:0px; text-transform:uppercase; color:white; text-align:center; padding:0px 15px; }
 
 /* Utilities */
 .sc-player .hidden { display:none; }
@@ -27,8 +36,8 @@
 .sc-scrubber .sc-played { }
 
 /* controls */
-.sc-player a { text-decoration:none; color:#666; }
-.sc-player .sc-controls { overflow:hidden; float:left; width:70px; margin:3px 0px; }
+.sc-player a { text-decoration:none; color:#fff; }
+.sc-player .sc-controls { overflow:hidden; display:block; width:100%; margin:10px 0px 5px; text-align:center; }
 .sc-controls a { display:inline-block; margin-right:5px; font-size:18px; }
 .sc-controls a.sc-pause { display:none; margin-left:-3px; }
 .sc-player.playing .sc-controls a.sc-play { display:none; }
@@ -40,10 +49,12 @@
 
 .sc-scrubber .sc-time-indicators { background:#fff; color:#000; display:block; padding:2px; font-size:0.4em; font-weight:normal; line-height:1em; position:absolute; right:0; top:-20px; }
 /* Track listings*/
-.sc-player ol.sc-trackslist li.active a { color:#333; position:relative; z-index:10; width:100%; overflow:hidden; display:block; font-weight:400; }
-.sc-track-duration { text-align:right; float:right; padding:0 5px; margin-left:5px; display:none; }
 
-.sc-waveform-container { display:block; z-index:10; position:absolute; top:0px; width:100%; }
+.sc-player ol.sc-trackslist li.active { }
+.sc-player ol.sc-trackslist li.active a { color:#fff; position:relative; z-index:10; }
+.sc-track-duration { text-align:right; padding:0 0px 0px 10px; margin-left:5px; width:35px; display:table-cell; vertical-align:middle; }
+
+.sc-waveform-container { display:block; z-index:10; position:absolute; top:0px; width:90%; right:0px; }
 .sc-player.playing .sc-buffer { background-color:#fff; }
 
 /*
