@@ -682,6 +682,8 @@ function get_fresh_new_tracks($args = array()) {
 	reset_blog();
 }
 
+
+
 // maybe eventually merge with fresh new tracks content call so we don't make two calls for same data
 function get_fnt_for_player($args = array()) {
 	global $exclude_posts;
@@ -715,11 +717,17 @@ function get_fnt_for_player($args = array()) {
 		$track = get_post_meta($id, 'track_name', true);
 		$remixer = get_post_meta($id, 'track_remixer', true);
 		$track_url = get_post_meta($id, 'track_url', true);
+		$track_artist_id = get_post_meta($id, 'db_featured_artist_id', true);
+
+		$artist_meta = array();
+		if(is_numeric($track_artist_id)) {
+			$artist_meta = get_artist_fields($track_artist_id, $blogID);
+		}
 
 		if($remixer != '') {
 			$track .= ' (' . $remixer . ' Remix)';
 		}
-		echo '<a href="' . $track_url . '" data-track="' . $track . '" data-artist="' . $artist . '" class="sc-player">' . $track . '</a>';
+		echo '<a href="' . $track_url . '" ' . build_track_data($track_url, $track, $artist, $artist_meta) . ' class="sc-player">' . $track . '</a>';
 	
 	}
 

@@ -166,8 +166,4 @@
 	        	<?php get_fnt_for_player(); ?>
 	        </div>
 
-	        <ul id="tracklist">
-	        	
-	        </ul>
-
 		</div>

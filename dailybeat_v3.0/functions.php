@@ -239,6 +239,59 @@ function single_author_widget($author_id = 0) {
 	<?php	
 }
 
+function get_artist_fields($id, $oldBlogID = 1) {
+
+	$blogID = get_blog_by_name('artists');
+	min_switch_to_blog($blogID);
+
+	// create array to return
+	$artist_vars = array();
+	
+	$artist = get_post($id);
+
+	$artist_vars['thumb_url'] =  wp_get_attachment_image_src(get_post_thumbnail_id($id), array(300,300))[0];
+
+	$post_meta = get_post_custom($id);
+
+	// assign all columns to variable
+	$artist_columns = artist_columns();
+
+	// in case value isn't set in database, set required variables to ''
+	foreach($artist_columns as $column) { $artist_vars[$column] = ''; }
+
+	// assign all fields
+	foreach($post_meta as $key => $meta) {
+		if(array_key_exists($key, array_flip($artist_columns))) { // if we want this key
+			if(isset($key) && !empty($key)) { $artist_vars[$key] = trim($meta[0]); } else $artist_vars[$key] = '';
+		}
+	}	
+
+	min_switch_to_blog($oldBlogID);
+
+	return $artist_vars;
+}
+
+// creates track data that can be applied to any track
+// this data is read by the soundcloud js file and populated in the player
+// track artist meta is the same data as get_artist_fields
+function build_track_data($track_url = '', $track = '', $artist = '', $artist_meta = array()) {
+
+	$thumb_url = isset($artist_meta['thumb_url']) ? $artist_meta['thumb_url'] : '';
+	$artist_instagram = isset($artist_meta['artist_instagram']) ? $artist_meta['artist_instagram'] : '';
+	$artist_twitter = isset($artist_meta['artist_twitter']) ? $artist_meta['artist_twitter'] : '';
+	$artist_soundcloud = isset($artist_meta['artist_soundcloud']) ? $artist_meta['artist_soundcloud'] : '';
+
+	return 'data-track-url="' . $track_url 
+		. '" data-track="' . $track
+		. '" data-title="' . $track
+		. '" data-artist="' . $artist
+		. '" data-thumb-url="' . $thumb_url
+		. '" data-artist-instagram="' . $artist_instagram
+		. '" data-artist-twitter="' . $artist_twitter
+		. '" data-artist-soundcloud="' . $artist_soundcloud
+		. '"';
+}
+
 function single_artist_widget($id) {
 
 	$blogID = get_blog_by_name('artists');
@@ -249,18 +302,6 @@ function single_artist_widget($id) {
 	$thumb_url =  wp_get_attachment_image_src( get_post_thumbnail_id($id), array(300,300))[0];
 
 	$post_meta = get_post_custom($id);
-
-	function artist_columns() {
-		return array(
-			'artist_name',
-			'artist_id',
-			'artist_tour_dates',
-			'artist_twitter',
-			'artist_soundcloud',
-			'artist_instagram',
-			'artist_sponsor'
-			);
-	}
 
 	// assign all columns to variable
 	$artist_columns = artist_columns();
@@ -342,7 +383,17 @@ function single_artist_widget($id) {
 			<?php 	
 		}
 
-
+function artist_columns() {
+		return array(
+			'artist_name',
+			'artist_id',
+			'artist_tour_dates',
+			'artist_twitter',
+			'artist_soundcloud',
+			'artist_instagram',
+			'artist_sponsor'
+			);
+	}
 
 		add_action('init', 'db_ad_cpt');
 		function db_ad_cpt() {

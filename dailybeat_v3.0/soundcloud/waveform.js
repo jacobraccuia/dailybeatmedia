@@ -1,3 +1,33 @@
+
+
+function renderWaveform(data,plain,clear){
+    if(data){
+        for(var i = 0; i < data.length; i++){
+
+            plain = plain || 2;
+            clear = clear || 1;
+            var step = plain+clear;
+            if (i % step == 0){
+                var sum=0;
+                for (var j = 0; j < plain; j++) {
+                    sum += data[i+j];
+                };
+                var average = (sum/plain);
+                for (var j = 0; j < plain; j++) {
+                    data[i+j]=average;
+                };
+                for (var j = plain; j < step; j++) {
+                    data[i+j]=0;
+                };
+            }
+        } 
+        return data;
+    }
+    else
+        return;
+}
+
+
 (function() {
   var JSONP, Waveform,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -59,13 +89,18 @@
     };
 
     Waveform.prototype.redraw = function() {
-      var d, i, middle, t, _i, _len, _ref, _results;
+      var d, i, middle, t, _i, _len, _ref, _results, col;
       this.clear();
       if (typeof this.innerColor === "function") {
         this.context.fillStyle = this.innerColor();
+        col = this.innerColor();
       } else {
         this.context.fillStyle = this.innerColor;
+        col = this.innerColor;
       }
+
+      this.context.fillStyle = 'rgba(255,255,255, .3)';
+      
       middle = this.height / 2;
       i = 0;
       _ref = this.data;
@@ -73,13 +108,32 @@
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         d = _ref[_i];
         t = this.width / this.data.length;
-        if (typeof this.innerColor === "function") {
-          this.context.fillStyle = this.innerColor(i / this.width, d);
+        if (typeof this.innerColor === "function" && this.innerColor !== 'undefined') {
+         //this.context.fillStyle = this.innerColor(i / this.width, d);
+
+          // if gray, fill in, else create gradient
+          if(this.innerColor(i / this.width, d) == 'unplayed' || 
+            (this.innerColor(i / this.width, d).substring(0, 3) != 'rgb' && this.innerColor(i / this.width, d).substring(0, 1) != '#')
+            ) {
+            this.context.fillStyle = 'rgba(255, 255, 255, 0.3)';
+          } else {
+
+            var grd = this.context.createLinearGradient(0, 0, this.width, 0);
+            grd.addColorStop(0,'rgba(0, 226, 207, .8)');
+            grd.addColorStop(1, this.innerColor(i / this.width, d));
+
+            this.context.fillStyle = grd;
+          }
+
         }
+
         this.context.clearRect(t * i, middle - middle * d, t, middle * d * 2);
         this.context.fillRect(t * i, middle - middle * d, t, middle * d * 2);
         _results.push(i++);
       }
+
+
+
       return _results;
     };
 
@@ -147,6 +201,9 @@
         i++;
       }
       newData[fitCount - 1] = data[data.length - 1];
+
+      //newData = renderWaveform(newData);
+
       return newData;
     };
 

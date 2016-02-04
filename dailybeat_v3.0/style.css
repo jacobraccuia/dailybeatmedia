@@ -32,14 +32,14 @@ table { border-collapse:collapse; border-spacing:0; }
 @font-face { font-family:'Hurme'; font-weight:400; src:url('fonts/HurmeGeometricSans1.otf') format('opentype'); }
 @font-face { font-family:'Hurme'; font-weight:500; src:url('fonts/HurmeGeometricSans1 SemiBold.otf') format('opentype'); }
 @font-face { font-family:'Hurme'; font-weight:700; src:url('fonts/HurmeGeometricSans1 Bold.otf') format('opentype'); }
-@font-face { font-family:'Hurme'; font-weight:800; src:url('fonts/HurmeGeometricSans1 Black.otf') format('opentype'); }
+@font-face { font-family:'Hurme'; font-weight:800; src:url('fonts/HurmeGeometricSans1 Black.otf') format('opentype'); } /*eaeaea*/
 
 
 * { margin:0; padding:0; }
 
 html { overflow:-moz-scrollbars-vertical; }
 html { overflow-x:auto; }
-body { font-size:14px; color:#333; background:#EAEAEA; position:relative; font-family:Hurme, Lato, Source Sans Pro, "Helvetica Neue", Helvetica, sans serif; 
+body { font-size:14px; color:#333; background:#E8EDF7; position:relative; font-family:Hurme, Lato, Source Sans Pro, "Helvetica Neue", Helvetica, sans serif; 
   text-rendering:optimizeLegibility; -webkit-font-feature-settings:"kern" 1; font-feature-settings:"kern" 1; }
 
 a { color:#333; font-weight:bold; text-decoration:none; }
@@ -195,7 +195,7 @@ li.divider, .list-divider { background-color:#2b2b2b; background-repeat:repeat-y
 #player.menu-open { -webkit-transform:translateX(200px); transform:translateX(200px); }
 .logged-in #player { top:80px; height:calc(100% - 80px);}
 
-#player { background:#2b2b2b; position:fixed; width:316px; height:calc(100% - 48px); top:48px; right:0; display:block; overflow-y:scroll; overflow-x:hidden; background-image:-webkit-linear-gradient(top, #2b2b2b, #010101); background-image:linear-gradient(to bottom, #2b2b2b, #010101); -webkit-transition:-webkit-transform 0.2s ease 0s; transition:-webkit-transform 0.2s ease 0s; transition:transform 0.2s ease 0s; transition:transform 0.2s ease 0s, -webkit-transform 0.2s ease 0s; z-index:102; -webkit-overflow-scrolling:touch; box-shadow:-1px 0px 20px 1px #666; }
+#player { background:#2b2b2b; position:fixed; width:316px; height:calc(100% - 48px); top:48px; right:0; display:block; overflow:hidden; background-image:-webkit-linear-gradient(top, #2b2b2b, #010101); background-image:linear-gradient(to bottom, #2b2b2b, #010101); -webkit-transition:-webkit-transform 0.2s ease 0s; transition:-webkit-transform 0.2s ease 0s; transition:transform 0.2s ease 0s; transition:transform 0.2s ease 0s, -webkit-transform 0.2s ease 0s; z-index:102; -webkit-overflow-scrolling:touch; box-shadow:-1px 0px 20px 1px #666; }
 
 
 
@@ -215,7 +215,7 @@ hr { margin:10px auto 15px; width:98%; border-color:#E9E9E9; border-width:2px; }
 .col-header { position:relative; height:38px; width:100%; overflow:hidden; }
 .col-header .bar { height:2px; width:47%; top:17px; left:0px; position:absolute; background-color:#00E2CF; background:-webkit-linear-gradient(left, #00E2CF, #5784E0); background:linear-gradient(to right, #00E2CF, #5784E0); }
 .col-header .bar.right { right:0px; left:auto; background-color:#00E2CF; background:-webkit-linear-gradient(right, #00E2CF, #5784E0); background:linear-gradient(to left, #00E2CF, #5784E0); }
-.col-header .logo { position:absolute; left:50%; -webkit-transform:translateX(-50%); transform:translateX(-50%); display:inline-block; margin:0px auto 0px; background:#EAEAEA; z-index:2; padding:0px 10px; top:0px; line-height:35px; }
+.col-header .logo { position:absolute; left:50%; -webkit-transform:translateX(-50%); transform:translateX(-50%); display:inline-block; margin:0px auto 0px; background:#E8EDF7; z-index:2; padding:0px 10px; top:0px; line-height:35px; }
 .col-header .dblive { font-weight:400; font-size:28px; }
 .col-header .dblive span { font-weight:800; }
 
@@ -477,6 +477,7 @@ h3.dotdotdot { max-height:40px; overflow:hidden; }
 .track:hover .fa-circle { color:rgba(255,255,255,1); }
 .track:hover .fa-play-circle { color:rgba(0,0,0,1); }
 
+.hidden-track-meta { display:none; } /* lmao */
 
 
 /* NOW feed */
@@ -843,5 +844,9 @@ a:hover .svg-attack-icon, .svg-attack-icon-color { background-image:url(images/s
 @media (max-width: 480px) {
   
 
+}
+
+@media (max-height: 650px) {
+  #player { overflow-y:scroll; overflow-x:hidden; }
 }
 

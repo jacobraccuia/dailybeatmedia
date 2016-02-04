@@ -1,6 +1,5 @@
 jQuery(document).ready(function($) {
 
-
 	$('#navbar').affix({
 		offset: { top: 0 }
 	});
@@ -54,15 +53,19 @@ jQuery(document).ready(function($) {
 
 	$('[data-play]').on('click', function() {
 		var player = $('#player .sc-player');
-		var track = $(this).data('track');
-		if(track != '') {
-
-			var song = player.find('.sc-trackslist a[href="' + track + '"]');
+		var track = $(this).data();
+		var track_url = $(this).data('track-url');
+		if(track_url != '') {
+			var song = player.find('.sc-trackslist a[href="' + track_url + '"]');
 			if(song.length < 1) {
 				$.scPlayer.loadTrackUrlAndPlay(player, track);
 			} else {
 				song.parent().click();
 			}
+
+		    if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
+		      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
+		    }
 
 //			$('#player .sc-player').remove();
 
@@ -80,6 +83,9 @@ jQuery(document).ready(function($) {
 
 }
 });
+
+
+	
 
 	if($('body').hasClass('home')) {
 
@@ -125,23 +131,23 @@ jQuery(document).ready(function($) {
 
 			var now_feed_height = top_now_feed.prop('scrollHeight');
 
-			if(now_feed_height > news_height) {
-				var last_child = top_now_feed.children().last().detach(); // remove last item from dom
-				bottom_now_feed.prepend(last_child); // prepend item to the second feed
+				if(now_feed_height > news_height) {
+					var last_child = top_now_feed.children().last().detach(); // remove last item from dom
+					bottom_now_feed.prepend(last_child); // prepend item to the second feed
 
-				i++;
-				check_feed_height(); // ooooooo recursion
-			}
+					i++;
+					check_feed_height(); // ooooooo recursion
+				}
 
 			top_now_feed.height(news_height);
-		}
+			}
 
-		check_feed_height();
-		featherlight_now_feed();
+			check_feed_height();
+			featherlight_now_feed();
 
-		now_feed_ajax();
-		callback();
-	}	
+			now_feed_ajax();
+			callback();
+		}	
 
 
 	function sticky_now_feed() {

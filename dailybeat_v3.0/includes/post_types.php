@@ -259,6 +259,15 @@ function fresh_new_track($blogID, $rank) {
 	$track = get_post_meta($id, 'track_name', true);
 	$remixer = get_post_meta($id, 'track_remixer', true);
 	$track_url = get_post_meta($id, 'track_url', true);
+	$track_artist_id = get_post_meta($id, 'db_featured_artist_id', true);
+
+	$thumb_url = get_thumb_url(75, 75);
+	$permalink = get_the_permalink();
+
+	$artist_meta = array();
+	if(is_numeric($track_artist_id)) {
+		$artist_meta = get_artist_fields($track_artist_id, $blogID);
+	}
 
 	if($remixer != '') {
 		$track .= ' (' . $remixer . ' Remix)';
@@ -268,8 +277,8 @@ function fresh_new_track($blogID, $rank) {
 	<div class="track track-<?php echo $rank; ?>">
 		<div class="track-meta">
 			<h4><span><?php echo $rank; ?></span></h4>
-			<div class="album-art" data-play="true" data-track="<?php echo $track_url; ?>">
-				<img src="<?php echo get_thumb_url(75, 75); ?>" title="<?php echo $artist; ?> - <?php echo $track; ?>"/>
+			<div class="album-art" data-play="true" <?php echo build_track_data($track_url, $track, $artist, $artist_meta); ?>>
+				<img src="<?php echo $thumb_url; ?>" title="<?php echo $artist; ?> - <?php echo $track; ?>"/>
 				<div class="video-overlay">
 					<span class="fa-stack">
 						<i class="fa fa-circle fa-stack-2x"></i>
@@ -278,7 +287,7 @@ function fresh_new_track($blogID, $rank) {
 				</div>
 			</div>
 		</div>		
-		<a href="<?php the_permalink(); ?>" target="_blank">
+		<a href="<?php echo $permalink; ?>" target="_blank">
 			<div class="track-info-wrapper">
 				<div class="track-info">
 					<div class="song"><?php echo $track; ?></div>

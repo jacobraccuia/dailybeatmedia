@@ -266,8 +266,8 @@
                   data.permalink_url = link.url;
                   // if track, add to player
 
-                   data.meta = link;
-                   playerObj.tracks.push(data);
+                  data.meta = link;
+                  playerObj.tracks.push(data);
                 }else if(data.creator){
                   // it's a group!
                   links.push({url:data.uri + '/tracks'});
@@ -290,7 +290,7 @@
                   playerObj.node.trigger({type:'onTrackDataLoaded', playerObj: playerObj, url: apiUrl});
                 }
               });
-      };
+};
         // update current API key
         apiKey = key;
         // update the players queue
@@ -308,14 +308,43 @@
         }
       },
 
-      updateTrackInfo = function($player, track) {
+      updateTrackInfo = function($player, track, callback) {
         // update the current track info in the player
         // log('updateTrackInfo', track);
         $('.sc-info', $player).each(function(index) {
-          $('h3', this).html('<a href="' + track.permalink_url +'">' + track.title + '</a>');
+          $('h3', this).html('<a href="' + track.permalink_url +'">' + track.meta.title + '</a>');
          // $('h4', this).html('by <a href="' + track.user.permalink_url +'">' + track.user.username + '</a>');
           //$('p', this).html(track.description || 'no Description');
         });
+
+
+        // update bio
+        $('.sc-artist-info', $player).each(function(index) {
+          if(track.meta.thumb_url != '' && track.meta.thumb_url != null) {    
+            $(this).html('<div class="artist-pic"><img src="' + track.meta.thumb_url + '" /></div><div class="artist-meta"><h4>' + track.meta.artist + '</h4><ul class="artist-social"></ul></div>');
+            if(track.meta.artist_twitter != '') {
+              $(this).find('ul').append('<li><a href="http://twitter.com/' + track.meta.artist_twitter + '" target="_blank"><i class="fa fa-fw fa-twitter"></i></a></li>');
+            }
+            if(track.meta.artist_instagram != '') {
+              $(this).find('ul').append('<li><a href="http://instagram.com/' + track.meta.artist_instagram + '" target="_blank"><i class="fa fa-fw fa-instagram"></i></a></li>');
+            }
+            if(track.meta.artist_soundcloud != '') {
+              $(this).find('ul').append('<li><a href="http://soundcloud.com/' + track.meta.artist_soundcloud   + '" target="_blank"><i class="fa fa-fw fa-soundcloud"></i></a></li>');
+            }
+
+            $('.artist-list-divider').show();
+            $(this).slideDown(400, function() {
+                  updatePlayerHeight();
+            });
+          } else { 
+            $('.artist-list-divider').hide();
+            $(this).slideUp(400, function() {
+                  updatePlayerHeight();
+            });
+          }
+
+        });
+
         // update the artwork
         $('.sc-artwork-list li', $player).each(function(index) {
           var $item = $(this),
@@ -330,7 +359,8 @@
                   // if the image isn't loaded yet, do it now
                   $(this).removeClass('sc-loading-artwork').html(artworkImage(track, false));
                 });
-          }else{
+          
+          } else {
             // reset other artworks
             $item.removeClass('active');
           }
@@ -341,6 +371,9 @@
        // $('.sc-waveform-container', $player).html('<img src="' + track.waveform_url +'" />');
 
        $player.trigger('onPlayerTrackSwitch.scPlayer', [track]);
+       if(callback) {
+        callback();
+       }
      },
 
      play = function(track) {
@@ -369,6 +402,7 @@
       },
       onPlay = function(player, id) {
         var track = getPlayerData(player).tracks[id || 0];
+
         updateTrackInfo(player, track);
         // cache the references to most updated DOM nodes in the progress bar
         updates = {
@@ -378,6 +412,7 @@
         };
         updatePlayStatus(player, true);
         play(track);
+
       },
       onPause = function(player) {
         updatePlayStatus(player, false);
@@ -404,7 +439,12 @@
         var $player = $(player);
         // continue playing through all players
         log('track finished get the next one');
-        $nextItem = $('.sc-trackslist li.active', $player).next('li');
+        $nextItem = $('.sc-trackslist li.active', $player).nextAll('li').not('.divider').first();
+
+        if($nextItem.length < 1) {
+          $nextItem = $('.sc-trackslist li.active', $player).parent('.sc-trackslist').find('li').first(); 
+        }
+
         // try to find the next track in other player
         if(!$nextItem.length){
           $nextItem = $player.nextAll('div.sc-player:first').find('.sc-trackslist li.active');
@@ -451,12 +491,14 @@
           position = audioEngine.getPosition(),
           relative = (position / duration);
 
+          big_waveform(relative);
 
           // update the scrubber width
           updates.$played.css('width', (100 * relative) + '%');
           // show the position in the track position counter
           updates.position.innerHTML = timecode(position);
           // announce the track position to the DOM
+
           $doc.trigger({
             type: 'onMediaTimeUpdate.scPlayer',
             duration: duration,
@@ -493,15 +535,19 @@
         url: val.href,
         title: val.innerHTML,
         artist: val.getAttribute('data-artist') || '',
-        track: val.getAttribute('data-track') || ''
+        track: val.getAttribute('data-track') || '',
+        thumb_url: val.getAttribute('data-thumb-url') || '',
+        artist_instagram: val.getAttribute('data-artist-instagram') || '',
+        artist_twitter: val.getAttribute('data-artist-twitter') || '',
+        artist_soundcloud: val.getAttribute('data-artist-soundcloud') || '',
       }; 
     }),
     $player = $('<div class="sc-player loading"></div>').data('sc-player', {id: playerId}),
     $artworks = $('<ol class="sc-artwork-list"></ol>').appendTo($player),
-        $info = $('<div class="wave1"></div><div class="sc-info"><h3></h3><a href="#" class="sc-info-close">X</a></div>').appendTo($player),
-        $controls = $('<div class="list-divider"></div><div class="sc-controls"></div><div class="list-divider"></div><h4 class="playlist-header">Keep Listening</h4><div class="list-divider"></div>').appendTo($player),
-        $list = $('<ol class="sc-trackslist"></ol>').appendTo($player);
-
+    $info = $('<div id="large-waveform"></div>  <div class="sc-info"><h3></h3><a href="#" class="sc-info-close">X</a></div>').appendTo($player),
+    $controls = $('<div class="list-divider"></div><div class="sc-controls"></div><div class="list-divider"></div><div class="sc-artist-info"></div><div class="list-divider artist-list-divider"></div><h4 class="playlist-header">Keep Listening</h4><div class="list-divider"></div></div>').appendTo($player),
+    $list = $('<ol class="sc-trackslist"></ol>').appendTo($player);
+    $('<div class="powered-by">powered by soundcloud</div>').appendTo($player);
         // add the classes of the source node to the player itself
         // the players can be indvidually styled this way
         if(sourceClasses || opts.customClass){
@@ -516,7 +562,7 @@
      //   .append('<a href="' + links[0].url + '/download" class="sc-download" target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a>')
 		//	.append('<div class="sc-volume-slider"><span class="sc-volume-status" style="width:' + soundVolume +'%"></span></div>')
    //.append('<a href="#" class="sc-volume-off"><span class="glyphicon glyphicon-volume-off"></span></a><a href="#" class="sc-volume-on"><span class="glyphicon glyphicon-volume-up"></span></a>')
-   .append('<a href="#play" class="sc-play"><span class="glyphicon glyphicon-play"></span></a> <a href="#pause" class="sc-pause hidden"><span class="glyphicon glyphicon-pause"></a>')
+   .append('<a href="#previous" class="sc-previous"><i class="fa fa-fw fa-backward"></i></a><a href="#play" class="sc-play"><i class="fa fa-fw fa-play"></i></a> <a href="#pause" class="sc-pause hidden"><span class="fa fa-fw fa-pause"></a><a href="#next" class="sc-next"><i class="fa fa-fw fa-forward"></i></a>')
    .end()
          // .append('<a href="#info" class="sc-info-toggle">Info</a>')
          .find('.sc-controls')
@@ -526,8 +572,8 @@
          .append('<div class="sc-time-indicators"><span class="sc-position"></span> | <span class="sc-duration"></span></div>');
 
         // load and parse the track data from SoundCloud API
-        console.log(links);
-        loadTracksData($player, links, opts.apiKey);
+       // console.log(links);
+       loadTracksData($player, links, opts.apiKey);
         // init the player GUI, when the tracks data was laoded
         $player.bind('onTrackDataLoaded.scPlayer', function(event) {
           // log('onTrackDataLoaded.scPlayer', event.playerObj, playerId, event.target);
@@ -578,6 +624,7 @@
           $player
           .removeClass('loading')
           .trigger('onPlayerInit');
+          
 
           $(this).find('.sc-trackslist').data('marquee', 0);
           if($(this).find('.sc-trackslist li.active a').height() > 17) { $(this).find('.sc-trackslist').data('marquee-run', 1); } 
@@ -650,6 +697,7 @@
   // toggling play/pause
   $(document).on('click','a.sc-play, a.sc-pause', function(event) {
     var $list = track_name = $(this).closest('.sc-player').find('ol.sc-trackslist');
+    
     // simulate the click in the tracklist
     if(!track_name.length) { 
       track_name = $('.full-width-soundcloud').find('ol.sc-trackslist');
@@ -671,6 +719,45 @@
     return false;
   });
 
+  // previous track
+  $(document).on('click', 'a.sc-previous', function(event) {
+    event.preventDefault();
+    var $list = track_name = $(this).closest('.sc-player').find('ol.sc-trackslist');
+
+    var track = $list.find('li.active').prevAll('li').not('.divider').first();
+    if(track.length < 1) {
+      track = $list.find('li:not(.divider)').last(); 
+    }
+
+    track.click();
+
+    if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
+      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
+    }
+
+    return false;
+  });
+
+  // next track
+  $(document).on('click', 'a.sc-next', function(event) {
+    event.preventDefault();
+    var $list = track_name = $(this).closest('.sc-player').find('ol.sc-trackslist');
+
+    var track = $list.find('li.active').nextAll('li').not('.divider').first();
+    if(track.length < 1) {
+      track = $list.find('li:not(.divider)').first(); 
+    }
+
+    track.click();
+    
+    if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
+      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
+    }
+
+    return false;
+  });
+
+
   // displaying the info panel in the player
   $(document).on('click','a.sc-info-toggle, a.sc-info-close', function(event) {
     var $link = $(this);
@@ -681,12 +768,14 @@
   });
 
   // selecting tracks in the playlist
-  $(document).on('click','.sc-trackslist li', function(event) {
+  $(document).on('click','.sc-trackslist li:not(.divider)', function(event) {
 
     var $track = $(this),
     $player = $track.closest('.sc-player'),
     trackId = $track.data('sc-track').id,
     play = $player.is(':not(.playing)') || $track.is(':not(.active)');
+
+
     if(play) {
       onPlay($player, trackId);
 
@@ -717,6 +806,11 @@ $track.addClass('active').siblings('li').removeClass('active');
 $('.artworks li', $player).each(function(index) {
   $(this).toggleClass('active', index === trackId);
 });
+
+if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
+      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
+    }
+  
 
 return false;
 });
@@ -760,7 +854,7 @@ var onTouchMove = function(ev) {
       //  originX = $node.offset().top,
      //   originHeight = $node.height(),
      //   getVolume = function(x) {
-	//		console.log(originHeight - originX);
+  	//		console.log(originHeight - originX);
       //    return Math.floor((1 - ((x - originX)/originHeight))*100);
       //  },
       var update = function(vol) {
@@ -824,82 +918,92 @@ $(document).on('mouseleave', '.sc-trackslist', function() {
 */
 
 
-  $(document).on('click', '#large-waveform canvas', function(event) {
-    
+$(document).on('click', '#large-waveform canvas', function(event) {
+
+  var cursor_position = get_cursor_position($(this), event);
+  var x = cursor_position[0];
+
+  var left_offset = $(this).offset().left;
+  var distance_from_left = x - left_offset;
+  
+  $player = $('#player .sc-player');
+
+  if($player.is(':not(.playing)')) {
+   $('.sc-controls .sc-play').click();  
+  }
+
+  //relative = Math.min(distance_from_left / $(this).width());
+  relative = Math.min(x / $(this).width());
+
+
+  setTimeout(function() { onSeek($player, relative); }, 100);
+
+});
+
+$(document).on('mousemove', '#large-waveform canvas', function(event) {
+
+  if($('#player .sc-player.playing').length) {
+
     var cursor_position = get_cursor_position($(this), event);
     var x = cursor_position[0];
-    
-      var left_offset = $(this).offset().left;
-      var distance_from_left = x - left_offset;
-    
-      $player = $('.full-width-soundcloud .sc-player');
-      
-      if($player.is(':not(.playing)')) {
-        $('.premiere-title .sc-play').click();  
-      }
-    
-      relative = Math.min(distance_from_left / $(this).width());
 
-      setTimeout(function() { onSeek($player, relative); }, 100);
-      
-  });
-  
-  $(document).on('mousemove', '#large-waveform canvas', function(event) {
-    
-    if($('#large-waveform').hasClass('active') && $('.full-width-soundcloud .sc-player.playing').length) {
+    window.mouse_position_x = mouse_position = x / $(this).width();
 
-      var cursor_position = get_cursor_position($(this), event);
-      var x = cursor_position[0];
-      
-      window.mouse_position_x = mouse_position = x / $(this).width();
+    var duration = audioEngine.getDuration(),
+    position = audioEngine.getPosition(),
+    relative = (position / duration);
 
-        var duration = audioEngine.getDuration(),
-                  position = audioEngine.getPosition(),
-                  relative = (position / duration);
-      
-      big_waveform(relative, mouse_position);
-    }
-  });
-  
-  $(document).on('mouseleave', '#large-waveform canvas', function(event) {
-    window.mouse_position_x = 0;
-    
-      var duration = audioEngine.getDuration(),
-        position = audioEngine.getPosition(),
-        relative = (position / duration);
-    
-    big_waveform(relative, mouse_position_x);
-  });
+    big_waveform(relative, mouse_position);
+  }
+});
+
+$(document).on('mouseleave', '#large-waveform canvas', function(event) {
+  window.mouse_position_x = 0;
+
+  var duration = audioEngine.getDuration(),
+  position = audioEngine.getPosition(),
+  relative = (position / duration);
+
+  big_waveform(relative, mouse_position_x);
+});
 
 
 
-    $.scPlayer.loadTrackInfoAndPlay = function($elem, track){
-        var playerObj = players[$elem.data('sc-player').id];
-        playerObj.tracks.push(track);
-        var index = playerObj.tracks.length-1;
-        var $list = $(playerObj.node).find('.sc-trackslist');
-        var $artworks = $(playerObj.node).find(".sc-artwork-list");
+$.scPlayer.loadTrackInfoAndPlay = function($elem, track, meta) {
+  var playerObj = players[$elem.data('sc-player').id];
+  track.meta = meta; // add meta to track data
+  playerObj.tracks.push(track);
+  console.log(track);
+  var index = playerObj.tracks.length-1;
+  var $list = $(playerObj.node).find('.sc-trackslist');
+  var $artworks = $(playerObj.node).find(".sc-artwork-list");
+
         // add to playlist
-        var $li = $('<li><a href="' + track.permalink_url +'">' + track.title + '</a><span class="sc-track-duration">' + timecode(track.duration) + '</span></li>')
-            .data('sc-track', {id:index})
-            .prependTo($list);
+        var $li = $('<li><a href="' + track.permalink_url +'"><div class="track-name">' + track.meta.track + '</div><div class="artist-name">' + meta.artist + '</div></a><span class="sc-track-duration">' + timecode(track.duration) + '</span></li><li class="divider"></div>')
+        .data('sc-track', {id:index})
+        .prependTo($list);
+
+
+
         // add to artwork list
         $('<li></li>')
-            .append(artworkImage(track, true))
-            .appendTo($artworks)
-            .data('sc-track', track);
+        .append(artworkImage(track, true))
+        .appendTo($artworks)
+        .data('sc-track', track);
         $li.click();
-    }
+      }
 
-    $.scPlayer.loadTrackUrlAndPlay = function($elem, url){
-    var apiUrl = scApiUrl(url, apiKey);
-    $.getJSON(apiUrl, function(data) {
-        if(data.duration){
-          data.permalink_url = url;
-          $.scPlayer.loadTrackInfoAndPlay($elem, data);
-        }
-    });
-}
+      $.scPlayer.loadTrackUrlAndPlay = function($elem, track){
+        var url = track.trackUrl;
+
+        var apiUrl = scApiUrl(url, apiKey);
+        $.getJSON(apiUrl, function(data) {
+          if(data.duration){
+            data.permalink_url = url;
+            $.scPlayer.loadTrackInfoAndPlay($elem, data, track);
+          }
+        });
+      }
 
 
   // ------------------------------------------------------------------- \\
@@ -907,17 +1011,58 @@ $(document).on('mouseleave', '.sc-trackslist', function() {
   $(function() {
     if($.isFunction($.scPlayer.defaults.onDomReady)){
       $.scPlayer.defaults.onDomReady(); // = null;
+
     }
   });
 })(jQuery);
 
+
+
+  jQuery(document).bind('onPlayerInit.scPlayer', function(event) {
+    updatePlayerHeight();
+  });
+
+  jQuery(document).bind('onPlayerTrackSwitch.scPlayer', function(event, track){
+    initialize_waveform(track);
+
+    if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
+      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
+    }
+  });
+
+function updatePlayerHeight() { 
+    var player_height = jQuery('#player').height();
+
+    var total_height = 0;
+    jQuery('#player > .sc-player > *').each(function() {
+      if(jQuery(this).hasClass('sc-trackslist') || !jQuery(this).is(':visible')) { return; }
+      total_height += jQuery(this).outerHeight();
+    });
+
+    var track_height = 150; //jQuery('#player .sc-trackslist').height();
+
+    total_height = total_height;
+    if(total_height < player_height) {
+      // add remaining height to trackslist
+      jQuery('#player .sc-trackslist').height((player_height - total_height) - 2);
+    }
+
+  }
+
+
 function initialize_waveform(track) {   
-  
+
+  // remove canvas if it exists and is not the currently playing track..
+  if(jQuery('#large-waveform canvas').length && jQuery('#large-waveform').data('track') != track.permalink) { 
+    jQuery('#large-waveform canvas').remove();
+  }
+
   // if large waveform div exists, canvas does NOT exist, and a track is provided
-  if(jQuery('#large-waveform').length && !jQuery('#large-waveform canvas').length && track != "") { 
+  if(jQuery('#large-waveform').length && !jQuery('#large-waveform canvas').length && track != "") {
+    jQuery('#large-waveform').data('track', track.permalink);
     waveform = new Waveform({
       container: document.getElementById("large-waveform"),
-      innerColor: 'rgba(255, 255, 255, 0.7)',
+      innerColor: 'rgba(255, 255, 255, 0.3)',
       height: 200
     });
     
@@ -929,9 +1074,8 @@ function big_waveform(track_position, mouse_position) {
 
   if(typeof mouse_position == 'undefined') { mouse_position = window.mouse_position_x; }
 
-  var color = jQuery('.full-width-soundcloud').data('sc-color');
+  var color = '00E2CF';
   color = hex_to_rgb(color);
-  
   var peaks = 1 / window.sc_data.length;
 
   if(jQuery('#large-waveform').length) {
@@ -943,31 +1087,33 @@ function big_waveform(track_position, mouse_position) {
         // if mouse is ahead of song
         if(mouse_position > waveform_position) {
           if(track_position > waveform_position) {
-            return 'rgba(' + color + ', .95)';
+              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .8)';
           } else if(track_position < mouse_position) { 
-            return 'rgba(' + color + ', .6)';
+              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .6)';
           }
         } else {
           // if mouse is not on the waveform 
           if(mouse_position == 0) {
             if(track_position > waveform_position) {
-              return 'rgba(' + color + ', .95)';
+              
+              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .8)';
+             // return 'rgba(' + color + ', .9)';
             } else if(track_position + peaks > waveform_position) { // super transparent one bar ahead of song
-              return 'rgba(' + color + ', .4)';
+              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .4)';
             } else {
-              return 'rgba(255, 255, 255, 0.7)'; // unplayed
+              return 'unplayed'; //rgba(255, 255, 255, 0.3)'; // unplayed
             }
           }
           // if mouse is stationary
           else if(track_position > waveform_position) {
-            return 'rgba(' + color + ', .6)';
+              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .6)';
           } else if(track_position + peaks > waveform_position) { // super transparent one bar ahead of song
-            return 'rgba(' + color + ', .4)';
+              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .4)';
           } else {
-            return 'rgba(255, 255, 255, 0.7)'; // unplayed
+            return 'unplayed'; //rgba(255, 255, 255, 0.3)'; // unplayed
           }
-        
-        return '';
+
+          return '';
         } 
       }
     }); waveform.redraw();
@@ -985,17 +1131,66 @@ function get_cursor_position(canvas, event) {
 }
 
 
+ getGradientColor = function(start_color, end_color, percent) {
+   // strip the leading # if it's there
+   start_color = start_color.replace(/^\s*#|\s*$/g, '');
+   end_color = end_color.replace(/^\s*#|\s*$/g, '');
+
+   // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+   if(start_color.length == 3){
+     start_color = start_color.replace(/(.)/g, '$1$1');
+   }
+
+   if(end_color.length == 3){
+     end_color = end_color.replace(/(.)/g, '$1$1');
+   }
+
+   // get colors
+   var start_red = parseInt(start_color.substr(0, 2), 16),
+       start_green = parseInt(start_color.substr(2, 2), 16),
+       start_blue = parseInt(start_color.substr(4, 2), 16);
+
+   var end_red = parseInt(end_color.substr(0, 2), 16),
+       end_green = parseInt(end_color.substr(2, 2), 16),
+       end_blue = parseInt(end_color.substr(4, 2), 16);
+
+   // calculate new color
+   var diff_red = end_red - start_red;
+   var diff_green = end_green - start_green;
+   var diff_blue = end_blue - start_blue;
+
+   diff_red = ( (diff_red * percent) + start_red ).toString(16).split('.')[0];
+   diff_green = ( (diff_green * percent) + start_green ).toString(16).split('.')[0];
+   diff_blue = ( (diff_blue * percent) + start_blue ).toString(16).split('.')[0];
+
+   // ensure 2 digits by color
+   if( diff_red.length == 1 )
+     diff_red = '0' + diff_red
+
+   if( diff_green.length == 1 )
+     diff_green = '0' + diff_green
+
+   if( diff_blue.length == 1 )
+     diff_blue = '0' + diff_blue
+
+   return hex_to_rgb('#' + diff_red + diff_green + diff_blue);
+ };
+
+
+
 function hex_to_rgb(hex) {
-  
+
   hex = hex.replace(/[^0-9A-F]/gi, '');
   
-    var bigint = parseInt(hex, 16);
-    var r = (bigint >> 16) & 255;
-    var g = (bigint >> 8) & 255;
-    var b = bigint & 255;
+  var bigint = parseInt(hex, 16);
+  var r = (bigint >> 16) & 255;
+  var g = (bigint >> 8) & 255;
+  var b = bigint & 255;
 
-    return r + "," + g + "," + b;
+  return r + "," + g + "," + b;
 }
+
+
 
 function c(x) {
 	console.log(x);	
