@@ -96,6 +96,7 @@ $permalink = get_permalink();
 			<div class="related-posts">
 				<h2>Related Posts</h2>
 			</div>
+			
 		</div>
 		<div style="clear:both;"></div>
 	</section>

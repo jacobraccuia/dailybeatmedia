@@ -344,10 +344,10 @@ article a:hover { color:#354B7A; }
 .trending-topic img { height:25px; display:inline-block; }
 .trending-slogan { font-size:14px; font-weight:300; text-transform:uppercase; color:#666; vertical-align:middle; display:inline-block; margin-left:10px; padding-left:10px; line-height:25px; border-left:1px solid #DDD; letter-spacing:1px; }
 
-.video-overlay { text-align:center; font-size:70px; position:absolute; width:100%; text-align:center; height:100px; margin-top:-70px; top:50%; }
-.video-overlay .fa-circle { color:rgba(255,255,255,.4); -webkit-transition:.6s ease color; transition:.6s ease color; }
-.video-overlay .fa-play-circle { color:rgba(0,0,0,.4); -webkit-transition:.6s ease color; transition:.6s ease color; }
-.video-overlay .fa-stack-2x { font-size:80px; line-height:140px; }
+.play-overlay { text-align:center; font-size:70px; position:absolute; width:100%; text-align:center; height:100px; margin-top:-70px; top:50%; }
+.play-overlay .fa-circle { color:rgba(255,255,255,.4); -webkit-transition:.6s ease color; transition:.6s ease color; }
+.play-overlay .fa-play-circle { color:rgba(0,0,0,.4); -webkit-transition:.6s ease color; transition:.6s ease color; }
+.play-overlay .fa-stack-2x { font-size:80px; line-height:140px; }
 .video-post:hover .fa-circle { color:rgba(255,255,255,1); }
 .video-post:hover .fa-play-circle { color:rgba(0,0,0,1); }
 

@@ -108,6 +108,17 @@
 						<li class="h-icon soundcloud"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-soundcloud"></i></a></li>
 						<li class="h-icon youtube"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-youtube-play"></i></a></li>
 						<li class="h-icon divider">&nbsp;</li>
+						<li class="navbar-player">
+							<ul>
+								<li>
+									<div class="album"></div>
+								</li>
+								<li class="h-icon"><i class="fa fa-fw fa-play"></i><i class="fa fa-fw fa-pause"></i></li>
+								<li>
+									<h3></h3>
+								</li>
+							</ul>
+						</li>
 						<li class="h-icon beatsxtra" id="player_button"><i class="svg svg-beatsxtra"></i></li>
 					</ul>
 				</div>
@@ -159,11 +170,9 @@
 
 
 		<div id="player">
-
-
-
+			<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>
 	        <div class="sc-player">
 	        	<?php get_fnt_for_player(); ?>
 	        </div>
-
+	        <div class="offpage-fa-fix"><i class="fa fa-pause-circle"></i></div>
 		</div>

@@ -37,7 +37,11 @@ jQuery(document).ready(function($) {
 		watch: "window"
 	});
 
+
+
+	/* music playaaa */
 	$('#player_button').on('click', function() {
+
 		if($(this).hasClass('open')) {
 			$(this).removeClass('open');
 			$('#player').slideUp();
@@ -47,42 +51,75 @@ jQuery(document).ready(function($) {
 		$(this).addClass('open');
 		$('#player').slideDown();
 
+		if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
+	      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
+	    }
 	});
 
-	/* music playaaa */
 
+	initialize = false;
+
+	function initialize_player() {
+		jQuery('.sc-player').scPlayer();
+	}
+
+	jQuery(window).load(function($) {
+		initialize_player();
+	});
+
+	jQuery(document).bind('onPlayerInit.scPlayer', function(event) {
+		initialize = true;
+		$('#player').addClass('loaded');
+
+		if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
+	      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
+	    }
+
+	});
+
+	var loaded_tracks = [];
 	$('[data-play]').on('click', function() {
+
+		if(!initialize) {
+			return false;
+		}
+
 		var player = $('#player .sc-player');
 		var track = $(this).data();
 		var track_url = $(this).data('track-url');
+		var playing = false;
+
+		if($(this).hasClass('playing')) {
+			playing = true;
+		}
+
+		$('[data-play]').each(function() {
+			$(this).removeClass('playing');
+		});
+
+		if(!playing) {
+			$(this).addClass('playing');
+		}
+
+		track_exists = false;
+		for(var i = 0; i < loaded_tracks.length; i++) {
+		    if(loaded_tracks[i] === track_url) {
+		    	track_exists = true;
+		    }
+		}
+
 		if(track_url != '') {
 			var song = player.find('.sc-trackslist a[href="' + track_url + '"]');
-			if(song.length < 1) {
+
+			// if song does not exist, set loaded to true.
+			if(!song.length && $(this).data('loaded') !== 'true') {
 				$.scPlayer.loadTrackUrlAndPlay(player, track);
+				$(this).data('loaded', 'true');
 			} else {
 				song.parent().click();
 			}
-
-		    if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
-		      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
-		    }
-
-//			$('#player .sc-player').remove();
-
-	//		var $myPlayer  = $.scPlayer({
-	//			links: [{url: track, title: track}]
-	//		}, '#player-wrapper');
-
-////			$myPlayer.appendTo($('#player-wrapper'));
-
-///			$('#player-holder').scPlayer({
-//		  links: [{url: track, title: 'Title'}]
-	//		});
-
-//			$('#player .sc-player').after('<div id="player-holder"></div>');
-
-}
-});
+		}
+	});
 
 
 	

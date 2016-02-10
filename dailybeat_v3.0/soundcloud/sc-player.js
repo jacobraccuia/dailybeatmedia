@@ -304,7 +304,7 @@
         }else if (track.artwork_url) {
           return '<img src="' + track.artwork_url.replace('-large', '-t300x300') + '"/>';
         }else{
-          return '<div class="sc-no-artwork">No Artwork</div>';
+          return '<div class="sc-no-artwork"></div>';
         }
       },
 
@@ -317,6 +317,7 @@
           //$('p', this).html(track.description || 'no Description');
         });
 
+        $('.navbar-player h3').html(track.meta.artist + ' - ' + track.meta.title);
 
         // update bio
         $('.sc-artist-info', $player).each(function(index) {
@@ -364,6 +365,9 @@
             // reset other artworks
             $item.removeClass('active');
           }
+
+          $('.navbar-player .album').html(artworkImage(track, false));
+
         });
         // update the track duration in the progress bar
         $('.sc-duration', $player).html(timecode(track.duration));
@@ -544,7 +548,7 @@
     }),
     $player = $('<div class="sc-player loading"></div>').data('sc-player', {id: playerId}),
     $artworks = $('<ol class="sc-artwork-list"></ol>').appendTo($player),
-    $info = $('<div id="large-waveform"></div>  <div class="sc-info"><h3></h3><a href="#" class="sc-info-close">X</a></div>').appendTo($player),
+    $info = $('<div id="large-waveform"></div>  <div class="sc-info"><h3 data-marquee="0"></h3><a href="#" class="sc-info-close">X</a></div>').appendTo($player),
     $controls = $('<div class="list-divider"></div><div class="sc-controls"></div><div class="list-divider"></div><div class="sc-artist-info"></div><div class="list-divider artist-list-divider"></div><h4 class="playlist-header">Keep Listening</h4><div class="list-divider"></div></div>').appendTo($player),
     $list = $('<ol class="sc-trackslist"></ol>').appendTo($player);
     $('<div class="powered-by">powered by soundcloud</div>').appendTo($player);
@@ -626,11 +630,6 @@
           .trigger('onPlayerInit');
           
 
-          $(this).find('.sc-trackslist').data('marquee', 0);
-          if($(this).find('.sc-trackslist li.active a').height() > 17) { $(this).find('.sc-trackslist').data('marquee-run', 1); } 
-
-
-
           // if auto play is enabled and it's the first player, start playing
           if(opts.autoPlay && !didAutoPlay){
             onPlay($player);
@@ -685,7 +684,7 @@
     loadArtworks: 5,
     // the default Api key should be replaced by your own one
     // get it here http://soundcloud.com/you/apps/new
-    apiKey: 'htuiRd1JP11Ww0X72T1C3g'
+    apiKey: '9f690b3117f0c43767528e2b60bc70ce'
   };
 
 
@@ -704,10 +703,6 @@
     }
 
     var current_track = $list.find('li.active a').text();
-    if(track_name.find('li.active a .js-marquee').length) {
-      var current_track = track_name.find('li.active a .js-marquee').first().text();
-    }
-
 
     if($(this).hasClass('sc-play')) {
       $(document).attr('title', '▶ ' + current_track);
@@ -731,10 +726,6 @@
 
     track.click();
 
-    if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
-      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
-    }
-
     return false;
   });
 
@@ -749,10 +740,6 @@
     }
 
     track.click();
-    
-    if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
-      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
-    }
 
     return false;
   });
@@ -773,46 +760,54 @@
     var $track = $(this),
     $player = $track.closest('.sc-player'),
     trackId = $track.data('sc-track').id,
-    play = $player.is(':not(.playing)') || $track.is(':not(.active)');
+    trackPlaying = $player.is(':not(.playing)') || $track.is(':not(.active)');
+
+    var song = $(this).find('a').attr('href');
+    $('.track [data-play]').removeClass('playing');
+
+    var all_tracks = $('[data-track-url="' + song + '"]');
+    var marquee = $player.find('.sc-info h3');
 
 
-    if(play) {
+    // if track is playing
+    if(trackPlaying) {
       onPlay($player, trackId);
 
-      var sct = $player.find('.sc-trackslist');
-		//if(sct.data('marquee-run') == 1) {
-			if(sct.data('marquee') == 0) {
-			/*	sct.find('.active a').marquee({
-					speed: 10000,
+      all_tracks.addClass('playing');
+      if(marquee.find('a').height() > 25) {
+		    marquee.marquee({
+					speed: 12000,
 					gap: 50,
-					delayBeforeStart: 10,
+					delayBeforeStart: 0,
 					direction: 'left',
 					duplicated: true
-				}); */
-  sct.data('marquee', 1);
-} else {  $('.active a').trigger('pause'); $('.active a').trigger('pause'); sct.find('.active a').trigger('resume'); }
-	//	}
+				});
+      } else {
+        marquee.marquee('pause');
+      }
 
-} else {
-  onPause($player);
+      $('.navbar-player').addClass('playing').addClass('active');
 
-  var sct = $player.find('.sc-trackslist');
-	// 	if(sct.data('marquee-run') == 1) {
-   sct.find('.active a').trigger('pause');
-	//	}
-}
+    } else {
+      onPause($player);
+      all_tracks.removeClass('playing');
+      $('#player_button').removeClass('playing');
+      $('.navbar-player').removeClass('playing');
 
-$track.addClass('active').siblings('li').removeClass('active');
-$('.artworks li', $player).each(function(index) {
-  $(this).toggleClass('active', index === trackId);
-});
+    }
 
-if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
+    $track.addClass('active').siblings('li').removeClass('active');
+    $('.artworks li', $player).each(function(index) {
+      $(this).toggleClass('active', index === trackId);
+    });
+
+    if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
       jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
     }
-  
 
-return false;
+
+
+  return false;
 });
 
 var scrub = function(node, xPos) {
@@ -886,28 +881,6 @@ $(document).on('click', '.sc-volume-off', function(e) {
  $(this).parents('.sc-player').find('.sc-volume-on').show();
  $(this).hide();
 });
-
-$(document).on('mouseenter', '.sc-trackslist', function() {
- if($(this).data('marquee-run') == 1 && $(this).closest('.sc-player').is(':not(.playing)')) {
-  if($(this).data('marquee') == 0) {
-				/*	$(this).find('.active a').marquee({
-						speed: 10000,
-						gap: 50,
-						delayBeforeStart: 10,
-						direction: 'left',
-						duplicated: true
-					}); */-
-$(this).data('marquee', 1);
-} else { $(this).find('.active a').trigger('resume'); }
-}
-});
-
-$(document).on('mouseleave', '.sc-trackslist', function() {		
- if($(this).data('marquee-run') == 1 && $(this).closest('.sc-player').is(':not(.playing)')) {
-  $(this).find('.active a').trigger('pause');
-}
-});
-
 
 
 /*
@@ -1010,7 +983,7 @@ $.scPlayer.loadTrackInfoAndPlay = function($elem, track, meta) {
   // the default Auto-Initialization
   $(function() {
     if($.isFunction($.scPlayer.defaults.onDomReady)){
-      $.scPlayer.defaults.onDomReady(); // = null;
+      $.scPlayer.defaults.onDomReady = null;
 
     }
   });

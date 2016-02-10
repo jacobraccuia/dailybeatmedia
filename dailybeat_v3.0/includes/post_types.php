@@ -189,7 +189,7 @@ function video_post($blogID = 1, $args = array()) {
 	<article class="video-post">
 		<a href="<?php echo $hyperlink; ?>">
 			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(700, 700); ?>');">
-				<div class="video-overlay">
+				<div class="play-overlay">
 					<span class="fa-stack">
 						<i class="fa fa-circle fa-stack-2x"></i>
 						<i class="fa fa-play-circle fa-stack-1x"></i>
@@ -279,10 +279,11 @@ function fresh_new_track($blogID, $rank) {
 			<h4><span><?php echo $rank; ?></span></h4>
 			<div class="album-art" data-play="true" <?php echo build_track_data($track_url, $track, $artist, $artist_meta); ?>>
 				<img src="<?php echo $thumb_url; ?>" title="<?php echo $artist; ?> - <?php echo $track; ?>"/>
-				<div class="video-overlay">
+				<div class="play-overlay">
 					<span class="fa-stack">
 						<i class="fa fa-circle fa-stack-2x"></i>
 						<i class="fa fa-play-circle fa-stack-1x"></i>
+						<i class="fa fa-pause-circle fa-stack-1x"></i>
 					</span>
 				</div>
 			</div>

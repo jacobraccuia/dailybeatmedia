@@ -8,7 +8,7 @@ add_action('wp_enqueue_scripts', 'db_enqueue_scripts');
 function db_enqueue_scripts() {
 	wp_enqueue_script('db_network_js', plugins_url('/js/scripts.js', __FILE__), array('jquery'));
 	wp_enqueue_style('db_network_css', plugins_url('/css/style.css' , __FILE__));
-	wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
+	wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css');
 
 	wp_localize_script('db_network_js', 'DB_Ajax', array('ajaxurl' => admin_url('admin-ajax.php')));
 	wp_localize_script('db_network_js', 'DB_Ajax', array('ajaxurl' => admin_url('admin-ajax.php'), 'postCommentNonce' => wp_create_nonce('myajax-post-comment-nonce'),));
