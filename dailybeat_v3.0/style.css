@@ -167,21 +167,35 @@ li.divider, .list-divider { background-color:#2b2b2b; background-repeat:repeat-y
 
 .h-icon.youtube > a { margin-right:3px; }
 .h-icon.search { padding:0px 8px; margin-top:-1px; -webkit-transition:.4s color ease-out; transition:.4s color ease-out; position:relative; }
-.h-icon.beatsxtra { padding:7px 15px 8px 12px; line-height:30px; position:relative; }
+.h-icon.beatsxtra { padding:8px 14px 8px 14px; line-height:30px; position:relative; }
 
-.navbar-player { display:none; width:300px; -webkit-transition:1s ease width; transition:1s ease width; }
-.navbar-player.active { display:block; }
+.navbar-player { display:block; width:0px; -webkit-transition:.5s ease width; transition:.5s ease width; white-space:nowrap; }
+.navbar-player.active { width:300px; margin-right:-51px; }
 
-.navbar-player li { float:left; }
+.navbar-player ul { white-space:nowrap; overflow:hidden; }
+.navbar-player li { display:inline-block; }
 
-.navbar-player.playing .fa-pause { display:inline-block; }
-.navbar-player.playing .fa-play { display:none; }
+.navbar-player.playing .fa-pause-circle { display:inline-block; }
+.navbar-player.playing .fa-play-circle { display:none; }
 .navbar-player .fa-pause { display:none; }
 
-.navbar-player .album { width:46px; height:46px; }
-.navbar-player .album img { width:100%; height:100%; }
+.navbar-player .album { width:46px; height:46px; position:relative; }
+.navbar-player .art img { width:100%; height:100%; }
+.navbar-player .play-overlay { font-size:20px; position:absolute; top:0px; margin-top:0px; height:46px; }
+.navbar-player .play-overlay .fa-stack { display:block; width:100%; line-height:46px; }
+.navbar-player .play-overlay .fa-stack-2x { font-size:20px; line-height:48px; }
 
-.navbar-player h3 { font-size:12px; color:white; float:left; overflow:hidden; display:inline-block; width:225px; }
+.navbar-player .track-info { color:white; float:none; overflow:hidden; display:inline-block; width:250px; position:static; height:46px; padding-top:3px; top:0px; }
+.navbar-player .track-info h3 { font-size:12px; font-weight:bold; margin:0px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
+.navbar-player .track-info h4 {  font-size:12px; font-weight:400; margin:0px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
+
+#player_button .svg-beatsxtra-icon { display:none; }
+#player_button.active { margin-left:51px; }
+#player_button.active .svg-beatsxtra { display:none; }
+#player_button.active .svg-beatsxtra-icon { display:inline-block; }
+
+#player_button:hover, #player_button.open { background:#00E2CF; background-image:-webkit-linear-gradient(top, #00E2CF, #5784E0); background-image:linear-gradient(to bottom, #00E2CF, #5784E0); }
+
 
 .h-icon.divider { width:2px; height:100%; margin:0px 5px; background:#5784E0; background-image:-webkit-linear-gradient(top, #00E2CF, #5784E0); background-image:linear-gradient(to bottom, #00E2CF, #5784E0); }
 
@@ -376,8 +390,11 @@ article a:hover { color:#354B7A; }
 .card-post .featured-image { height:auto; padding-top:56.25%; }
 .card-post .post-meta { margin-bottom:5px; }
 
-.vintage-post .post-info { margin:0px; padding:10px 5px; }
-.vintage-post .featured-image { height:180px; }
+.vintage-wrapper { padding:0px!important; }
+.vintage-wrapper > div { padding:0px; }
+.vintage-wrapper .row { display:-webkit-box; display:flex; }
+.vintage-post .post-info { margin:0px; padding:20px 20px 20px 10px; }
+.vintage-post .featured-image { min-height:180px; height:100%; }
 .vintage-post h2, .vintage-post h6, .vintage-post .post-excerpt { margin-bottom:8px; }
 .vintage-post .caption { bottom:0px; left:0px; padding:40px 0px 10px 15px; }
 .vintage-post .read-more a { font-size:13px; color:#00aced; font-weight:400; }
@@ -484,17 +501,17 @@ h3.dotdotdot { max-height:40px; overflow:hidden; }
 .track-info .song { font-size:13px; color:#333; font-weight:bold; text-overflow:ellipsis; overflow:hidden; white-space:nowrap; padding-top:2px; }
 .track-info .artist { font-size:12px; color:#999; text-overflow:ellipsis; word-wrap:nowrap; font-weight:400; }
 
-.track .play-overlay { top:0; left:0; padding-top:7px; margin:0px; width:60px; height:60px; font-size:24px; }
+.track .play-overlay { top:0; left:0; padding-top:7px; margin:0px; width:60px; height:60px; font-size:24px; cursor:pointer; }
 .track .play-overlay .fa-stack-2x { font-size:24px; line-height:48px; }
 .track:hover .play-overlay, .track .playing .play-overlay { background:rgba(0,0,0,.3); }
 
 .offpage-fa-fix { position:absolute; right:-100px; opacity:0; font-size:1; }
 
 
-.play-overlay { text-align:center; font-size:70px; position:absolute; width:100%; text-align:center; height:100px; margin-top:-70px; top:50%; -webkit-transition:.6s ease background-color; transition:.6s ease background-color; }
+.play-overlay { text-align:center; font-size:70px; position:absolute; width:100%; text-align:center; height:100px; margin-top:-70px; top:50%; -webkit-transition:.6s ease background-color; transition:.6s ease background-color; cursor:pointer; }
 
-.play-overlay .fa-circle { color:rgba(255,255,255,1); }
-.play-overlay .fa-play-circle, .track .fa-pause-circle { color:rgba(0,0,0,1); }
+.play-overlay .fa-circle { color:rgba(0,0,0,1); }
+.play-overlay .fa-play-circle, .play-overlay .fa-pause-circle { color:rgba(255,255,255,1); }
 .play-overlay .fa-pause-circle { display:none; }
 
 .play-overlay .fa-stack { display:none; }
@@ -558,7 +575,6 @@ h3.dotdotdot { max-height:40px; overflow:hidden; }
 .web-intents .retweet:focus svg { }
 .web-intents .like svg { fill:#AAB8C2; width:16px; height:20px; }
 .web-intents .like:hover svg { fill:#19CF86; }
-.web-intents .like:focus svg { }
 
 .widget.ad { padding:0px; }
 .widget .media { width:100%; margin:0px auto 12px; display:block; }
@@ -771,7 +787,9 @@ footer .external-links li a { width:20px; height:20px; display:block; }
 .svg-trending { background:url(images/svg/trending.svg) no-repeat transparent; background-size:contain; }
 
 .svg-beatsxtra { background-image:url(images/svg/beatsxtra_logo.svg); width:82px; height:30px; }
-.svg-beatsxtra-icon { background-image:url(images/svg/beatsxtra_logo_icon.svg); width:31px; height:34px; }
+.svg-beatsxtra-icon { background-image:url(images/svg/beatsxtra_logo_icon.svg); width:31px; height:31px; }
+#player_button:hover .svg-beatsxtra, #player_button.open .svg-beatsxtra { background-image:url(images/svg/beatsxtra_logo_active.svg); }
+#player_button:hover .svg-beatsxtra-icon, #player_button.open .svg-beatsxtra-icon { background-image:url(images/svg/beatsxtra_logo_icon_active.svg); }
 
 .svg-trc-grey { background-image:url(images/svg/logos/grey/trc.svg); }
 .svg-dbm-grey { background-image:url(images/svg/logos/grey/dbm.svg); }

@@ -41,7 +41,6 @@ jQuery(document).ready(function($) {
 
 	/* music playaaa */
 	$('#player_button').on('click', function() {
-
 		if($(this).hasClass('open')) {
 			$(this).removeClass('open');
 			$('#player').slideUp();
@@ -49,34 +48,41 @@ jQuery(document).ready(function($) {
 		}
 
 		$(this).addClass('open');
-		$('#player').slideDown();
+		$('#player').slideDown(function() {
 
-		if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
-	      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
-	    }
+			var waveform_url = $('#player').data('waveform_url');
+			if(waveform_url) {
+				var track = { waveform_url: waveform_url };
+				initialize_waveform(track);
+			}
+
+			updatePlayerHeight();
+
+	     });
 	});
 
 
-	initialize = false;
 
 	function initialize_player() {
 		jQuery('.sc-player').scPlayer();
 	}
 
-	jQuery(window).load(function($) {
+	$(window).load(function() {
 		initialize_player();
 	});
 
-	jQuery(document).bind('onPlayerInit.scPlayer', function(event) {
+	initialize = false;
+	$(document).bind('onPlayerInit.scPlayer', function(event) {
+
 		initialize = true;
 		$('#player').addClass('loaded');
 
-		if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
-	      jQuery('.sc-trackslist').find('li.active').nextAll().andSelf().prependTo('.sc-trackslist');
-	    }
+        updatePlayerHeight();
 
 	});
 
+
+	// when clicking tracks on the site
 	var loaded_tracks = [];
 	$('[data-play]').on('click', function() {
 
@@ -84,10 +90,10 @@ jQuery(document).ready(function($) {
 			return false;
 		}
 
-		var player = $('#player .sc-player');
-		var track = $(this).data();
-		var track_url = $(this).data('track-url');
-		var playing = false;
+		var player = $('#player .sc-player'),
+			track = $(this).data(),
+			track_url = $(this).data('track-url'),
+			playing = false;
 
 		if($(this).hasClass('playing')) {
 			playing = true;
@@ -120,6 +126,11 @@ jQuery(document).ready(function($) {
 			}
 		}
 	});
+	
+	$(document).on('click','.navbar-player .fa-stack', function(event) {
+    	var tracklist = $('#player ol.sc-trackslist');
+    	tracklist.find('li.active').click();
+    });	
 
 
 	
@@ -131,9 +142,16 @@ jQuery(document).ready(function($) {
 
 		function now_feed_ajax() {
 			setTimeout(function() {
+
+				var bottom_widget_count = 8; 
+				if($('.bottom-home-nowfeed .widget').length > 4) {
+					bottom_widget_count = $('.bottom-home-nowfeed .widget').length;
+				}
+
 				$.post(
 					DB_Ajax_Call.ajaxurl, {
 						action : 'update_now_feed',
+						bottom_count: bottom_widget_count,
 						postCommentNonce : DB_Ajax_Call.postCommentNonce,
 					},
 					function(response) {
@@ -152,9 +170,41 @@ jQuery(document).ready(function($) {
 						now_feed(sticky_now_feed);
 
 					}, 'json');
-		}, 3100 * 60); // every 3.3 minutes // so it doesn't update before cron
+			}, 3100 * 60); // every 3.3 minutes // so it doesn't update before cron
 		}
 
+
+		var bottom_feed = $('.bottom-home-nowfeed');
+		var news_height = $('section.news_continued .home-center-content').height();
+
+		var offset = $('.top-home-nowfeed .widget').length + $('.bottom-home-nowfeed .widget').length;
+
+		// this function either adds a new widget to the bottom or removes one if the height is too much
+		// once the bottom feed height is greater than the news height, direction is set to up and it won't get new items again.
+		var i = 0;
+		function check_bottom_feed_height(direction, offset) {
+			if(i > 10) { return; } // just in case all hell breaks loose..
+
+			var bottom_feed_height = bottom_feed.prop('scrollHeight');
+
+			// remove last item
+			if(bottom_feed_height > news_height) {
+				bottom_feed.children().last().detach(); // remove last item from dom
+				check_bottom_feed_height('up');
+				return;
+			}
+
+			// add new item
+			if(bottom_feed_height < news_height && direction != 'up') {
+			
+				get_next_now_feed(offset, function(widget) {
+					bottom_feed.append(widget); // append item to the second feed		
+
+					i++;
+					check_bottom_feed_height('down', offset + 3); // ooooooo recursion
+				});
+			}
+		}
 
 		function now_feed(callback) {
 			var top_now_feed = $('.top-home-nowfeed');
@@ -180,12 +230,29 @@ jQuery(document).ready(function($) {
 			}
 
 			check_feed_height();
+
+			var offset = $('.top-home-nowfeed .widget').length + $('.bottom-home-nowfeed .widget').length;
+			check_bottom_feed_height('middle', offset);
+			
 			featherlight_now_feed();
 
 			now_feed_ajax();
 			callback();
 		}	
 
+	
+	// calls the ajax function that gets the next widget in the now feed
+	function get_next_now_feed(offset, callback) {
+		$.post(
+			DB_Ajax_Call.ajaxurl, {
+				action : 'get_next_now_feed',
+				offset: offset,
+				postCommentNonce : DB_Ajax_Call.postCommentNonce,
+			},
+			function(response) {
+				return callback(response.widget);
+			}, 'json');
+	}
 
 	function sticky_now_feed() {
 		if($('.top-home-nowfeed').length < 1) { return; }
@@ -251,6 +318,7 @@ jQuery(document).ready(function($) {
 	$(window).load(function() {
 		sticky_now_feed();
 		sticky_fnt();
+		check_bottom_feed_height('middle', offset);
 	});
 
 	$(window).resize(function() {
@@ -279,7 +347,6 @@ jQuery(document).ready(function($) {
 
 		$(window).scroll(); // trigger scroll to keep element in place.
 	}
-
 
 } // end home conditional
 

@@ -108,13 +108,13 @@ get_header();
 		</div>
 
 		<div class="col-fixed col-fixed-right pull-right">
-			<?php $feed->getNowFeed(array('limit' => 20, 'unique_class' => 'bottom-home-nowfeed')); ?>
+			<?php $feed->getNowFeed(array('limit' => 8, 'unique_class' => 'bottom-home-nowfeed')); ?>
 		</article>
 	</div>
 
 	<div class="col-offset-center">
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-xs-12 home-center-content">
 
 				<div class="row post-wrapper ht-wrapper">
 					<div class="col-xs-12">

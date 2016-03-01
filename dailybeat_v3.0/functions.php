@@ -32,6 +32,7 @@ function my_enqueue_scripts() {
 	wp_enqueue_script('jquery_marquee', THEME_DIR . '/js/marquee.js');
 //	wp_enqueue_script('jquery_sticky', THEME_DIR . '/js/jquery.sticky.js');
 	wp_enqueue_script('jquery_push', THEME_DIR . '/js/jquery.pushmenu.js');
+	wp_enqueue_script('waypoints', THEME_DIR . '/js/jquery.waypoints.min.js');
 	wp_enqueue_script('images_loaded', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js');
 
 	if(is_single()) {

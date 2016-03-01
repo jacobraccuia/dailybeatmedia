@@ -29,6 +29,27 @@ function get_standard_loop($args = array()) {
 		</div> */ ?>
 		<div class="row post-wrapper full-width-wrapper full-story-wrapper">
 			<?php get_exclusive_posts(); ?>
+		</div>
+		<div class="row post-wrapper vintage-wrapper">
+			<?php get_vintage_posts(array('blog_id' => 1)); ?>
+		</div>
+		<div class="row post-wrapper vintage-wrapper">
+			<?php get_vintage_posts(array('blog_id' => 1)); ?>
+		</div>
+		<div class="row post-wrapper vintage-wrapper">
+			<?php get_vintage_posts(array('blog_id' => 1)); ?>
+		</div>
+		<div class="row post-wrapper full-width-wrapper full-story-wrapper">
+			<?php get_exclusive_posts(); ?>
+		</div>
+		<div class="row post-wrapper vintage-wrapper">
+			<?php get_vintage_posts(array('blog_id' => 1)); ?>
+		</div>
+		<div class="row post-wrapper vintage-wrapper">
+			<?php get_vintage_posts(array('blog_id' => 1)); ?>
+		</div>
+		<div class="row post-wrapper standard-wrapper">
+			<?php get_standard_posts(); ?>
 		</div><?php /*
 		<div class="row post-wrapper trending-wrapper">
 			<?php get_standard_post_feature(); ?>
@@ -140,7 +161,8 @@ function get_vintage_posts($args = array()) {
 
 	$defaults = array(
 		'posts_per_page' => 1,
-		'tags' => ''
+		'tags' => '',
+		'blog_id' => '',
 		);
 
 	// merge arguments with defaults && set keys as variables
@@ -153,6 +175,7 @@ function get_vintage_posts($args = array()) {
 		'post__not_in' => $exclude_posts,
 		'post_type' => 'post',
 		'tag' => $tags,
+		'blog_id' => $blog_id,
 		'orderby' => 'date',
 		'order' => 'DESC',
 		);

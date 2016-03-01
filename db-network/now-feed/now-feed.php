@@ -52,16 +52,41 @@ function update_now_feed() {
     if(!wp_verify_nonce( $nonce, 'myajax-post-comment-nonce'))
         die('Busted!');
 
+    $count = isset($_POST['bottom_count']) ? $_POST['bottom_count'] : 10;
+
     $response = array();
     $feed = new NowFeed();
 
     ob_start();
-    $feed->getNowFeed(array('limit' => 12, 'ad' => true, 'image_cutoff' => 4, 'unique_class' => 'top-home-nowfeed'));
+    $feed->getNowFeed(array('limit' => 12, 'ad' => true, 'image_cutoff' => 4, 'include_wrapper' => false));
     $response['top'] = ob_get_clean();  
 
     ob_start();
-    $feed->getNowFeed(array('limit' => 20, 'unique_class' => 'bottom-home-nowfeed'));
+    $feed->getNowFeed(array('limit' => $count, 'include_wrapper' => false));
     $response['bottom'] = ob_get_clean();
+
+    echo json_encode($response);
+    die;
+}
+
+add_action('wp_ajax_get_next_now_feed', 'get_next_now_feed');
+add_action('wp_ajax_nopriv_get_next_now_feed','get_next_now_feed');
+
+function get_next_now_feed() {
+
+    $nonce = $_POST['postCommentNonce'];
+    if(!wp_verify_nonce( $nonce, 'myajax-post-comment-nonce'))
+        die('Busted!');
+    
+    $offset = isset($_POST['offset']) ? $_POST['offset'] : 20;
+
+    $response = array();
+    $feed = new NowFeed();
+
+    ob_start();
+    $feed->getNowFeed(array('limit' => 3, 'offset' => $offset, 'include_wrapper' => false));
+    $response['widget'] = ob_get_clean();
+    $response['offset']= $offset + 3;
 
     echo json_encode($response);
     die;
@@ -137,7 +162,8 @@ class NowFeed {
             'offset' => 0,
             'ad' => false,
             'image_cutoff' => 9999,
-            'unique_class' => ''
+            'unique_class' => '',
+            'include_wrapper' => true
             );
 
         // merge arguments with defaults && set keys as variables
@@ -148,7 +174,9 @@ class NowFeed {
         $images_looped = 0;
         $non_images_looped = 0;
 
-        echo '<div class="now-feed-container ' . $unique_class .'">';
+        if($include_wrapper) {
+            echo '<div class="now-feed-container ' . $unique_class .'">';
+        }
 
         $i = $k = 0;
         $now_feed_loops = $this->now_feed_loops;
@@ -190,13 +218,13 @@ class NowFeed {
 
             $now_feed_loops++; // loop tracker across all instances of the call
         }
-
-        echo '</div>';
-
+    
+        if($include_wrapper) {
+            echo '</div>';
+        }
+    
         $this->now_feed_loops = $now_feed_loops;
-
     }
-
 
     public static function set_instagram_cache() {
 
