@@ -25,22 +25,36 @@ function my_enqueue_scripts() {
 
 	wp_enqueue_script('twitter_web_intents', '//platform.twitter.com/widgets.js');
 	wp_enqueue_script('featherlist_js', '//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.js');
-	wp_enqueue_script('modernizr_js', THEME_DIR . '/js/modernizr.js');
 	wp_enqueue_script('history_js_', THEME_DIR . '/js/html5/jquery.history.js');
-	wp_enqueue_script('jquery_stickem', THEME_DIR . '/js/jquery.stickem.js');
-	wp_enqueue_script('jquery_dotdotdot', THEME_DIR . '/js/jquery.dotdotdot.min.js');
-	wp_enqueue_script('jquery_marquee', THEME_DIR . '/js/marquee.js');
-//	wp_enqueue_script('jquery_sticky', THEME_DIR . '/js/jquery.sticky.js');
-	wp_enqueue_script('jquery_push', THEME_DIR . '/js/jquery.pushmenu.js');
-	wp_enqueue_script('waypoints', THEME_DIR . '/js/jquery.waypoints.min.js');
 	wp_enqueue_script('images_loaded', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js');
 
-	if(is_single()) {
+
+	/*                    *\	
+	**       UGLIFY       **
+	**    /src/js/*.js    **
+
+	NOTE: lots of these should be packaged with the db_network plugin
+
+	stickem
+	dotdotdot
+	pushmenu
+	waypoints
+	marquee
+	modernizrr
+
+	*/
+
+	wp_enqueue_script('dailybeat_uglify_js', THEME_DIR . '/js/uglify.js', array('jquery'));
+	wp_enqueue_script('dailybeat_js', THEME_DIR . '/js/uglify_db_scripts.js', array('jquery'));
+
+	/*if(is_single()) {
 		wp_enqueue_script('single_scripts', THEME_DIR . '/js/single_scripts.js', array('jquery'));
 	}
 
 	wp_enqueue_script('ajax_page_load', THEME_DIR . '/js/ajax_page_load.js');	
 	wp_enqueue_script('dailybeat_js', THEME_DIR . '/js/scripts.js', array('jquery'));
+*/
+	
 	wp_localize_script('dailybeat_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php')));
 	wp_localize_script('dailybeat_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php'), 'postCommentNonce' => wp_create_nonce('myajax-post-comment-nonce'),));
 
@@ -530,6 +544,42 @@ function artist_columns() {
 }
 
 
+add_action('init', 'register_db_shortcodes');
+function register_db_shortcodes(){
+   add_shortcode('blockquote', 'db_blockquote');
+   add_shortcode('divider', 'db_divider');
+}
+
+function db_blockquote($atts, $content = null) {
+	extract(shortcode_atts(array(
+		'side' => 'left',
+		'by' => '',
+		), $atts));
+
+	$class = 'blockquote';
+	if($side == 'right')  {
+		$class .= ' right';
+	}
+
+	$by_text = '';
+	if($by != '') {
+		$by_text = '<div class="by"> - ' . $by . '</div>';
+	}
+
+	return '<div class="' . $class . '"><div class="bq">&ldquo;</div>' . $content . '"' . $by_text . '</div>';
+	
+}
+
+function db_divider($atts) {
+	extract(shortcode_atts(array(
+		//'side' => 'left',
+		), $atts));
+
+	return '<div class="ex-divider thick"></div>';
+	
+}
+
+// VERY IMPORTANT, fixes shortcode injection inside wpautop.
 function char_based_excerpt($count) {
 	//  $permalink = get_permalink($post->ID);
 	$excerpt = get_the_content();
@@ -558,6 +608,7 @@ function addhttp($url) {
 }
 
 function the_timestamp() { echo human_time_diff(get_the_time('U'), current_time('timestamp')); }
+function full_timestamp() { return get_the_time('F j, Y'); }
 
 function print_pre($a) { echo '<pre>'; print_r($a); echo '</pre>'; }
 

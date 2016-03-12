@@ -400,9 +400,13 @@ article a:hover { color:#354B7A; }
 
 .vintage-wrapper { padding:0px!important; }
 .vintage-wrapper > div { padding:0px; }
-.vintage-wrapper .row { display:flex; }
-.vintage-post .post-info { margin:0px; padding:20px 20px 20px 10px; }
-.vintage-post .featured-image { min-height:180px; height:100%; }
+.vintage-wrapper .row { display:table; }
+.vintage-wrapper .row [class$="-4"] { float:none; display:table-cell; height:100%; }
+.vintage-wrapper .row [class$="-8"] { float:none; display:table-cell; vertical-align:middle; }
+.vintage-post .post-info { margin:0px; padding:20px; min-height:202px; position:relative; }
+.vintage-post .post-excerpt { padding-bottom:22px; }
+.vintage-post .read-more { position:absolute; left:20px; line-height:14px; bottom:20px; }
+.vintage-post .featured-image { min-height:180px; height:100%; position:absolute; }
 .vintage-post h2, .vintage-post h6, .vintage-post .post-excerpt { margin-bottom:8px; }
 .vintage-post .caption { bottom:0px; left:0px; padding:40px 0px 10px 15px; }
 .vintage-post .read-more a { font-size:13px; color:#00aced; font-weight:400; }
@@ -584,6 +588,7 @@ h3.dotdotdot { max-height:40px; overflow:hidden; }
 
 
 /* single.php */
+.single { background:white; }
 .single .col-offset-center { margin:0px 296px 0px 217px; }
 .single .col-fixed { width:151px; margin:0px 32px 0px 32px; position:relative; overflow:hidden; }
 .single .col-fixed-right { width:232px; margin-left:32px; margin-right:32px; }
@@ -647,28 +652,32 @@ h3.dotdotdot { max-height:40px; overflow:hidden; }
 /* single content */ 
 .single-body { overflow:hidden; margin:0px 0px 25px; padding:25px 0px 0px 0px; }
 .single-body .divider { background:#CCC; height:1px; float:right; width:95px; opacity:.9; margin-right:5px; }
+.single-body .content-divider { background:#CCC; height:1px; opacity:.9; width:80%; margin:40px auto; float:none; }
 
 .single-content-padding { padding:0px 20px; }
-.single-content { font-size:16px; line-height:28px; font-size:400; overflow:hidden; }
-.single-content a { font-weight:500; color:$pink; }
-.single-content a:hover { text-decoration:underline; }
-.single-content iframe { margin:20px auto; display:block; }
+.content { font-size:16px; line-height:28px; font-size:400; overflow:hidden; margin-bottom:0px; }
+.content a { font-weight:500; color:$pink; }
+.content a:hover { text-decoration:underline; }
+.content iframe { margin:20px auto; display:block; }
 
 .single-content > p:first-child:first-letter { display:block; float:left; font-size:76px; line-height:70px; font-weight:bold; padding:0px 15px 5px 0; margin-top:5px;background: -webkit-gradient(linear, 0 0, 100% 100%, from($blue), to($darkblue));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent; }
 
 
-.single-content .wp-caption { position:relative; clear:both; }
-.single-content .alignnone { width:100%!important; overflow:hidden; margin:20px 0px; display:block; }
+.wp-caption { position:relative; clear:both; }
+.alignnone { width:100%!important; overflow:hidden; margin:20px 0px; display:block; }
 
 /* adjust these heights in js */
-.single-content .alignleft { float:left; max-width:450px; max-height:400px; height:auto!important; margin:0px 25px 20px 0px; }
-.single-content .alignright { float:right; max-width:450px; max-height:400px; height:auto!important; margin:0px 0px 20px 25px; }
+.alignleft { float:left; max-width:450px; max-height:400px; height:auto!important; margin:0px 25px 20px 0px; }
+.alignright { float:right; max-width:450px; max-height:400px; height:auto!important; margin:0px 0px 20px 25px; }
 
-.single-content .wp-caption img { width:100%!important; height:auto!important; }
+.wp-caption img { width:100%!important; height:auto!important; }
 
 .wp-caption-text { position:absolute; bottom:0px; right:0px; color:#DDD; padding:8px 15px 5px; background:rgba(0,0,0,.2); font-size:12px; text-transform:uppercase; font-weight:300; letter-spacing:1.5px; line-height:18px; }
+
+.single-body .related-posts { overflow:hidden; }
+
 
 /****************************/
 /* artist feature on single */
@@ -704,6 +713,40 @@ ul.tour-dates { list-style:none; margin:0px 0px; padding-right:10px; }
 
 .single-artist-widget .view-all { color:#999; float:right; font-size:10px; text-transform:uppercase; }
 
+/* single exclusive!!!! */
+
+.exclusive-image { height:100vh; width:100%; background-size:cover; background-attachment:fixed; background-repeat:no-repeat; position:relative; }
+.exclusive-image .overlay { position:absolute; left:0px; margin:0px; width:100%; height:100%; background:black; opacity:0.0; }
+.exclusive-header { width:1000px; text-align:center; margin:30px auto 20px; }
+
+.exclusive-image-1 { height:calc(100vh - 150px); }
+
+.exclusive-header h1 { font-size:65px; line-height:55px; margin:30px auto 0px; font-weight:800; color:black; font-family:Times New Roman; }
+.exclusive-header h2 { font-size:22px; margin:30px auto 0px; line-height:40px; letter-spacing:0px; color:#999; font-weight:400; color:black; }
+.exclusive-header h3 { font-weight:400; font-size:20px; letter-spacing:1px; text-transform:uppercase; margin:0px; }
+.exclusive-header h4 { font-weight:400; font-size:18px; margin:30px auto 0px; text-transform:uppercase; color:#AAA; }
+
+.exclusive-content { width:750px; overflow:visible; margin:40px auto; }
+.exclusive-content > p { font-size:16px; line-height:26px; letter-spacing:.3px; display:block; margin:0px auto 15px; }
+.exclusive-content .wp-caption { margin:0px auto 15px; }
+.exclusive-content .blockquote { float:left; width:230px; padding:40px 40px 40px 0px; font-size:22px; letter-spacing:-.2px; margin-left:-100px; }
+.exclusive-content .blockquote.right { float:right; padding-left:40px; padding-right:0px; text-align:right; margin-left:0px; margin-right:-100px; }
+.blockquote .by { font-size:12px; color:#999; }
+.blockquote .bq { font-size:105px; line-height:5px; margin-top:45px; font-family:times new roman;}
+
+
+.exclusive-content h1 { font-size:22px; font-weight:bold; }
+.exclusive-content h2 { font-size:16px; font-weight:bold; margin:25px 0px 5px; }
+
+
+.exclusive-content .ex-divider.thick { margin:30px auto; }
+
+.ex-divider { height:1px; max-width:750px; margin:20px auto 0px; background-color:#999; }
+.ex-divider.thick { height:8px; max-width:750px; margin:25px auto -10px; }
+
+.exclusive-content-1 p:first-child:first-letter { display:block; float:left; font-size:140px; line-height:70px; font-weight:bold; padding:0px 25px 5px 0; margin-top:13px; }
+
+.exclusive-image h5.wp-caption-text { margin-bottom:0px; }
 
 /* utility class */
 .rounded { border-radius:50%; }

@@ -70,11 +70,11 @@ function db_custom_post_types() {
 		'taxonomies' => array('category'),
 		'menu_icon' => 'dashicons-format-chat',
 		'rewrite' => array('slug' => 'exclusive'),
-		'capability_type' => 'page',
+		'capability_type' => 'post',
 		'has_archive' => true, 
 		'hierarchical' => true,
 		'menu_position' => null,
-		'supports' => array('title', 'thumbnail', 'editor', 'excerpt', 'page-attributes', 'comments')
+		'supports' => array('title', 'thumbnail', 'excerpt', 'comments')
 		); 
 
 	register_post_type('exclusive', $args);
@@ -126,6 +126,7 @@ function db_admin_init(){
 	add_meta_box('db_meta', 'Extra Information', 'db_meta_beatmersive', 'beatmersive', 'normal', 'high');
 	add_meta_box('db_splash_meta', 'Splash', 'db_splash_meta', 'page', 'normal', 'high');
 	add_meta_box('db_featured_artist', 'Featured Artist', 'db_featured_artist', 'post', 'side', 'core');
+	add_meta_box('db_exclusive', 'Exclusive Editor', 'db_meta_exclusive', 'exclusive', 'normal', 'high');
 }
 
 
@@ -174,7 +175,7 @@ function db_splash_meta($post) {
 	$db_splash_link = get_post_meta(get_the_ID(), 'db_splash_link', true);
 	?>
 	<style>
-	.ui-autocomplete .ui-state-focus { width:92%; }
+		.ui-autocomplete .ui-state-focus { width:92%; }
 	</style>
 	<div class="field">
 		<label>Background Color (include #):</label>
@@ -229,6 +230,138 @@ function db_meta_beatmersive($post) {
 	</div>
 
 	<?php
+}
+
+
+function db_exclusive_columns() {
+	return array(
+		'db_ex_subtitle',
+		'db_ex_edition',
+		'db_ex_theme_color',
+		);
+}
+
+function db_meta_exclusive($post) {
+	$post_id = $post->ID;
+	$post_meta = get_post_custom();
+
+	// assign all columns to variable
+	$db_exclusive_columns = db_exclusive_columns();
+
+	// in case value isn't set in database, set required variables to ''
+	foreach($db_exclusive_columns as $column) { ${$column} = ''; }
+
+	// assign all fields
+	foreach($post_meta as $key => $meta) {
+		if(array_key_exists($key, array_flip($db_exclusive_columns))) { // if we want this key
+			if(isset($key) && !empty($key)) { ${$key} = trim($meta[0]); } else ${$key} = '';
+		}
+
+		// special handling for paragraph sections
+		if(substr($key, 0, 5) == 'db_ex') {
+			${$key} = trim($meta[0]);
+		}
+
+	}
+
+	$i = 1;
+	// find out how many sections there are
+	$sections_to_show = 1; // always show at least one
+	while($i < 11) {
+		if(isset($post_meta['db_ex_section' . $i]) && $post_meta['db_ex_section' . $i][0] != '') {
+			$sections_to_show++;
+		}
+
+		$i++;
+	}
+	
+	?>
+
+	<style>
+		.ex_section { width:98%; margin:15px auto; }
+		h3.ex_title { height:25px; font-weight:bold; padding:5px 0px!important; font-size:16px; }
+		.ex_title em { font-size:12px; color:#666; }
+		div.field { margin-top:10px; overflow:hidden; }
+		h2#new_section { display:inline-block; font-size:12px; padding:3px 12px; font-weight:bold; text-transform:uppercase; border:1px solid #999; border-radius:2px; background-color:#B5EAA6; margin-left:5px; color:black; cursor:pointer; }
+		.ex_section hr { width:80%; margin:25px auto; }
+		.ex_section label { display:block; }
+
+	</style>
+
+	<div class="ex_section">
+		<div class="field">
+			<label for="db_ex_subtitle">Subtitle</label>
+			<input style="padding:5px; width:450px;" autocomplete="off" class="" name="db_ex_subtitle" type="text" value="<?php echo $db_ex_subtitle; ?>" />
+		</div>
+		<div class="field">
+			<label for="db_ex_edition">Edition #</label>
+			<input style="padding:5px; width:150px;" autocomplete="off" class="" name="db_ex_edition" type="text" value="<?php echo $db_ex_edition; ?>" />
+		</div>
+		<div class="field">
+			<label for="db_ex_theme_color">Theme Hex Color</label>
+			<input style="padding:5px; width:450px;" autocomplete="off" class="" name="db_ex_theme_color" type="text" value="<?php echo $db_ex_theme_color; ?>" />
+		</div>
+	</div>
+	<?php
+	$i = 1;
+	while($i < $sections_to_show) {
+
+		// set variables
+		$db_ex_section = isset(${'db_ex_section' . $i}) ? ${'db_ex_section' . $i} : '';
+		$db_ex_bg_color = isset(${'db_ex_bg_color' . $i}) ? ${'db_ex_bg_color' . $i} : '';
+
+		create_section(0, $i, $db_ex_section, $db_ex_bg_color);
+		$i++;
+	}	
+	?>
+	<h2 id="new_section" data-section="<?php echo $i; ?>" db-post_id="<?php echo $post_id; ?>">Add New Section</h2>
+
+	<?php
+}
+
+function create_section($post_id = 0, $counter, $db_ex_section = '', $db_ex_bg_color = '') {
+
+	if($post_id > 0) {
+		$post_meta = get_post_custom($post_id);
+		$db_ex_section = isset($post_meta['db_ex_section' . $i]) ? $post_meta['db_ex_section' . $i] : '';
+		$db_ex_bg_color = isset($post_meta['db_ex_bg_color' . $i]) ? $post_meta['db_ex_bg_color' . $i] : '';
+	}
+
+	?>
+	<div class="ex_section ex_section<?php echo $counter; ?>">
+
+		<h3 class="ex_title">Section <?php echo $counter; ?></h3>
+		<div class="ex_container">
+			<?php echo wp_editor($db_ex_section, 'db_ex_section' . $counter, array('textarea_rows' => 14)); ?>
+
+			<div class="field">
+				<label for="db_beatmersive_hyperlink">Background Color for Section <?php echo $counter; ?></label>
+				<input style="padding:5px; width:100px;" autocomplete="off" name="db_ex_bg_color<?php echo $counter; ?>" type="text" value="<?php echo $db_ex_bg_color; ?>" />
+			</div>
+		</div>
+
+	</div>
+	<?php
+}
+
+add_action('wp_ajax_load_section', 'ajax_load_section');
+add_action('wp_ajax_nopriv_load_section', 'ajax_load_section');
+function ajax_load_section() {
+
+	$nonce = isset($_POST['postCommentNonce']) ? $_POST['postCommentNonce'] : '';
+	if(!wp_verify_nonce($nonce, 'myajax-post-comment-nonce')) { die('Busted!'); }
+
+	$counter = isset($_POST['counter']) ? $_POST['counter'] : '';
+	$post_id = isset($_POST['post_id']) ? $_POST['post_id'] : '';
+	
+	ob_start();
+	create_section($post_id, $counter);
+	$result = ob_get_contents();
+	ob_end_clean();
+
+	echo json_encode(array('results' => $result));
+
+	die;
 }
 
 // display form field
@@ -329,9 +462,14 @@ function db_load_scripts($hook) {
 
 	if($hook == 'post.php' || $hook == 'post-new.php') {
 		global $post;
-		if($post->post_type == 'post') {
-			wp_enqueue_script( 'jquery-ui-autocomplete' );
-			wp_enqueue_script('jquery-artists', THEME_DIR . '/js/admin/jquery-posts.js', array('jquery'));
+
+		if($post->post_type == 'post' || $post->post_type == 'exclusive') {
+			wp_enqueue_script('jquery-ui-autocomplete');
+
+			wp_enqueue_script('db_admin_js', THEME_DIR . '/js/admin/jquery-posts.js', array('jquery'));
+
+			wp_localize_script('db_admin_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php')));
+			wp_localize_script('db_admin_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php'), 'postCommentNonce' => wp_create_nonce('myajax-post-comment-nonce'),));
 		}
 	}
 }

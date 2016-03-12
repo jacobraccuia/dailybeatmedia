@@ -48,8 +48,8 @@ function get_standard_loop($args = array()) {
 		<div class="row post-wrapper vintage-wrapper">
 			<?php get_vintage_posts(array('blog_id' => 1)); ?>
 		</div>
-		<div class="row post-wrapper standard-wrapper">
-			<?php get_standard_posts(); ?>
+		<div class="row post-wrapper full-width-wrapper full-story-wrapper">
+			<?php get_exclusive_posts(); ?>
 		</div><?php /*
 		<div class="row post-wrapper trending-wrapper">
 			<?php get_standard_post_feature(); ?>
@@ -106,6 +106,8 @@ function get_standard_posts($args = array()) {
 
 		$i++;
 	}
+
+	reset_blog();
 }
 
 function get_brand_posts($blog_name) {

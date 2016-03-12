@@ -21,7 +21,6 @@ jQuery(document).ready(function($) {
 
  		// if url not going to another dailybeat page
 
-
 		var matches = target_href.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
 		var domain = matches && matches[1];  // domain will be null if no match is found
 
@@ -56,12 +55,20 @@ jQuery(document).ready(function($) {
 					}
 				});
 
-				var new_page_content = $(data).siblings('#content').html();
+				var parser = new DOMParser();
+				doc = parser.parseFromString(data, "text/html");
+				
+				var body_classes = doc.body.getAttribute('class');
+				var new_page_content = $(doc.body).find('#content').html();
+
 
 			    var matches = data.match(/<title>(.*?)<\/title>/);
 			    var page_title = matches[1];
 
-				History.pushState({ html: new_page_content }, page_title, target_href);
+				// Garbage collection, you don't need this anymore.
+				parser = doc = null;
+
+				History.pushState({ html: new_page_content, bodyClass: body_classes }, page_title, target_href);
 		    }
 		});
 
@@ -90,29 +97,40 @@ jQuery(document).ready(function($) {
 
 
 // this function updates page content with ajax and cool effects!
+// data is an object that stores page html, body classes, and more
 var updateRunning = 0;
 function update_content(data) {
 	// return an already resolved promise
 	if(data == null) { return $().promise(); }
 	
 	++updateRunning;
-	
-	var id = $(data).prop('id'),
-		content = "#" + id,
-		header = 0, p1, p2;
+
+	var pageContent = data.html;
+	var body_classes = data.bodyClass;
+
+	// replace body class with classes loaded
+	$('body').removeClass().addClass(body_classes);
+
+	var id = $(pageContent).prop('id'),
+	content = "#" + id,
+	header = 0, p1, p2;
 
 
-		$('#content').invisible().html(data);
-		$('#content').visible();
-		
+	$('#content').invisible().html(pageContent);
+	$('#content').visible();
 
-		return $.when(p1, p2).always(function() {
-			--updateRunning;
-		});
-		
+	if(body_classes.indexOf('single') > -1) {
+		console.log('a');
+		single_scripts(true);
 	}
+
+	return $.when(p1, p2).always(function() {
+		--updateRunning;
+	});
 	
-	
+}
+
+
 	// this wrapper function queues up and lets all fadeIn/fadeOut happen before executing again
 	var queue = [];
 	function update_content_wrapper(data) {
@@ -143,7 +161,7 @@ function update_content(data) {
 	// revert to a previously saved state
 	History.Adapter.bind(window, 'statechange', function() { // note: We are using statechange instead of popstate
         var event_state = History.getState(); // note: We are using History.getState() instead of event.state
-		update_content_wrapper(event_state.data.html);	
+		update_content_wrapper(event_state.data);	
 	});
 
 

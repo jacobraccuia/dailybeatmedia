@@ -73,10 +73,10 @@ $permalink = get_permalink();
 					?>
 
 					<li class="social facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $bitly; ?>" data-shared="<?php the_title(); ?>" data-social="Facebook" target="_blank"><i class="fa fa-facebook-square"></i>Share</a></li>
-					<li class="social twitter"><a href="https://twitter.com/share?text=<?php echo $share_title; ?>&url=<?php echo $bitly; ?>&via=TorontoRC&hashtags=TRC" data-shared="<?php the_title(); ?>" data-social="Twitter" target="_blank"><i class="fa fa-twitter"></i>Tweet</a></li>
+					<li class="social twitter"><a href="https://twitter.com/share?text=<?php echo $share_title; ?>&url=<?php echo $bitly; ?>&via=DailyBeat&hashtags=db" data-shared="<?php the_title(); ?>" data-social="Twitter" target="_blank"><i class="fa fa-twitter"></i>Tweet</a></li>
 					<li class="social linkedin"><a href="https://www.linkedin.com/cws/share?url=<?php echo $bitly; ?>" data-shared="<?php the_title(); ?>" data-social="Google Plus" target="_blank"><i class="fa fa-linkedin-square"></i>Post</a></li>
 					<li class="social email"><a href="mailto:?subject=<?php the_title(); ?>&body=<?php echo the_excerpt(); ?>" data-shared="<?php the_title(); ?>" data-social="Email"><i class="fa fa-envelope"></i>Email</a></li>
-					<li class="social pinterest"><a href="https://www.pinterest.com/pin/create/button/?url=<?php echo $bitly; ?>" target="_blank" data-shared="<?php the_title(); ?>" data-social="Pinterest"><i class="fa fa-pinterest-square"></i>Pin</a></li>
+					<?php /* <li class="social pinterest"><a href="https://www.pinterest.com/pin/create/button/?url=<?php echo $bitly; ?>" target="_blank" data-shared="<?php the_title(); ?>" data-social="Pinterest"><i class="fa fa-pinterest-square"></i>Pin</a></li> &/ ?>y
 					<?php /* <li class="social comment"><a href="#comments"><i class="fa fa-comment"></i>Comment</a></li> */ ?>
 				</ul>
 			</div>
@@ -92,10 +92,10 @@ $permalink = get_permalink();
 
 		<div class="col-offset-center">
 
-			<div class="single-content">
+			<div class="single-content content">
 				<?php the_content(); ?>
 			</div>
-
+			<div class="content-divider"></div>
 			<div class="related-posts">
 				<h2>Related Posts</h2>
 				<?php
@@ -109,10 +109,11 @@ $permalink = get_permalink();
 				get_standard_posts(array('tags' => $x)); ?>
 			</div>
 			
+
 		</div>
 		<div style="clear:both;"></div>
 	</section>
-
+	
 </div> <!-- close content -->
 
 <?php endwhile; endif; ?>

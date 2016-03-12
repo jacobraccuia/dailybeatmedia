@@ -1034,11 +1034,8 @@ function prependTrackToFront() {
     }
 }
 
-x = 0;
 function initialize_waveform(track) {
-  console.log(x);
-  x++;
-  var trk = jQuery('#large-waveform').data('track');
+    jQuery('#large-waveform').data('track', track.permalink);
 
  /* // CHECK IF CANVAS HAS SHIT IN IT
   // remove canvas if it exists and is not the currently playing track..
@@ -1059,7 +1056,6 @@ function initialize_waveform(track) {
     waveform.dataFromSoundCloudTrack(track);
   }
 */
-
 
   // if large waveform div exists, canvas does NOT exist, and a track is provided
   if(!jQuery('#large-waveform canvas').length) {
