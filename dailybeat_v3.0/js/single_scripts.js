@@ -3,7 +3,6 @@ jQuery(document).ready(function($) {
 	// make it global
 	window.single_scripts = function(reload) {
 
-
 		// refresh scripts!
 		if(reload) {
 			resize_media(sticky_social_feed);	

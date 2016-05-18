@@ -13,10 +13,10 @@
 .sc-scrubber .sc-buffer, .sc-scrubber .sc-played { position:absolute; top:0; width:0; -webkit-transition:width 0.1s linear; height:32px; }
 /* tracks */
 
-/* Track listings*/
-.sc-trackslist { display:block; position:relative; overflow:hidden; overflow-y:scroll; height:150px; }
+/* track listings */
+ol.sc-trackslist { display:block; position:relative; overflow:hidden; overflow-y:scroll; height:150px; padding-top:2px; }
 .sc-trackslist li { cursor:pointer; list-style:none; text-transform:uppercase; overflow:hidden; letter-spacing:.5px; display:table; width:100%; }
-.sc-trackslist li a { line-height:17px; float:left; display:block; padding:7px 15px 7px 15px;  }
+.sc-trackslist li a { line-height:17px; float:left; display:block; padding:7px 15px 6px 15px;  }
 .sc-trackslist .artist-name { font-weight:400; color:#DDD; }
 .sc-trackslist li.active .artist-name { font-weight:400; color:#00E2CF!important; }
 

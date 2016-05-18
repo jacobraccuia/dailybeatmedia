@@ -182,7 +182,7 @@ class NowFeed {
         $now_feed_loops = $this->now_feed_loops;
         foreach($now_feed as $key => $item) {
             if(isset($this->exclude_feed[$key])) { continue; } // if has already been displayed
-            if($images_looped >= $image_cutoff) { break; } // if has too many images
+            if($images_looped > $image_cutoff) { break; } // if has too many images
             if($this->has_video($item)) { continue; } // skip videos for now
             if($i++ < $offset) continue; // offset
             if($i > $offset + $limit) break; // limit
@@ -191,15 +191,15 @@ class NowFeed {
             if($this->has_image($item) === true) {
                 $images_looped++;
             } else {
-                // every two w/out an image = one image.
+                // every three w/out an image = one image.
                 $non_images_looped++;
-                if($non_images_looped == 2) {
+                if($non_images_looped == 3) {
                     $images_looped++;
                     $non_images_looped = 0;
                 }
             }
             
-            if($images_looped >= $image_cutoff) { break; }
+            if($images_looped > $image_cutoff) { break; }
 
             if($item['type'] == 'twitter') {
                 echo $this->tweets($item['data'], $now_feed_loops);
@@ -210,7 +210,7 @@ class NowFeed {
 
             $k++;
             // on second iteration show ad
-            if($k == 1 && $ad) {
+            if($k == 1 && $ad && shortcode_exists('bsa_pro_ad_space')) {    
                 echo '<div class="widget ad">';
                 echo do_shortcode('[bsa_pro_ad_space id="1"]');
                 echo '</div>';
@@ -345,7 +345,7 @@ class NowFeed {
                 <p><?php echo $comment; ?></p>
             </div>
             <?php if($media_url != '') {
-                echo '<a href="#now-feed-popup-' . $i . '" class="featherlight-now-feed"><div class="featured-image" data-image-url="' . $large_media_url . ':large" style="background-image:url(' . $media_url .':small);"></div></a>';
+                echo '<a href="#now-feed-popup-' . $i . '" class="featherlight-now-feed"><div class="featured-image" data-image-url="' . $large_media_url . ':large" data-src="' . $media_url .':small"></div></a>';
             } ?>
             <div class="meta">
                 <a href="http://twitter.com" target="_blank"><i class="fa fa-fw fa-twitter"></i></a>
@@ -385,7 +385,7 @@ class NowFeed {
                 <h5><a href="http://instagram.com/<?php echo $username; ?>" target="_blank"><?php echo $username; ?></a></h5>
                 <p><?php echo $comment; ?></p>
             </div>
-            <?php echo '<a href="#now-feed-popup-' . $i . '" class="featherlight-now-feed"><div class="featured-image" data-image-url="' . $high_res . '" style="background-image:url(' . $image .');"></div></a>'; ?>
+            <?php echo '<a href="#now-feed-popup-' . $i . '" class="featherlight-now-feed"><div class="featured-image" data-image-url="' . $high_res . '" data-src="' . $image .'"></div></a>'; ?>
             <div class="meta">
                 <a href="http://instagram.com" target="_blank"><i class="fa fa-fw fa-instagram"></i></a>
                 <span class="timestamp"><?php echo $timestamp; ?></span>

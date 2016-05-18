@@ -32,7 +32,7 @@ function classic_post($blogID = 1, $args = array()) {
 
 	<article class="classic-post">
 		<a href="<?php the_permalink(); ?>">
-			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(350, 350); ?>');"></div>
+			<div class="featured-image" data-src="<?php echo get_thumb_url(350, 350); ?>"></div>
 		</a>
 		<?php if(1 == 1) { ?>
 		<div class="via-bar <?php echo $short_blog_name; ?>"><?php echo $blog_name; ?></div>
@@ -74,7 +74,7 @@ function variant_post($blogID = 1, $args = array()) {
 
 	<article class="variant-post">
 		<a href="<?php the_permalink(); ?>">
-			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(350, 350); ?>');"></div>
+			<div class="featured-image" data-src="<?php echo get_thumb_url(350, 350); ?>"></div>
 		</a>
 		<?php if(1 == 1) { ?>
 		<div class="via-bar <?php echo $short_blog_name; ?>"><?php echo $blog_name; ?></div>
@@ -105,7 +105,7 @@ function trending_post($blogID = 1, $trending_post_content = '') {
 	?>
 	<article class="trending-post">
 		<a href="<?php the_permalink(); ?>">
-			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(700, 700); ?>');"></div>
+			<div class="featured-image" data-src="<?php echo get_thumb_url(700, 700); ?>"></div>
 		</a>
 		<div class="post-info">
 			<div class="col-md-7 left-story">
@@ -141,12 +141,12 @@ function vintage_post($blogID = 1) {
 	?>
 	<article class="vintage-post">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-4 vintage-image">
 				<a href="<?php the_permalink(); ?>">
-					<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(700, 700); ?>');"></div>
+					<div class="featured-image" data-src="<?php echo get_thumb_url(700, 700); ?>"></div>
 				</a>
 			</div>
-			<div class="col-md-8">
+			<div class="col-md-8 	">
 				<div class="post-info">
 					<h6 class="post-meta">
 						<span class="timestamp"><?php the_timestamp(); ?></span> - <span class="author"><?php the_author_posts_link(); ?></span>
@@ -154,7 +154,7 @@ function vintage_post($blogID = 1) {
 					<a href="<?php the_permalink(); ?>">
 						<h2 class="<?php echo $external; ?>"><?php the_title(); ?></h2>
 					</a>
-					<div class="post-excerpt"><?php the_excerpt(); ?></div>
+					<div class="post-excerpt dotdotdot"><?php the_excerpt(); ?></div>
 					<div class="read-more"><a href="<?php the_permalink(); ?>">Read Full Story</a><?php if($blogID > 1) { ?> at <?php echo blog_svg($blogID); } ?></div>
 				</div>
 			</div>
@@ -188,7 +188,7 @@ function video_post($blogID = 1, $args = array()) {
 
 	<article class="video-post">
 		<a href="<?php echo $hyperlink; ?>">
-			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(700, 700); ?>');">
+			<div class="featured-image" data-src="<?php echo get_thumb_url(700, 700); ?>">
 				<div class="play-overlay">
 					<span class="fa-stack">
 						<i class="fa fa-circle fa-stack-2x"></i>
@@ -221,11 +221,7 @@ function exclusive_post($blogID = 1) {
 
 	<article class="exclusive-post">
 		<a href="<?php the_permalink(); ?>">
-			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(900, 900); ?>');">
-				<div class="spotlight-bg"></div>
-
-
-			</div>
+			<div class="featured-image" data-src="<?php echo get_thumb_url(900, 900); ?>"><?php /* <div class="spotlight-bg"></div> */ ?></div>
 		</a>
 		<div class="caption">
 			<h1 class="<?php echo $external; ?>"><?php the_title(); ?></h1>
@@ -334,9 +330,7 @@ function spotlight_post($blogID = 1, $args = array()) {
 
 	<article class="spotlight-post<?php echo $styles; ?>">
 		<a href="<?php the_permalink(); ?>">
-			<div class="featured-image" style="background-image:url('<?php echo get_thumb_url($w, $h); ?>');">
-				<div class="spotlight-bg"></div>
-			</div>
+			<div class="featured-image" data-src="<?php echo get_thumb_url($w, $h); ?>"><?php /*<div class="spotlight-bg"></div><?php */ ?></div>
 		</a>
 		<div class="caption">
 			<?php if($blogID > 1) { ?>

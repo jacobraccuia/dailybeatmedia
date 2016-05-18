@@ -429,7 +429,7 @@ function get_top_posts($args = array()) {
 
 		<article class="top-post">
 			<a href="<?php the_permalink(); ?>">
-				<div class="featured-image" style="background-image:url('<?php echo get_thumb_url(700, 700); ?>');"></div>
+				<div class="featured-image" data-src="<?php echo get_thumb_url(700, 700); ?>"></div>
 				<div class="wp-caption-text"><?php echo $thumb_caption; ?></div>
 			</a>
 			<div class="post-info">
@@ -715,7 +715,7 @@ function get_fnt_for_player($args = array()) {
 
 	$defaults = array(
 		'offset' => 0,
-		'posts_per_page' => 10,
+		'posts_per_page' => 1,
 	);
 
 	// merge arguments with defaults && set keys as variables

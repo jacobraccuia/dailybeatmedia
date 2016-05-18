@@ -35,26 +35,31 @@ function my_enqueue_scripts() {
 
 	NOTE: lots of these should be packaged with the db_network plugin
 
-	stickem
-	dotdotdot
-	pushmenu
-	waypoints
-	marquee
-	modernizrr
+	stickem     - sticky 
+	blazy lazy  - loading
+	dotdotdot   - truncate text
+	pushmenu    - cabinet
+	waypoints   - not entirely sure what we use this for
+	marquee     - for soundcloud
+	modernizrr  - for browser shit
 
 	*/
 
-	wp_enqueue_script('dailybeat_uglify_js', THEME_DIR . '/js/uglify.js', array('jquery'));
-	wp_enqueue_script('dailybeat_js', THEME_DIR . '/js/uglify_db_scripts.js', array('jquery'));
+	wp_enqueue_script('dailybeat_js', THEME_DIR . '/js/uglify.js', array('jquery'));
+	wp_enqueue_script('dailybeat_plugins_js', THEME_DIR . '/js/uglify_db_scripts.js', array('jquery'));
+
+
+	// commented out because we uglify the scripts 
+	//	wp_enqueue_script('ajax_page_load', THEME_DIR . '/js/ajax_page_load.js');
+	//	wp_enqueue_script('dailybeat_js', THEME_DIR . '/js/scripts.js', array('jquery'));
 
 	/*if(is_single()) {
 		wp_enqueue_script('single_scripts', THEME_DIR . '/js/single_scripts.js', array('jquery'));
 	}
+	*/
 
-	wp_enqueue_script('ajax_page_load', THEME_DIR . '/js/ajax_page_load.js');	
-	wp_enqueue_script('dailybeat_js', THEME_DIR . '/js/scripts.js', array('jquery'));
-*/
-	
+
+
 	wp_localize_script('dailybeat_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php')));
 	wp_localize_script('dailybeat_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php'), 'postCommentNonce' => wp_create_nonce('myajax-post-comment-nonce'),));
 

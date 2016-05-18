@@ -254,66 +254,72 @@
     playerObj = { node: $player, tracks: [], meta: [] },
     loadUrl = function(link) {
       var apiUrl = scApiUrl(link.url, apiKey);
-      $.getJSON(apiUrl, function(data) {
-                // log('data loaded', link.url, data);
-                index += 1;
 
-                if(data.tracks){
-                  // log('data.tracks', data.tracks);
-                  playerObj.tracks = playerObj.tracks.concat(data.tracks);
-                }else if(data.duration){
-                  // a secret link fix, till the SC API returns permalink with secret on secret response
-                  data.permalink_url = link.url;
-                  // if track, add to player
+      console.log(apiUrl);
 
-                  data.meta = link;
-                  playerObj.tracks.push(data);
-                }else if(data.creator){
-                  // it's a group!
-                  links.push({url:data.uri + '/tracks'});
-                }else if(data.username){
-                  // if user, get his tracks or favorites
-                  if(/favorites/.test(link.url)){
-                    links.push({url:data.uri + '/favorites'});
-                  }else{
-                    links.push({url:data.uri + '/tracks'});
-                  }
-                }else if($.isArray(data)){
-                  playerObj.tracks = playerObj.tracks.concat(data);
-                }
 
-                if(links[index]){
-                  // if there are more track to load, get them from the api
-                  loadUrl(links[index]);
-                }else{
-                  // if loading finishes, anounce it to the GUI
-                  playerObj.node.trigger({type:'onTrackDataLoaded', playerObj: playerObj, url: apiUrl});
-                }
-              });
-};
-        // update current API key
-        apiKey = key;
-        // update the players queue
-        players.push(playerObj);
-        // load first tracks
-        loadUrl(links[index]);
-      },
-      artworkImage = function(track, usePlaceholder) {
-        if(usePlaceholder){
-          return '<div class="sc-loading-artwork">Loading Artwork</div>';
-        }else if (track.artwork_url) {
-          return '<img src="' + track.artwork_url.replace('-large', '-t300x300') + '"/>';
-        }else{
-          return '<div class="sc-no-artwork"></div>';
+      $.ajax({
+        dataType: 'jsonp',
+        url: apiUrl,
+        success: function(data) {
+           index += 1;
+
+            if(data.tracks) {
+              // log('data.tracks', data.tracks);
+              playerObj.tracks = playerObj.tracks.concat(data.tracks);
+            } else if(data.duration) {
+              // a secret link fix, till the SC API returns permalink with secret on secret response
+              data.permalink_url = link.url;
+              // if track, add to player
+
+              data.meta = link;
+              playerObj.tracks.push(data);
+            } else if(data.creator) {
+              // it's a group!
+              links.push({url:data.uri + '/tracks'});
+            } else if(data.username) {
+              // if user, get his tracks or favorites
+              if(/favorites/.test(link.url)) {
+                links.push({url:data.uri + '/favorites'});
+              } else {
+                links.push({url:data.uri + '/tracks'});
+              }
+            } else if($.isArray(data)) {
+              playerObj.tracks = playerObj.tracks.concat(data);
+            }
+
+            if(links[index]) {
+              // if there are more track to load, get them from the api
+              loadUrl(links[index]);
+            } else {
+              // if loading finishes, anounce it to the GUI
+              playerObj.node.trigger({type:'onTrackDataLoaded', playerObj: playerObj, url: apiUrl});
+            }
         }
-      },
-
-      updateTrackInfo = function($player, track, callback) {
+      });
+    };
+      // update current API key
+      apiKey = key;
+      // update the players queue
+      players.push(playerObj);
+      // load first tracks
+      // loadUrl(links[index]);
+    },
+    artworkImage = function(track, usePlaceholder) {
+      if(usePlaceholder){
+        return '<div class="sc-loading-artwork">Loading Artwork</div>';
+      }else if (track.artwork_url) {
+        return '<img src="' + track.artwork_url.replace('-large', '-t300x300') + '"/>';
+      }else{
+        return '<div class="sc-no-artwork"></div>';
+      }
+    },
+    updateTrackInfo = function($player, track, callback) {
         // update the current track info in the player
         // log('updateTrackInfo', track);
         $('.sc-info', $player).each(function(index) {
           $('h3', this).html('<a href="' + track.permalink_url +'">' + track.meta.title + '</a>');
-         // $('h4', this).html('by <a href="' + track.user.permalink_url +'">' + track.user.username + '</a>');
+          // $('h4', this).html('by <a href="' + track.user.permalink_url +'">' + track.user.username + '</a>');
           //$('p', this).html(track.description || 'no Description');
         });
 
@@ -322,7 +328,7 @@
 
         // update bio
         $('.sc-artist-info', $player).each(function(index) {
-          if(track.meta.thumb_url != '' && track.meta.thumb_url != null) {    
+          if(track.meta.thumb_url != '' && track.meta.thumb_url != null) {
             $(this).html('<div class="artist-pic"><img src="' + track.meta.thumb_url + '" /></div><div class="artist-meta"><h4>' + track.meta.artist + '</h4><ul class="artist-social"></ul></div>');
             if(track.meta.artist_twitter != '') {
               $(this).find('ul').append('<li><a href="http://twitter.com/' + track.meta.artist_twitter + '" target="_blank"><i class="fa fa-fw fa-twitter"></i></a></li>');
@@ -336,15 +342,14 @@
 
             $('.artist-list-divider').show();
             $(this).slideDown(400, function() {
-                  updatePlayerHeight();
+              updatePlayerHeight();
             });
-          } else { 
+          } else {
             $('.artist-list-divider').hide();
             $(this).slideUp(400, function() {
-                  updatePlayerHeight();
+              updatePlayerHeight();
             });
           }
-
         });
 
         // update the artwork
@@ -361,7 +366,7 @@
                   // if the image isn't loaded yet, do it now
                   $(this).removeClass('sc-loading-artwork').html(artworkImage(track, false));
                 });
-          
+
           } else {
             // reset other artworks
             $item.removeClass('active');
@@ -376,21 +381,21 @@
        // $('.sc-waveform-container', $player).html('<img src="' + track.waveform_url +'" />');
 
        $player.trigger('onPlayerTrackSwitch.scPlayer', [track]);
-       if(callback) {
-        callback();
-       }
-     },
+        if(callback) {
+          callback();
+        }
+    },
 
-     play = function(track) {
-      var url = track.permalink_url;
+      play = function(track) {
+        var url = track.permalink_url;
 
-      if(currentUrl === url){
-          // log('will play');
-          audioEngine.play();
-        }else{
-          currentUrl = url;
-          // log('will load', url);
-          audioEngine.load(track, apiKey);
+        if(currentUrl === url){
+            // log('will play');
+            audioEngine.play();
+          }else{
+            currentUrl = url;
+            // log('will load', url);
+            audioEngine.load(track, apiKey);
         }			
       },
       getPlayerData = function(node) {
@@ -479,7 +484,7 @@
         audioEngine.setVolume(soundVolume);
       },
       positionPoll;
-
+    
     // listen to audio engine events
     $doc
     .bind('scPlayer:onAudioReady', function(event) {
@@ -604,7 +609,11 @@
             .appendTo($artworks)
             .toggleClass('active', active)
             .data('sc-track', track);
+
+            jQuery('#player').data('waveform_url', track.waveform_url);
+
           });
+
           // update the element before rendering it in the DOM
           $player.each(function() {
             if($.isFunction(opts.beforeRender)){
@@ -616,6 +625,7 @@
           $('.sc-position', $player)[0].innerHTML = timecode(0);
           // set up the first track info
           updateTrackInfo($player, tracks[0]);
+
 
 
           // if continous play enabled always skip to the next track after one finishes
@@ -775,13 +785,13 @@
 
       all_tracks.addClass('playing');
       if(marquee.find('a').height() > 25) {
-		    marquee.marquee({
-					speed: 12000,
-					gap: 50,
-					delayBeforeStart: 0,
-					direction: 'left',
-					duplicated: true
-				});
+        marquee.marquee({
+         speed: 12000,
+         gap: 50,
+         delayBeforeStart: 0,
+         direction: 'left',
+         duplicated: true
+       });
       } else {
         marquee.marquee('pause');
       }
@@ -801,27 +811,27 @@
       $(this).toggleClass('active', index === trackId);
     });
 
-  prependTrackToFront();
+    prependTrackToFront();
 
 
-  return false;
-});
+    return false;
+  });
 
-var scrub = function(node, xPos) {
-  var $scrubber = $(node).closest('.sc-time-span'),
-  $buffer = $scrubber.find('.sc-buffer'),
-  $available = $scrubber.find('.sc-waveform-container img'),
-  $player = $scrubber.closest('.sc-player'),
-  relative = Math.min($buffer.width(), (xPos  - $available.offset().left)) / $available.width();
-  onSeek($player, relative);
-};
+  var scrub = function(node, xPos) {
+    var $scrubber = $(node).closest('.sc-time-span'),
+    $buffer = $scrubber.find('.sc-buffer'),
+    $available = $scrubber.find('.sc-waveform-container img'),
+    $player = $scrubber.closest('.sc-player'),
+    relative = Math.min($buffer.width(), (xPos  - $available.offset().left)) / $available.width();
+    onSeek($player, relative);
+  };
 
-var onTouchMove = function(ev) {
-  if (ev.targetTouches.length === 1) {
-    scrub(ev.target, ev.targetTouches && ev.targetTouches.length && ev.targetTouches[0].clientX);
-    ev.preventDefault();
-  }
-};
+  var onTouchMove = function(ev) {
+    if (ev.targetTouches.length === 1) {
+      scrub(ev.target, ev.targetTouches && ev.targetTouches.length && ev.targetTouches[0].clientX);
+      ev.preventDefault();
+    }
+  };
 
 
   // seeking in the loaded track buffer
@@ -885,22 +895,22 @@ $(document).on('click', '.sc-volume-off', function(e) {
     $('span.sc-volume-status').css({height: event.volume + '%'});
   });
 
-*/
+  */
 
 
-$(document).on('click', '#large-waveform canvas', function(event) {
+  $(document).on('click', '#large-waveform canvas', function(event) {
 
-  var cursor_position = get_cursor_position($(this), event);
-  var x = cursor_position[0];
+    var cursor_position = get_cursor_position($(this), event);
+    var x = cursor_position[0];
 
-  var left_offset = $(this).offset().left;
-  var distance_from_left = x - left_offset;
-  
-  $player = $('#player .sc-player');
+    var left_offset = $(this).offset().left;
+    var distance_from_left = x - left_offset;
 
-  if($player.is(':not(.playing)')) {
-   $('.sc-controls .sc-play').click();  
-  }
+    $player = $('#player .sc-player');
+
+    if($player.is(':not(.playing)')) {
+     $('.sc-controls .sc-play').click();  
+   }
 
   //relative = Math.min(distance_from_left / $(this).width());
   relative = Math.min(x / $(this).width());
@@ -910,40 +920,40 @@ $(document).on('click', '#large-waveform canvas', function(event) {
 
 });
 
-$(document).on('mousemove', '#large-waveform canvas', function(event) {
+  $(document).on('mousemove', '#large-waveform canvas', function(event) {
 
-  if($('#player .sc-player.playing').length) {
+    if($('#player .sc-player.playing').length) {
 
-    var cursor_position = get_cursor_position($(this), event);
-    var x = cursor_position[0];
+      var cursor_position = get_cursor_position($(this), event);
+      var x = cursor_position[0];
 
-    window.mouse_position_x = mouse_position = x / $(this).width();
+      window.mouse_position_x = mouse_position = x / $(this).width();
+
+      var duration = audioEngine.getDuration(),
+      position = audioEngine.getPosition(),
+      relative = (position / duration);
+
+      big_waveform(relative, mouse_position);
+    }
+  });
+
+  $(document).on('mouseleave', '#large-waveform canvas', function(event) {
+    window.mouse_position_x = 0;
 
     var duration = audioEngine.getDuration(),
     position = audioEngine.getPosition(),
     relative = (position / duration);
 
-    big_waveform(relative, mouse_position);
-  }
-});
-
-$(document).on('mouseleave', '#large-waveform canvas', function(event) {
-  window.mouse_position_x = 0;
-
-  var duration = audioEngine.getDuration(),
-  position = audioEngine.getPosition(),
-  relative = (position / duration);
-
-  big_waveform(relative, mouse_position_x);
-});
+    big_waveform(relative, mouse_position_x);
+  });
 
 
 
-$.scPlayer.loadTrackInfoAndPlay = function($elem, track, meta) {
-  var playerObj = players[$elem.data('sc-player').id];
+  $.scPlayer.loadTrackInfoAndPlay = function($elem, track, meta) {
+    var playerObj = players[$elem.data('sc-player').id];
   track.meta = meta; // add meta to track data
   playerObj.tracks.push(track);
-  console.log(track);
+
   var index = playerObj.tracks.length-1;
   var $list = $(playerObj.node).find('.sc-trackslist');
   var $artworks = $(playerObj.node).find(".sc-artwork-list");
@@ -980,16 +990,15 @@ $.scPlayer.loadTrackInfoAndPlay = function($elem, track, meta) {
   // the default Auto-Initialization
   $(function() {
     if($.isFunction($.scPlayer.defaults.onDomReady)){
-      $.scPlayer.defaults.onDomReady = null;
-
+      $.scPlayer.defaults.onDomReady;
     }
   });
 })(jQuery);
 
 
-  jQuery(document).bind('onPlayerTrackSwitch.scPlayer', function(event, track) {
+jQuery(document).bind('onPlayerTrackSwitch.scPlayer', function(event, track) {
 
-    jQuery('#player').data('waveform_url', track.waveform_url);
+  jQuery('#player').data('waveform_url', track.waveform_url);
 
     // if player isn't loaded or active, remove canvas
     if(jQuery('#player').hasClass('loaded')) {
@@ -1001,13 +1010,13 @@ $.scPlayer.loadTrackInfoAndPlay = function($elem, track, meta) {
   });
 
 function updatePlayerHeight() { 
-    var player_height = jQuery('#player').height();
+  var player_height = jQuery('#player').height();
 
-    var total_height = 0;
-    jQuery('#player > .sc-player > *').each(function() {
-      if(jQuery(this).hasClass('sc-trackslist') || !jQuery(this).is(':visible')) { return; }
-      total_height += jQuery(this).outerHeight();
-    });
+  var total_height = 0;
+  jQuery('#player > .sc-player > *').each(function() {
+    if(jQuery(this).hasClass('sc-trackslist') || !jQuery(this).is(':visible')) { return; }
+    total_height += jQuery(this).outerHeight();
+  });
 
     var track_height = 150; //jQuery('#player .sc-trackslist').height();
 
@@ -1020,7 +1029,7 @@ function updatePlayerHeight() {
     prependTrackToFront();
   }
 
-function prependTrackToFront() {
+  function prependTrackToFront() {
     if(jQuery('.sc-trackslist').find('li.active').index() > 0) {
 
 
@@ -1032,9 +1041,9 @@ function prependTrackToFront() {
       jQuery('.sc-trackslist').scrollTop(0);
       jQuery('.sc-trackslist').css('overflow-y', 'scroll');
     }
-}
+  }
 
-function initialize_waveform(track) {
+  function initialize_waveform(track) {
     jQuery('#large-waveform').data('track', track.permalink);
 
  /* // CHECK IF CANVAS HAS SHIT IN IT
@@ -1055,7 +1064,7 @@ function initialize_waveform(track) {
     
     waveform.dataFromSoundCloudTrack(track);
   }
-*/
+  */
 
   // if large waveform div exists, canvas does NOT exist, and a track is provided
   if(!jQuery('#large-waveform canvas').length) {
@@ -1066,10 +1075,10 @@ function initialize_waveform(track) {
       innerColor: 'rgba(255, 255, 255, 0.3)',
       height: 200
     });
-   
-   }
- 
-    waveform.dataFromSoundCloudTrack(track);
+
+  }
+
+  waveform.dataFromSoundCloudTrack(track);
 }
 
 
@@ -1079,7 +1088,11 @@ function big_waveform(track_position, mouse_position) {
 
   var color = '00E2CF';
   color = hex_to_rgb(color);
-  var peaks = 1 / window.sc_data.length;
+
+  var peaks = 1;
+  if(window.sc_data.length) {
+    peaks = 1 / window.sc_data.length;
+  }
 
   if(jQuery('#large-waveform').length) {
     var waveform = new Waveform({
@@ -1090,15 +1103,15 @@ function big_waveform(track_position, mouse_position) {
         // if mouse is ahead of song
         if(mouse_position > waveform_position) {
           if(track_position > waveform_position) {
-              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .8)';
+            return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .8)';
           } else if(track_position < mouse_position) { 
-              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .6)';
+            return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .6)';
           }
         } else {
           // if mouse is not on the waveform 
           if(mouse_position == 0) {
             if(track_position > waveform_position) {
-              
+
               return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .8)';
              // return 'rgba(' + color + ', .9)';
             } else if(track_position + peaks > waveform_position) { // super transparent one bar ahead of song
@@ -1109,9 +1122,9 @@ function big_waveform(track_position, mouse_position) {
           }
           // if mouse is stationary
           else if(track_position > waveform_position) {
-              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .6)';
+            return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .6)';
           } else if(track_position + peaks > waveform_position) { // super transparent one bar ahead of song
-              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .4)';
+            return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .4)';
           } else {
             return 'unplayed'; //rgba(255, 255, 255, 0.3)'; // unplayed
           }
@@ -1134,7 +1147,7 @@ function get_cursor_position(canvas, event) {
 }
 
 
- getGradientColor = function(start_color, end_color, percent) {
+getGradientColor = function(start_color, end_color, percent) {
    // strip the leading # if it's there
    start_color = start_color.replace(/^\s*#|\s*$/g, '');
    end_color = end_color.replace(/^\s*#|\s*$/g, '');
@@ -1150,12 +1163,12 @@ function get_cursor_position(canvas, event) {
 
    // get colors
    var start_red = parseInt(start_color.substr(0, 2), 16),
-       start_green = parseInt(start_color.substr(2, 2), 16),
-       start_blue = parseInt(start_color.substr(4, 2), 16);
+   start_green = parseInt(start_color.substr(2, 2), 16),
+   start_blue = parseInt(start_color.substr(4, 2), 16);
 
    var end_red = parseInt(end_color.substr(0, 2), 16),
-       end_green = parseInt(end_color.substr(2, 2), 16),
-       end_blue = parseInt(end_color.substr(4, 2), 16);
+   end_green = parseInt(end_color.substr(2, 2), 16),
+   end_blue = parseInt(end_color.substr(4, 2), 16);
 
    // calculate new color
    var diff_red = end_red - start_red;
@@ -1181,7 +1194,7 @@ function get_cursor_position(canvas, event) {
 
 
 
-function hex_to_rgb(hex) {
+ function hex_to_rgb(hex) {
 
   hex = hex.replace(/[^0-9A-F]/gi, '');
   
