@@ -96,6 +96,7 @@ function db_track_columns() {
 		'track_artist_name',
 		'track_name',
 		'track_remixer',
+		'track_waveform',
 		);
 }
 
@@ -119,6 +120,7 @@ function db_tracks($post) {
 	?>
 	<style>
 		input { display:block; }
+		input[type="text"] { width:70%; }
 	</style>
 	<div class="field">
 		<label for="track_artist_name">Track Artist:</label>
@@ -128,7 +130,30 @@ function db_tracks($post) {
 		<label for="track_remixer">Track Remixer:</label>
 		<input autocomplete="off" name="track_remixer" type="text" value="<?php echo $track_remixer; ?>" />
 		<label for="track_url">Track URL:</label>
-		<input autocomplete="off" name="track_url" type="text" value="<?php echo $track_url; ?>" />
+		<input autocomplete="off" name="track_url" class="track_url" type="text" value="<?php echo $track_url; ?>" />
+		<br/>
+
+		<?php 
+
+		if($track_url != '') {
+			$clientid = '9f690b3117f0c43767528e2b60bc70ce'; 
+
+			$soundcloud_url = 'https://api.soundcloud.com/resolve?url=' . $track_url . '&format=json&consumer_key=' . $clientid;
+			$track_json = file_get_contents($soundcloud_url);
+			$track = json_decode($track_json);
+			
+			if($track == null || property_exists($track, 'errors') && isset($track->errors[0])) {
+				echo '<span class="private_track_error"><span style="color:red;">This track is private and cannot play.  Please don\'t publish me!!</span></span>';
+			} else {
+				echo '<span class="private_track_error"><span style="color:green;">This track should play, but you should check anyways :)</span></span>';
+			}
+		}
+		?>
+
+		<br/>
+		<? /* <button class="get_waveform">Get Waveform</button>
+		<input autocomplete="off" name="track_waveform" class="track_waveform" 	type="text" value="<?php echo $track_waveform; ?>" />
+		*/ ?>
 	</div>
 	<?php 
 }
@@ -149,7 +174,7 @@ function db_track_save_post() {
 		}
 
 		// update post title if necessary
-		if($_POST['track_name'] != '' && $_POST['track_artist_name'] != '') {	
+		if(isset($_POST['track_name']) && $_POST['track_name'] != '' && $_POST['track_artist_name'] != '') {	
 			$remixer = '';
 			if($_POST['track_remixer'] != '') { $remixer = ' (' . $_POST['track_remixer'] . ' Remix)'; }
 
@@ -173,6 +198,7 @@ function db_load_scripts($hook) {
 		if($post->post_type == 'tracks') {
 			wp_enqueue_script( 'jquery-ui-autocomplete' );
 			wp_enqueue_script('jquery-artists', THEME_DIR . '/js/admin/jquery-posts.js', array('jquery'));
+			wp_enqueue_script('soundcloud-js', '//connect.soundcloud.com/sdk.js', array('jquery'));
 		}
 	}
 }

@@ -403,24 +403,5 @@ function exclude_this_post($blogID, $post_id) {
 	$exclude_posts[$blogID] = array_merge($exclude_posts[$blogID], array($post_id));
 }
 
-function min_switch_to_blog($blogID) {
-	if($blogID == $GLOBALS['blog_id']) { return true; }
-
-	//switch_to_blog($blogID);
-	//return true;
-
-	global $wpdb;
-	$wpdb->set_blog_id($blogID);
-	$GLOBALS['blog_id'] = $blogID;
-	wp_cache_init();
-
-	return true;
-}
-
-function reset_blog() {
-	switch_to_blog(1);
-	unset($GLOBALS['_wp_switched_stack']);
-	$GLOBALS['switched'] = false; 
-}
 
 ?>

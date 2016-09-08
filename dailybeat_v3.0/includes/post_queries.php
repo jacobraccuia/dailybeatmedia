@@ -709,56 +709,6 @@ function get_fresh_new_tracks($args = array()) {
 
 
 
-// maybe eventually merge with fresh new tracks content call so we don't make two calls for same data
-function get_fnt_for_player($args = array()) {
-	global $exclude_posts;
-
-	$defaults = array(
-		'offset' => 0,
-		'posts_per_page' => 1,
-	);
-
-	// merge arguments with defaults && set keys as variables
-	$args = array_merge($defaults, $args);
-	foreach($args as $key => $val) { ${$key} = $val; }
-
-	$blogID = get_blog_by_name('freshnewtracks');
-	switch_to_blog($blogID);
-
-	$exclude = $exclude_posts[$blogID];
-	$args = array(
-		'posts_per_page' => $posts_per_page,
-		//'offset' => $offset,
-		'post_status' => 'publish',
-		'post_type' => 'tracks',
-		);
-
-	$query = new WP_Query($args);
-	while($query->have_posts()) { $query->the_post();
-
-		$id = get_the_ID();
-
-		$artist = get_post_meta($id, 'track_artist_name', true);
-		$track = get_post_meta($id, 'track_name', true);
-		$remixer = get_post_meta($id, 'track_remixer', true);
-		$track_url = get_post_meta($id, 'track_url', true);
-		$track_artist_id = get_post_meta($id, 'db_featured_artist_id', true);
-
-		$artist_meta = array();
-		if(is_numeric($track_artist_id)) {
-			$artist_meta = get_artist_fields($track_artist_id, $blogID);
-		}
-
-		if($remixer != '') {
-			$track .= ' (' . $remixer . ' Remix)';
-		}
-		echo '<a href="' . $track_url . '" ' . build_track_data($track_url, $track, $artist, $artist_meta) . ' class="sc-player">' . $track . '</a>';
-	
-	}
-
-	reset_blog();
-}
-
 function get_spotlight_posts() {
 	global $exclude_posts, $wpdb, $post;
 

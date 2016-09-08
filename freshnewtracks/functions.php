@@ -2,6 +2,7 @@
 
 require_once('includes/wp_bootstrap_navwalker.php');
 require_once('includes/custom_post_settings.php');
+require_once('admin/admin_functions.php');
 //require_once('includes/post_queries.php');
 //require_once('now-feed/now-feed.php');
 
@@ -49,6 +50,46 @@ function my_enqueue_scripts() {
 	wp_enqueue_style('jacob_css', THEME_DIR . '/style.css');
 
 }
+
+
+// cron jobs!
+add_action('init', 'fnt_register_update_feed_event');
+function fnt_register_update_feed_event() {
+	if(!wp_next_scheduled('fnt_check_for_invalid_tracks')) {
+		wp_schedule_event(time(), 'daily', 'fnt_check_for_invalid_tracks');
+	}
+}   
+
+add_action('update_now_feed', 'fnt_check_for_invalid_tracks');
+function fnt_check_for_invalid_tracks() {
+
+	$clientid = '9f690b3117f0c43767528e2b60bc70ce'; 
+
+	$args = array(
+		'posts_per_page' => -1,
+		'offset' => 0,
+		'post_status' => 'publish',
+		'post_type' => 'tracks',
+		);
+
+	$query = new WP_Query($args);
+	while($query->have_posts()) { $query->the_post();
+
+		$id = get_the_ID();
+		$track_url = get_post_meta($id, 'track_url', true);
+
+		$soundcloud_url = 'https://api.soundcloud.com/resolve?url=' . $track_url . '&format=json&consumer_key=' . $clientid;
+		$track_json = file_get_contents($soundcloud_url);
+		$track = json_decode($track_json);
+		if($track == null || isset($track->errors) && isset($track->errors[0]) && $track->errors[0]->error_message == '404 - Not Found' || $track->errors[0]->error_message == 'HTTP Error: 403') {
+
+			$update = array('ID' => $id, 'post_status' => 'draft');
+			wp_update_post($update);
+		}
+	}
+}
+
+
 
 // register post thumbnails
 add_theme_support('post-thumbnails');
@@ -197,146 +238,113 @@ function author_biography($author_id = 0) {
 		<div class="author-connect">
 			<ul>
 				<?php if(get_the_author_meta('twitter', $author_id) != "") { ?>
-				<li class="twitter-bio"><a href="http://twitter.com/intent/user?screen_name=<?php echo get_the_author_meta('twitter', $author_id); ?>"><i class="fa fa-fw fa-twitter"></i></a></li>
-				<?php } if(get_the_author_meta('linkedin', $author_id) != "") { ?>
-				<li class="linkedin-bio"><a href="<?php echo get_the_author_meta('linkedin', $author_id); ?>" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
-				<?php } ?>
-			</ul>
-		</div>
-	</div>	
-	<?php	
-}
+					<li class="twitter-bio"><a href="http://twitter.com/intent/user?screen_name=<?php echo get_the_author_meta('twitter', $author_id); ?>"><i class="fa fa-fw fa-twitter"></i></a></li>
+					<?php } if(get_the_author_meta('linkedin', $author_id) != "") { ?>
+						<li class="linkedin-bio"><a href="<?php echo get_the_author_meta('linkedin', $author_id); ?>" target="_blank"><i class="fa fa-fw fa-linkedin"></i></a></li>
+						<?php } ?>
+					</ul>
+				</div>
+			</div>	
+			<?php	
+		}
 
 
 
 
-add_action('init', 'db_ad_cpt');
-function db_ad_cpt() {
-	register_post_type('ad_display',
-		array(
-			'labels' => array(
-				'name' => __('Advertisement'),
-				'singular_name' => __( 'Advertisements' ),
-				'menu_name' => __( 'Ads' ),
-				'all_items' => __( 'All Ads' ),
-				'add_new' => __( 'Add New Ad' ),
-				'add_new_item' => __( 'Add New Advertisement' ),
-				'edit_item' => __( 'Edit Ad' ),
-				'new_item' => __( 'New Ad' ),
-				'view_item' => __( 'View Ad' ),
-				'search_items' => __( 'Search Ad' ),
-				'not_found' => __( 'Ad Not Found' ),
-				'not_found_in_trash' => __( 'Ad Not Found In Trash' ),
-				),
-			'public' => true,
-			'description' => 'Shows a new ad!',
-			'show_ui' => true,
-			'show_in_menu' => true,
-			'capability_type' => 'post',
-			'hierarchical' => false,
-			'rewrite' => array('slug' => 'ads'),
-			'query_var' => true,
-			'supports' => array('title', 'thumbnail'),
-			'menu_position' => 10,
-			'has_archive' => true,
-			)
-		);
-}
+		add_action('admin_menu', 'db_ads_meta');
+		function db_ads_meta() {
+			add_meta_box('db_ads_meta', 'Ad Information', 'db_ads_meta_functions', 'ad_display', 'normal', 'high');
+		}
 
-add_action('admin_menu', 'db_ads_meta');
-function db_ads_meta() {
-	add_meta_box('db_ads_meta', 'Ad Information', 'db_ads_meta_functions', 'ad_display', 'normal', 'high');
-}
+		add_action('init', 'db_ads_tax', 1);
+		function db_ads_tax() {
+			register_taxonomy('ad_type', array('ad_display'), array('hierarchical' => true, 'label' => 'Ad Type', 'public' => true, 'singular_label' => 'Ad Type'));
+		}
 
-add_action('init', 'db_ads_tax', 1);
-function db_ads_tax() {
-	register_taxonomy('ad_type', array('ad_display'), array('hierarchical' => true, 'label' => 'Ad Type', 'public' => true, 'singular_label' => 'Ad Type'));
-}
+		function db_ads_meta_functions() {
+			global $post;
+			$db_ad_permalink = get_post_meta($post->ID, 'db_ad_hyperlink', true);
+			$db_ad_location = get_post_meta($post->ID, 'db_ad_location', true);
 
-function db_ads_meta_functions() {
-	global $post;
-	$db_ad_permalink = get_post_meta($post->ID, 'db_ad_hyperlink', true);
-	$db_ad_location = get_post_meta($post->ID, 'db_ad_location', true);
+			if(!isset($db_ad_location)) { $db_ad_location = 0; }
 
-	if(!isset($db_ad_location)) { $db_ad_location = 0; }
-
-	?>
-	<label for="ad">Ad Hyperlink ( where do you want it to go )</label>
-	<input type="text" name="db_ad_hyperlink" value="<?php if(isset($db_ad_permalink)) { echo $db_ad_permalink; } ?>" />
-	<br/>
+			?>
+			<label for="ad">Ad Hyperlink ( where do you want it to go )</label>
+			<input type="text" name="db_ad_hyperlink" value="<?php if(isset($db_ad_permalink)) { echo $db_ad_permalink; } ?>" />
+			<br/>
 
 
-	<label for="location">Ad Location</label>
-	<select name="db_ad_location">
-		<option <?php if($db_ad_location == 0) { echo 'selected'; } ?>>Please select location:</option>
-		<option value="1" <?php if($db_ad_location == 1) { echo 'selected'; } ?>>1</option>
-		<option value="2" <?php if($db_ad_location == 2) { echo 'selected'; } ?>>2</option>
-		<option value="3" <?php if($db_ad_location == 3) { echo 'selected'; } ?>>3</option>
-		<option value="4" <?php if($db_ad_location == 4) { echo 'selected'; } ?>>4</option>
-		<option value="5" <?php if($db_ad_location == 5) { echo 'selected'; } ?>>5</option>
-		<option value="6" <?php if($db_ad_location == 6) { echo 'selected'; } ?>>6</option>
-		<option value="7" <?php if($db_ad_location == 7) { echo 'selected'; } ?>>7</option>
-		<option value="8" <?php if($db_ad_location == 8) { echo 'selected'; } ?>>8</option>
-		<option value="9" <?php if($db_ad_location == 9) { echo 'selected'; } ?>>9</option>
-		<option value="10" <?php if($db_ad_location == 10) { echo 'selected'; } ?>>10</option>
-	</select>
-	<?php
-}
+			<label for="location">Ad Location</label>
+			<select name="db_ad_location">
+				<option <?php if($db_ad_location == 0) { echo 'selected'; } ?>>Please select location:</option>
+				<option value="1" <?php if($db_ad_location == 1) { echo 'selected'; } ?>>1</option>
+				<option value="2" <?php if($db_ad_location == 2) { echo 'selected'; } ?>>2</option>
+				<option value="3" <?php if($db_ad_location == 3) { echo 'selected'; } ?>>3</option>
+				<option value="4" <?php if($db_ad_location == 4) { echo 'selected'; } ?>>4</option>
+				<option value="5" <?php if($db_ad_location == 5) { echo 'selected'; } ?>>5</option>
+				<option value="6" <?php if($db_ad_location == 6) { echo 'selected'; } ?>>6</option>
+				<option value="7" <?php if($db_ad_location == 7) { echo 'selected'; } ?>>7</option>
+				<option value="8" <?php if($db_ad_location == 8) { echo 'selected'; } ?>>8</option>
+				<option value="9" <?php if($db_ad_location == 9) { echo 'selected'; } ?>>9</option>
+				<option value="10" <?php if($db_ad_location == 10) { echo 'selected'; } ?>>10</option>
+			</select>
+			<?php
+		}
 
 // save any editted meta
-add_action('save_post_ad_display', 'db_ad_save_post');
-function db_ad_save_post() {
-	global $post;
-	if(isset($_POST['db_ad_hyperlink'])) {
-		update_post_meta($post->ID, 'db_ad_hyperlink', trim($_POST['db_ad_hyperlink']));
-	}
+		add_action('save_post_ad_display', 'db_ad_save_post');
+		function db_ad_save_post() {
+			global $post;
+			if(isset($_POST['db_ad_hyperlink'])) {
+				update_post_meta($post->ID, 'db_ad_hyperlink', trim($_POST['db_ad_hyperlink']));
+			}
 
-	if(isset($_POST['db_ad_inline'])) {
-		update_post_meta($post->ID, 'db_ad_inline', trim($_POST['db_ad_inline']));
-	}
-	if(isset($_POST['db_ad_location'])) {
-		update_post_meta($post->ID, 'db_ad_location', trim($_POST['db_ad_location']));
-	}
-}
+			if(isset($_POST['db_ad_inline'])) {
+				update_post_meta($post->ID, 'db_ad_inline', trim($_POST['db_ad_inline']));
+			}
+			if(isset($_POST['db_ad_location'])) {
+				update_post_meta($post->ID, 'db_ad_location', trim($_POST['db_ad_location']));
+			}
+		}
 
 
 
 // hide permalink stuff from cpt
-add_filter('get_sample_permalink_html', 'db_hide_permalinks');
-function db_hide_permalinks($in) {
-	global $post;
-	if($post->post_type == 'ad_display') { 
-		return '';
-	} else {
-		return $in;	
-	}
-}
+		add_filter('get_sample_permalink_html', 'db_hide_permalinks');
+		function db_hide_permalinks($in) {
+			global $post;
+			if($post->post_type == 'ad_display') { 
+				return '';
+			} else {
+				return $in;	
+			}
+		}
 
-add_action('after_setup_theme', 'default_attachment_display_settings');
-function default_attachment_display_settings() {
-	update_option('image_default_align', 'left' );
-	update_option('image_default_link_type', 'none' );
-	update_option('image_default_size', 'large' );
-}
+		add_action('after_setup_theme', 'default_attachment_display_settings');
+		function default_attachment_display_settings() {
+			update_option('image_default_align', 'left' );
+			update_option('image_default_link_type', 'none' );
+			update_option('image_default_size', 'large' );
+		}
 
-if(current_user_can('contributor') && !current_user_can('upload_files')) { add_action('admin_init', 'allow_contributor_uploads'); } 
-function allow_contributor_uploads() {
-	$contributor = get_role('contributor');
-	$contributor->add_cap('upload_files');
-}
+		if(current_user_can('contributor') && !current_user_can('upload_files')) { add_action('admin_init', 'allow_contributor_uploads'); } 
+		function allow_contributor_uploads() {
+			$contributor = get_role('contributor');
+			$contributor->add_cap('upload_files');
+		}
 
 
-function make_bitly_url($url, $login = 'o_6e0qt9hksv', $apikey = 'R_6558905de3a882e85191efa8344751de', $format = 'xml', $version = '2.0.1') {
+		function make_bitly_url($url, $login = 'o_6e0qt9hksv', $apikey = 'R_6558905de3a882e85191efa8344751de', $format = 'xml', $version = '2.0.1') {
 	//create the URL
-	$bitly = 'http://api.bit.ly/shorten?version='.$version.'&longUrl='.urlencode($url).'&login='.$login.'&apiKey='.$apikey.'&format='.$format;
+			$bitly = 'http://api.bit.ly/shorten?version='.$version.'&longUrl='.urlencode($url).'&login='.$login.'&apiKey='.$apikey.'&format='.$format;
 
 	//get the url - could also use cURL here
-	$response = file_get_contents($bitly);
+			$response = file_get_contents($bitly);
 
 	//parse depending on desired format
-	if(strtolower($format) == 'json') {
-		$json = @json_decode($response,true);
-		return $json['results'][$url]['shortUrl'];
+			if(strtolower($format) == 'json') {
+				$json = @json_decode($response,true);
+				return $json['results'][$url]['shortUrl'];
 	} else { // xml
 		$xml = simplexml_load_string($response);
 		return 'http://bit.ly/'.$xml->results->nodeKeyVal->hash;

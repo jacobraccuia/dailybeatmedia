@@ -74,7 +74,7 @@ get_header();
 							<div class="trending-topic"><span class="svg svg-icon svg-rr-icon-color"></span><span class="trending-slogan rr">Raver Rafting<span>WE ARE THE SCENE</span></span></div>
 						</div>
 
-						<?php get_brand_posts('raver'); ?>
+						<?php get_brand_posts('rafting'); ?>
 
 					</div>
 

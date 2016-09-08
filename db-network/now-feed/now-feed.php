@@ -182,7 +182,7 @@ class NowFeed {
         $now_feed_loops = $this->now_feed_loops;
         foreach($now_feed as $key => $item) {
             if(isset($this->exclude_feed[$key])) { continue; } // if has already been displayed
-            if($images_looped > $image_cutoff) { break; } // if has too many images
+            if($images_looped >= $image_cutoff) { break; } // if has too many images
             if($this->has_video($item)) { continue; } // skip videos for now
             if($i++ < $offset) continue; // offset
             if($i > $offset + $limit) break; // limit
@@ -229,29 +229,31 @@ class NowFeed {
     public static function set_instagram_cache() {
 
         $instagram_ids = array(
-            283001946,
-            25877499,
-            210609437,
-            1540079,
-            28855276,
-            30464350,
-            21989850,
-            181395647,
-            30890446,
-            19359711,
-            3810502,
-            639577784,
-            395407,
-            366581549
+            //283001946,
+              25877499, // daily beat media
+            //210609437,
+            //1540079,
+            //28855276,
+            //30464350,
+            //21989850,
+            //181395647,
+            //30890446,
+            //19359711,
+            //3810502,
+            //639577784,
+            //395407,
+            //366581549
             );
 
         require_once('InstagramAPIExchange.php');
+        require_once('InstagramException.php');
 
-        $instagram = new Instagram('41f7ca3bb3534b9ab8f93983fc3e0b89');
+        $instagram = new Instagram('03159bdd94b14ac1803d1945b6d9c759');
+        $instagram->setAccessToken('25877499.1677ed0.bad6959f2be14f9da744d1c0b9f81f26');
         $all_instas = array();
 
         foreach($instagram_ids as $id) {
-            $all_instas = array_merge($instagram->getUserMedia($id, 2)->data, $all_instas);
+            $all_instas = array_merge($instagram->getUserMedia($id, 5)->data, $all_instas);
         }
 
         if(!isset($all_instas[0]->created_time)) {

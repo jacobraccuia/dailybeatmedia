@@ -13,40 +13,11 @@ remove_action('wp_head', 'wp_generator');
 add_action('wp_enqueue_scripts', 'my_enqueue_scripts');
 function my_enqueue_scripts() {
 		
-	wp_enqueue_script('bootstrap_js', THEME_DIR . '/bootstrap/bootstrap.min.js', array('jquery'));
-	wp_enqueue_style('bootstrap_css', THEME_DIR . '/bootstrap/bootstrap.min.css');
-	wp_enqueue_style('bootstrap_css_mods', THEME_DIR . '/bootstrap/bootstrap_style_modifications.css');
-	
-	// soundcloud shit
-	wp_enqueue_script('waveform_js', THEME_DIR . '/soundcloud/waveform.js', array('jquery'));
-	wp_enqueue_script('soundcloud_api_js', THEME_DIR . '/soundcloud/soundcloud.player.api.js', array('jquery'));
-	wp_enqueue_script('soundcloud_player_js', THEME_DIR . '/soundcloud/sc-player.js', array('jquery'));
-	wp_enqueue_style('soundcloud_css', THEME_DIR . '/soundcloud/sc-player.css');
-
 	wp_enqueue_script('twitter_web_intents', '//platform.twitter.com/widgets.js');
 	wp_enqueue_script('featherlist_js', '//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.js');
-	wp_enqueue_script('history_js_', THEME_DIR . '/js/html5/jquery.history.js');
 	wp_enqueue_script('images_loaded', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js');
 
-
-	/*                    *\	
-	**       UGLIFY       **
-	**    /src/js/*.js    **
-
-	NOTE: lots of these should be packaged with the db_network plugin
-
-	stickem     - sticky 
-	blazy lazy  - loading
-	dotdotdot   - truncate text
-	pushmenu    - cabinet
-	waypoints   - not entirely sure what we use this for
-	marquee     - for soundcloud
-	modernizrr  - for browser shit
-
-	*/
-
-	wp_enqueue_script('dailybeat_js', THEME_DIR . '/js/uglify.js', array('jquery'));
-	wp_enqueue_script('dailybeat_plugins_js', THEME_DIR . '/js/uglify_db_scripts.js', array('jquery'));
+	wp_enqueue_script('dailybeat_js', THEME_DIR . '/js/scripts.js', array('jquery'));
 
 
 	// commented out because we uglify the scripts 
@@ -57,8 +28,6 @@ function my_enqueue_scripts() {
 		wp_enqueue_script('single_scripts', THEME_DIR . '/js/single_scripts.js', array('jquery'));
 	}
 	*/
-
-
 
 	wp_localize_script('dailybeat_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php')));
 	wp_localize_script('dailybeat_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php'), 'postCommentNonce' => wp_create_nonce('myajax-post-comment-nonce'),));
@@ -258,196 +227,7 @@ function single_author_widget($author_id = 0) {
 	</div>	
 	<?php	
 }
-
-function get_artist_fields($id, $oldBlogID = 1) {
-
-	$blogID = get_blog_by_name('artists');
-	min_switch_to_blog($blogID);
-
-	// create array to return
-	$artist_vars = array();
 	
-	$artist = get_post($id);
-
-	$artist_vars['thumb_url'] =  wp_get_attachment_image_src(get_post_thumbnail_id($id), array(300,300))[0];
-
-	$post_meta = get_post_custom($id);
-
-	// assign all columns to variable
-	$artist_columns = artist_columns();
-
-	// in case value isn't set in database, set required variables to ''
-	foreach($artist_columns as $column) { $artist_vars[$column] = ''; }
-
-	// assign all fields
-	foreach($post_meta as $key => $meta) {
-		if(array_key_exists($key, array_flip($artist_columns))) { // if we want this key
-			if(isset($key) && !empty($key)) { $artist_vars[$key] = trim($meta[0]); } else $artist_vars[$key] = '';
-		}
-	}	
-
-	min_switch_to_blog($oldBlogID);
-
-	return $artist_vars;
-}
-
-// creates track data that can be applied to any track
-// this data is read by the soundcloud js file and populated in the player
-// track artist meta is the same data as get_artist_fields
-function build_track_data($track_url = '', $track = '', $artist = '', $artist_meta = array()) {
-
-	$thumb_url = isset($artist_meta['thumb_url']) ? $artist_meta['thumb_url'] : '';
-	$artist_instagram = isset($artist_meta['artist_instagram']) ? $artist_meta['artist_instagram'] : '';
-	$artist_twitter = isset($artist_meta['artist_twitter']) ? $artist_meta['artist_twitter'] : '';
-	$artist_soundcloud = isset($artist_meta['artist_soundcloud']) ? $artist_meta['artist_soundcloud'] : '';
-
-	return 'data-track-url="' . $track_url 
-		. '" data-track="' . $track
-		. '" data-title="' . $track
-		. '" data-artist="' . $artist
-		. '" data-thumb-url="' . $thumb_url
-		. '" data-artist-instagram="' . $artist_instagram
-		. '" data-artist-twitter="' . $artist_twitter
-		. '" data-artist-soundcloud="' . $artist_soundcloud
-		. '"';
-}
-
-function single_artist_widget($id) {
-
-	$blogID = get_blog_by_name('artists');
-	min_switch_to_blog($blogID);
-
-	$artist = get_post($id);
-
-	$thumb_url =  wp_get_attachment_image_src( get_post_thumbnail_id($id), array(300,300))[0];
-
-	$post_meta = get_post_custom($id);
-
-	// assign all columns to variable
-	$artist_columns = artist_columns();
-	
-	// in case value isn't set in database, set required variables to ''
-	foreach($artist_columns as $column) { ${$column} = ''; }
-
-	// assign all fields
-	foreach($post_meta as $key => $meta) {
-		if(array_key_exists($key, array_flip($artist_columns))) { // if we want this key
-			if(isset($key) && !empty($key)) { ${$key} = trim($meta[0]); } else ${$key} = '';
-		}
-	}	
-
-	reset_blog();
-	
-	$tour_dates = json_decode($artist_tour_dates);
-
-	?>
-	<div class="single-artist-widget">
-		<?php if($artist_sponsor != '') { ?>
-		<div class="artist-sponsor">Presented by <img src="<?php echo $artist_sponsor; ?>" /></div>
-			<?php } ?>
-		<h2>Featured Artist <span><?php echo $artist_name; ?></span></h2>
-		<div class="artist-image"><img src="<?php echo $thumb_url; ?>" /></div>
-		<ul class="social">
-			<?php if($artist_instagram != '') { echo '<li class="instagram">' . social_media('instagram', $artist_instagram) . '</li>'; } ?>
-			<?php if($artist_twitter != '') { echo '<li class="twitter">' . social_media('twitter', $artist_twitter) . '</li>'; } ?>
-			<?php if($artist_soundcloud != '') { echo '<li class="soundcloud">' . social_media('soundcloud', $artist_soundcloud) . '</li>'; } ?>
-		</ul>
-		<?php 
-		if(
-			isset($tour_dates) &&
-			isset($tour_dates->resultsPage) &&
-			isset($tour_dates->resultsPage->results) &&
-			isset($tour_dates->resultsPage->results->event) &&
-			count($tour_dates->resultsPage->results->event) > 0) 
-		{ 
-			?>
-			<h4>Upcoming Tour Dates</h4>
-			<ul class="tour-dates">
-				<?php
-				$i = 0;
-				foreach($tour_dates->resultsPage->results->event as $date) {
-					$venue = $date->venue->displayName;
-
-						// stripping separately just in case
-					$display = strstr($date->displayName, ' (', true);
-						$display = strstr($display, ' at ', true);
-
-						$permalink = $date->uri;
-
-						if($display == '') { continue; }
-
-						$start = DateTime::createFromFormat('Y-m-d', $date->start->date);
-						$start_month = $start->format('M');
-						$start_day = $start->format('d');
-
-						echo '<li>';
-						echo '<div class="date"><div class="month">' . $start_month . '</div>' . $start_day . '</div>';
-						echo '<div class="details">';
-						echo '<a href="' . $permalink . '">' . $display . '</a>';
-						echo '<div class="location">at ' . $venue . '</div>';
-						echo '</div>';
-						echo '</li>';
-						$i++;
-						if($i > 4) { break; }
-					} 
-					?>
-				</ul>
-				<?php 
-			}
-			if($i > 4) {
-				?>
-				<a class="view-all" href="http://www.songkick.com/artists/<?php echo $artist_id; ?>" target="_blank">View All Tour Dates</a>
-				<?php } ?>
-			</div>
-
-			<?php 	
-		}
-
-function artist_columns() {
-		return array(
-			'artist_name',
-			'artist_id',
-			'artist_tour_dates',
-			'artist_twitter',
-			'artist_soundcloud',
-			'artist_instagram',
-			'artist_sponsor'
-			);
-	}
-
-		add_action('init', 'db_ad_cpt');
-		function db_ad_cpt() {
-			register_post_type('ad_display',
-				array(
-					'labels' => array(
-						'name' => __('Advertisement'),
-						'singular_name' => __( 'Advertisements' ),
-						'menu_name' => __( 'Ads' ),
-						'all_items' => __( 'All Ads' ),
-						'add_new' => __( 'Add New Ad' ),
-						'add_new_item' => __( 'Add New Advertisement' ),
-						'edit_item' => __( 'Edit Ad' ),
-						'new_item' => __( 'New Ad' ),
-						'view_item' => __( 'View Ad' ),
-						'search_items' => __( 'Search Ad' ),
-						'not_found' => __( 'Ad Not Found' ),
-						'not_found_in_trash' => __( 'Ad Not Found In Trash' ),
-						),
-					'public' => true,
-					'description' => 'Shows a new ad!',
-					'show_ui' => true,
-					'show_in_menu' => true,
-					'capability_type' => 'post',
-					'hierarchical' => false,
-					'rewrite' => array('slug' => 'ads'),
-					'query_var' => true,
-					'supports' => array('title', 'thumbnail'),
-					'menu_position' => 10,
-					'has_archive' => true,
-					)
-				);
-		}
-
 		add_action('admin_menu', 'db_ads_meta');
 		function db_ads_meta() {
 			add_meta_box('db_ads_meta', 'Ad Information', 'db_ads_meta_functions', 'ad_display', 'normal', 'high');
@@ -549,40 +329,6 @@ function artist_columns() {
 }
 
 
-add_action('init', 'register_db_shortcodes');
-function register_db_shortcodes(){
-   add_shortcode('blockquote', 'db_blockquote');
-   add_shortcode('divider', 'db_divider');
-}
-
-function db_blockquote($atts, $content = null) {
-	extract(shortcode_atts(array(
-		'side' => 'left',
-		'by' => '',
-		), $atts));
-
-	$class = 'blockquote';
-	if($side == 'right')  {
-		$class .= ' right';
-	}
-
-	$by_text = '';
-	if($by != '') {
-		$by_text = '<div class="by"> - ' . $by . '</div>';
-	}
-
-	return '<div class="' . $class . '"><div class="bq">&ldquo;</div>' . $content . '"' . $by_text . '</div>';
-	
-}
-
-function db_divider($atts) {
-	extract(shortcode_atts(array(
-		//'side' => 'left',
-		), $atts));
-
-	return '<div class="ex-divider thick"></div>';
-	
-}
 
 // VERY IMPORTANT, fixes shortcode injection inside wpautop.
 function char_based_excerpt($count) {
