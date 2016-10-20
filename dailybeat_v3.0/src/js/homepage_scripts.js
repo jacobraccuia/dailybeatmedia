@@ -224,9 +224,6 @@ jQuery(document).ready(function($) {
 
 	}
 
-
-	homepage_scripts();
-
 	if($('body').hasClass('home')) {
 		// call the scripts!
 		homepage_scripts();

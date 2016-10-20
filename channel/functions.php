@@ -1,9 +1,11 @@
 <?php
 
-require_once('includes/wp_bootstrap_navwalker.php');
-require_once('includes/post_queries.php');
-require_once('includes/custom_post_settings.php');
-//require_once('now-feed/now-feed.php');
+
+
+// includes folder
+foreach(glob(get_template_directory() . '/includes/*.php') as $filename) {
+	require_once($filename);
+}
 
 // remove meta_head generator
 remove_action('wp_head', 'wp_generator');
@@ -11,7 +13,7 @@ remove_action('wp_head', 'wp_generator');
 // add all appropriate styles and scripts
 add_action('wp_enqueue_scripts', 'my_enqueue_scripts');
 function my_enqueue_scripts() {
-		
+
 	wp_enqueue_script('twitter_web_intents', '//platform.twitter.com/widgets.js');
 	wp_enqueue_script('featherlist_js', '//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.js');
 	wp_enqueue_script('images_loaded', 'https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js');
@@ -32,43 +34,81 @@ function my_enqueue_scripts() {
 	wp_localize_script('channel_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php'), 'postCommentNonce' => wp_create_nonce('myajax-post-comment-nonce'),));
 
 	wp_enqueue_style('featherlight_css', '//cdn.rawgit.com/noelboss/featherlight/1.3.3/release/featherlight.min.css');
-	wp_enqueue_style('channel_css', THEME_DIR . '/style.css');
-
-}
-
-// register post thumbnails
-add_theme_support('post-thumbnails');
-
-// register menus
-register_nav_menus(array(
-	'primary_menu' => 'Primary Menu',
-	'sticky_menu' => 'Sticky Menu',
-	'featured_menu' => 'Featured Menu',
-	'footer_menu' => 'Footer Menu',
-	));
-
-
-
-// add roles to body class
-add_filter('admin_body_class', 'wpa66834_role_admin_body_class');
-function wpa66834_role_admin_body_class($classes) {
-	global $current_user;
-	foreach($current_user->roles as $role)
-		$classes .= ' role-' . $role;
-	return trim($classes);
+	wp_enqueue_style('channel_css', get_stylesheet_uri());
+	wp_add_inline_style('channel_css', db_theme_css());
 }
 
 
+function db_theme_css() {
 
-// SoundCloud Player
-function soundcloud_player($link, $title) {
-	echo '<a href="' . $link . '" class="sc-player">' . $title . '</a>';
+	$theme_color_light = zuko_get_options('theme_color_light');
+	$theme_color_dark = zuko_get_options('theme_color_dark');
+
+	if($theme_color_dark == '' || $theme_color_light == '') { return; }
+	
+	ob_start();
+
+	?>
+
+	/* set gradients */
+	.nav-border { background:linear-gradient(to right, <?php echo $theme_color_light; ?>, <?php echo $theme_color_dark; ?>); }
+	#page-progress { background:linear-gradient(to right, <?php echo $theme_color_light; ?>, <?php echo $theme_color_dark; ?>); }
+	#veggie.menu-active { background:<?php echo $theme_color_light; ?>; background-image:linear-gradient(to bottom, <?php echo $theme_color_dark; ?>, <?php echo $theme_color_light; ?>); }
+
+	#cabinet h2 span { color:<?php echo $theme_color_light; ?>; background:-webkit-gradient(linear, 0 0, 100% 100%, from(<?php echo $theme_color_light; ?>), to(<?php echo $theme_color_dark; ?>)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+	#player_button:hover, #player_button.open { background:$blue; background-image:linear-gradient(to bottom, <?php echo $theme_color_light; ?>, <?php echo $theme_color_dark; ?>); }
+	.h-icon.divider { background:<?php echo $theme_color_dark; ?>; background-image:linear-gradient(to bottom, <?php echo $theme_color_light; ?>, <?php echo $theme_color_dark; ?>); }
+	.footer-border { background-color:<?php echo $theme_color_light; ?>; background:linear-gradient(to right, <?php echo $theme_color_light; ?>, <?php echo $theme_color_dark; ?>); }
+	footer .divider { background:linear-gradient(to right, <?php echo $theme_color_light; ?>, <?php echo $theme_color_dark; ?>); }
+
+	.col-header .bar { background-color:<?php echo $theme_color_light; ?>; background:linear-gradient(to right, <?php echo $theme_color_light; ?>, <?php echo $theme_color_dark; ?>); }
+	.col-header .bar.right { background-color:<?php echo $theme_color_light; ?>; background:linear-gradient(to left, <?php echo $theme_color_light; ?>, <?php echo $theme_color_dark; ?>); }
+	
+	<?php
+	$results = ob_get_contents();
+	ob_end_clean();
+	return $results;
 }
 
-// full width soundcloud player
-function full_soundcloud_player($link, $title, $soundcloud_color = "") {
-	echo '<div class="full-width-soundcloud" data-sc-color="' . $soundcloud_color . '"><a href="' . $link . '" class="sc-player">' . $title . '</a></div>';
+function category_filter_posts() {
+
+	$terms = get_terms('category', array('parent' => 0, 'hide_empty' => 0));
+
+	$i = 0; 
+	$class = 'active';
+	echo '<ul class="category-picker">';
+
+	foreach($terms as $k => $term) {
+		if($term->slug == 'uncategorized') { unset($terms[$k]); continue; }
+
+		if($i > 0) { $class = '';}
+		$i = 1; 
+		echo '<li data-id="' . $term->term_id . '" class="' . $class . '">' . $term->name . '</li>';
+	}
+
+	echo '</ul>';
+
+	echo '<div class="category-post-wrapper">';
+
+	$i = 0;
+	$style = '';
+	foreach($terms as $term) {
+		if($i > 0) { $style = 'style="display:none;"'; }
+		$i = 1;
+
+		echo '<div class="row post-wrapper standard-wrapper" ' . $style . ' data-section-id="' . $term->term_id .'">';
+		get_standard_posts(array('category' => $term->term_id, 'blazy' => false, 'posts_per_page' => 6));
+		echo '</div>';	
+	}
+
+	echo '</div>';
+
 }
+
+
+
+
 
 // filter the content
 //add_filter('the_content', 'filter_the_content');
@@ -90,7 +130,7 @@ function remove_spaces($the_content) {
 
 // VERY IMPORTANT, fixes shortcode injection inside wpautop.
 function char_based_excerpt($count) {
-	//  $permalink = get_permalink($post->ID);
+//  $permalink = get_permalink($post->ID);
 	$excerpt = get_the_content();
 	$excerpt = strip_tags($excerpt);
 	$excerpt = substr($excerpt, 0, $count);
@@ -98,7 +138,7 @@ function char_based_excerpt($count) {
 	$excerpt = rtrim($excerpt,",.;:- _!$&#");
 	$excerpt = preg_replace('!\s+!', ' ', $excerpt);
 	$excerpt = $excerpt . '...';
-	//  $excerpt = $excerpt.'<a href="'.$permalink.'" style="text-decoration: none;">&nbsp;(...)</a>';
+//  $excerpt = $excerpt.'<a href="'.$permalink.'" style="text-decoration: none;">&nbsp;(...)</a>';
 	return $excerpt;
 }
 

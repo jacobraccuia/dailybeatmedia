@@ -1,80 +1,14 @@
 <?php
 
-require_once('post_types.php');
-
-
 // all wp_query calls
-
-
-function get_standard_loop($args = array()) {
-	$defaults = array(
-		'loops' => '1',
-		);
-
-	// merge arguments with defaults && set keys as variables
-	$args = array_merge($defaults, $args);
-	foreach($args as $key => $val) { ${$key} = $val; }
-
-	$i = 0;
-	while($i < $loops) {
-	/*	?>
-		<div class="row post-wrapper full-width-wrapper video-wrapper">
-			<?php get_video_post(); ?>
-		</div>
-		<div class="row post-wrapper vintage-wrapper">
-			<?php get_vintage_posts(); ?>
-		</div>
-		<div class="row post-wrapper vintage-wrapper">
-			<?php get_vintage_posts(); ?>
-		</div> */ ?>
-		<div class="row post-wrapper full-width-wrapper full-story-wrapper">
-			<?php get_exclusive_posts(); ?>
-		</div>
-		<div class="row post-wrapper vintage-wrapper">
-			<?php get_vintage_posts(array('blog_id' => 1)); ?>
-		</div>
-		<div class="row post-wrapper vintage-wrapper">
-			<?php get_vintage_posts(array('blog_id' => 1)); ?>
-		</div>
-		<div class="row post-wrapper vintage-wrapper">
-			<?php get_vintage_posts(array('blog_id' => 1)); ?>
-		</div>
-		<div class="row post-wrapper full-width-wrapper full-story-wrapper">
-			<?php get_exclusive_posts(); ?>
-		</div>
-		<div class="row post-wrapper vintage-wrapper">
-			<?php get_vintage_posts(array('blog_id' => 1)); ?>
-		</div>
-		<div class="row post-wrapper vintage-wrapper">
-			<?php get_vintage_posts(array('blog_id' => 1)); ?>
-		</div>
-		<div class="row post-wrapper full-width-wrapper full-story-wrapper">
-			<?php get_exclusive_posts(); ?>
-		</div><?php /*
-		<div class="row post-wrapper trending-wrapper">
-			<?php get_standard_post_feature(); ?>
-		</div>
-		<?php /* <div class="row post-wrapper standard-wrapper">
-			<?php get_standard_posts(); ?>
-		</div>
-		<div class="row post-wrapper full-width-wrapper video-wrapper">
-			<?php get_video_post(); ?>
-		</div>
-		<div class="row post-wrapper trending-wrapper">
-			<?php get_standard_post_feature(array('swap_columns' => true)); ?>
-		</div> */ ?>
-		<?php
-		$i++;
-	}
-}
-
 
 function get_standard_posts($args = array()) {
 	global $post, $exclude_posts;
 
 	$defaults = array(
-		'tags' => '',
-		'trending_logo' => '',
+		'category' => '',
+		'posts_per_page' => 8,
+		'blazy' => true
 		);
 
 	// merge arguments with defaults && set keys as variables
@@ -82,33 +16,171 @@ function get_standard_posts($args = array()) {
 	foreach($args as $key => $val) { ${$key} = $val; }
 
 	$args = array(
-		'posts_per_page' => 3,
+		'posts_per_page' => $posts_per_page,
 		'post_status' => 'publish',
 		'post__not_in' => $exclude_posts,
 		'post_type' => 'post',
-		'tag' => $tags,
+		'category__in' => $category,
 		'orderby' => 'date',
 		'order' => 'DESC',
 		);
 
+	$query = new WP_Query($args);
+	while($query->have_posts()) { $query->the_post();
+		echo '<div class="col-md-6">';
+		echo classic_post(array('blazy' => $blazy));
+		echo '</div>';
+	}
+
+}
+
+function get_exclusive_post() {
+	global $post;
+
+	$args = array(
+		'posts_per_page' => 1,
+		'post_status' => 'publish',
+		'post_type' => 'post',
+		'meta_key' => 'db_weekly_views',
+		'orderby' => 'meta_value_num',
+		'order' => 'DESC'
+		);
+
+	$query = new WP_Query($args);
+	while($query->have_posts()) { $query->the_post();
+		echo exclusive_post();
+	}
+}
+
+function get_spotlight_posts() {
+	global $exclude_posts, $wpdb, $post;
+
+	$cat_object = get_category_by_slug('spotlight-featured'); 
+	$spotlight_featured = $cat_object->term_id;
+
+	$main_featured_args = array(
+		'posts_per_page' => 1,
+		'cat'  => $spotlight_featured, // $category . ', -' . $featured_cat, // all categories, excluding featured
+		'post_status' => 'publish'
+		);
+
+	$main_featured_id = ''; 
+	$main_featured_query = new WP_Query($main_featured_args);
+
+	// is there a quicker way to get the ID?
+	if($main_featured_query->have_posts()) { 
+		$main_featured_id = $main_featured_query->posts[0]->ID;
+	}
+
+	exclude_this_post(1, $main_featured_id);
+
+
+	$table_name = $wpdb->base_prefix . 'db_stats';
+	$results = $wpdb->get_results("SELECT * FROM {$table_name}", ARRAY_A);
+
+	if($results) {
+
+		// sort by views
+		usort($results, function($a, $b) { return $b['views'] - $a['views']; });
+
+		$posts_to_query = array();
+		$posts_added = 0;
+		$blogs_added = array();
+		$result_count = count($results);
+
+		while(list($key, $post) = each($results)) {
+
+			// remove day old posts
+			if(strtotime($post['date_added']) < strtotime('-1 day')) { unset($results[$key]); }
+
+			$blogID = $post['blog_id'];
+			$post_id = $post['post_id'];
+
+			if($blogID == 1 && $post_id == $main_featured_id || $post_id == 1) { continue; }
+
+			// if only one blog exists by the 3rd post skip till new blog ( so we don't have all posts from the same blog.. )
+			if(count($posts_to_query) == 1 && $posts_added == 3 && $key + 1 < $result_count) {
+				if(in_array($blogID, $blogs_added)) { continue; }
+			}
+
+			$blogs_added[] = $blogID;
+			$posts_to_query[$blogID][] = $post_id;
+			$posts_added++;
+
+			if($posts_added == 6) { break; }
+
+		}
+
+	}
+
+	$args = array(
+		'posts_per_page' => 10 - count($posts_to_query),
+		'post_status' => 'publish',
+		'post__in' => $posts_to_query,
+		'post_type' => 'post',
+		'orderby' => 'meta_value_num',
+		'meta_key' => 'db_views',
+		);
 
 	$query = new WP_Query();
 	$network_query = $query->posts = network_query_posts($args);
 	$post_count = $query->post_count = count($network_query);
 
-	$i = 1;
+	$posts_looped = 0;
 	while($query->have_posts()) { $query->the_post();
+
 		$blogID = $post->BLOG_ID;
 
-		echo '<div class="col-md-4">';
-		echo classic_post($blogID, array('show_via' => true));
-		echo '</div>';
+		if($posts_looped == 0 || $posts_looped == 3) {
+			echo '<div class="col-md-3">';
+		}
 
-		$i++;
+		if($posts_looped != 2) {
+			echo spotlight_post($blogID);
+			$posts_looped++;
+		}
+
+		if($posts_looped == 2 || $posts_looped == 5) {
+			echo '</div>';
+		} 
+
+		if($posts_looped == 2) {
+
+			while($main_featured_query->have_posts()) { $main_featured_query->the_post();
+				echo '<div class="col-md-6">';
+				echo spotlight_post(1, array('center' => true));
+				echo '</div>';
+			}
+
+			$posts_looped++;
+		}
+
+		if($posts_looped == 5) { break; }
+
 	}
 
 	reset_blog();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function get_brand_posts($blog_name) {
 	global $exclude_posts;
@@ -272,35 +344,6 @@ function get_video_post($args = array()) {
 	reset_blog();
 }
 
-function get_exclusive_posts($args = array()) {
-	global $post, $exclude_posts;
-
-	$defaults = array(
-		'posts_per_page' => 1,
-		);
-
-// merge arguments with defaults && set keys as variables
-	$args = array_merge($defaults, $args);
-	foreach($args as $key => $val) { ${$key} = $val; }
-
-	$args = array(
-		'posts_per_page' => $posts_per_page,
-		'post_status' => 'publish',
-		'post__not_in' => $exclude_posts[1],
-		'post_type' => 'exclusive',
-		'orderby' => 'date',
-		'order' => 'DESC',
-		);
-	$query = new WP_Query($args);
-	while($query->have_posts()) { $query->the_post();
-
-		$blogID = 1;
-		echo '<div class="col-xs-12">';
-		echo exclusive_post($blogID);
-		echo '</div>';
-	}
-
-}
 
 function get_standard_post_feature($args = array()) {
 	global $post, $exclude_posts;
@@ -313,7 +356,7 @@ function get_standard_post_feature($args = array()) {
 	// merge arguments with defaults && set keys as variables
 	$args = array_merge($defaults, $args);
 	foreach($args as $key => $val) { ${$key} = $val; }
-	
+
 	$args = array(
 		'posts_per_page' => 6,
 		'post_status' => 'publish',
@@ -351,7 +394,7 @@ function get_standard_post_feature($args = array()) {
 		} 
 
 		if($i == 2) {
-			
+
 			$classes = '';
 			if($swap_columns) {
 				$classes = ' col-lg-pull-8';
@@ -477,9 +520,9 @@ function get_top_posts($args = array()) {
 									}
 
 									if($i == 4 || $i == $post_count) { ?>
-								</ul>
-							</div>
-							<?php
+									</ul>
+								</div>
+								<?php
 							break; // so no additional loops once we run out of posts!
 						}
 
@@ -591,12 +634,12 @@ function get_trending_posts($args = array()) {
 								}
 
 								if($i == 6 || $i == $post_count) { ?>
-							</ul>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<?php
+				<?php
 			break; // so no additional loops once we run out of posts!
 		}
 
@@ -709,116 +752,6 @@ function get_fresh_new_tracks($args = array()) {
 
 
 
-
-function get_spotlight_posts() {
-	global $exclude_posts, $wpdb, $post;
-
-	$cat_object = get_category_by_slug('spotlight-featured'); 
-	$spotlight_featured = $cat_object->term_id;
-
-	$main_featured_args = array(
-		'posts_per_page' => 1,
-		'cat'  => $spotlight_featured, // $category . ', -' . $featured_cat, // all categories, excluding featured
-		'post_status' => 'publish'
-		);
-
-	$main_featured_id = ''; 
-	$main_featured_query = new WP_Query($main_featured_args);
-
-	// is there a quicker way to get the ID?
-	if($main_featured_query->have_posts()) { 
-		$main_featured_id = $main_featured_query->posts[0]->ID;
-	}
-
-	exclude_this_post(1, $main_featured_id);
-
-
-	$table_name = $wpdb->base_prefix . 'db_stats';
-	$results = $wpdb->get_results("SELECT * FROM {$table_name}", ARRAY_A);
-
-	if($results) {
-
-		// sort by views
-		usort($results, function($a, $b) { return $b['views'] - $a['views']; });
-
-		$posts_to_query = array();
-		$posts_added = 0;
-		$blogs_added = array();
-		$result_count = count($results);
-
-		while(list($key, $post) = each($results)) {
-
-			// remove day old posts
-			if(strtotime($post['date_added']) < strtotime('-1 day')) { unset($results[$key]); }
-
-			$blogID = $post['blog_id'];
-			$post_id = $post['post_id'];
-
-			if($blogID == 1 && $post_id == $main_featured_id || $post_id == 1) { continue; }
-
-			// if only one blog exists by the 3rd post skip till new blog ( so we don't have all posts from the same blog.. )
-			if(count($posts_to_query) == 1 && $posts_added == 3 && $key + 1 < $result_count) {
-				if(in_array($blogID, $blogs_added)) { continue; }
-			}
-
-			$blogs_added[] = $blogID;
-			$posts_to_query[$blogID][] = $post_id;
-			$posts_added++;
-
-			if($posts_added == 6) { break; }
-
-		}
-		
-	}
-
-	$args = array(
-		'posts_per_page' => 10 - count($posts_to_query),
-		'post_status' => 'publish',
-		'post__in' => $posts_to_query,
-		'post_type' => 'post',
-		'orderby' => 'meta_value_num',
-		'meta_key' => 'db_views',
-		);
-
-	$query = new WP_Query();
-	$network_query = $query->posts = network_query_posts($args);
-	$post_count = $query->post_count = count($network_query);
-
-	$posts_looped = 0;
-	while($query->have_posts()) { $query->the_post();
-
-		$blogID = $post->BLOG_ID;
-
-		if($posts_looped == 0 || $posts_looped == 3) {
-			echo '<div class="col-md-3">';
-		}
-
-		if($posts_looped != 2) {
-			echo spotlight_post($blogID);
-			$posts_looped++;
-		}
-
-		if($posts_looped == 2 || $posts_looped == 5) {
-			echo '</div>';
-		} 
-
-		if($posts_looped == 2) {
-
-			while($main_featured_query->have_posts()) { $main_featured_query->the_post();
-				echo '<div class="col-md-6">';
-				echo spotlight_post(1, array('center' => true));
-				echo '</div>';
-			}
-
-			$posts_looped++;
-		}
-
-		if($posts_looped == 5) { break; }
-
-	}
-
-	reset_blog();
-}
 
 add_action('wp_ajax_load_posts', 'ajax_load_posts');
 add_action('wp_ajax_nopriv_load_posts', 'ajax_load_posts');

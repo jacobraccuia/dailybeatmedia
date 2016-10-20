@@ -5,12 +5,12 @@
  */
 
 get_header();
-$blog_id = get_current_blog_id();
+
 global $post;
 if($post->ID == 38998) {
-	include_once('single/single-simple.php');
+	include_once('single-simple.php');
 } else {
-	include_once('single/single-default.php');
+	include_once('single-default.php');
 }
 
 

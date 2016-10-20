@@ -96,7 +96,7 @@ function update_content(data, source) {
 		single_scripts(true);
 	}
 
-	if(body_classes.indexOf('home') > -1) {
+	if(body_classes.indexOf('home') > -1 && typeof homepage_scripts === 'function') {
 		homepage_scripts(true);
 	}
 

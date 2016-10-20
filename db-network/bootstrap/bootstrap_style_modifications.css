@@ -9,8 +9,8 @@
 .row {
   margin-left:-12px;
   margin-right:-12px;
-  padding-left:6px!important;
-  padding-right:6px!important; 
+  padding-left:6px;
+  padding-right:6px; 
 }
 
 /* if 12px of padding is ever needed, bring this back.

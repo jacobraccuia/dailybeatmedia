@@ -1,12 +1,4 @@
 <?php
-// all post views
-
-global $exclude_posts;
-$exclude_posts = array();
-
-for($i = 1; $i <= 8; $i++) {
-	$exclude_posts[$i] = array(0);
-}
 
 // standard post layout
 function classic_post($blogID = 1, $args = array()) {
@@ -387,20 +379,6 @@ function short_blog_name($blog_name) {
 	}
 
 	return strtolower($acronym);
-}
-
-
-
-function exclude_this_post($blogID, $post_id) {
-	global $exclude_posts;
-
-	if($blogID == 0 || $post_id == 0) { return; }
-
-	if(!isset($exclude_posts[$blogID])) {
-		$exclude_posts[$blogID] = array();
-	}
-
-	$exclude_posts[$blogID] = array_merge($exclude_posts[$blogID], array($post_id));
 }
 
 

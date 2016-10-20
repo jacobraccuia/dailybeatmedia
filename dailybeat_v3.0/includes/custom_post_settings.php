@@ -125,47 +125,7 @@ function db_admin_init(){
 	add_meta_box('db_meta', 'Extra Information', 'db_meta', 'premiere', 'normal', 'high');
 	add_meta_box('db_meta', 'Extra Information', 'db_meta_beatmersive', 'beatmersive', 'normal', 'high');
 	add_meta_box('db_splash_meta', 'Splash', 'db_splash_meta', 'page', 'normal', 'high');
-	add_meta_box('db_featured_artist', 'Featured Artist', 'db_featured_artist', 'post', 'side', 'core');
 	add_meta_box('db_exclusive', 'Exclusive Editor', 'db_meta_exclusive', 'exclusive', 'normal', 'high');
-}
-
-
-function db_featured_artist($post) {
-	$db_featured_artist = get_post_meta(get_the_ID(), 'db_featured_artist', true);
-	$db_featured_artist_id = get_post_meta(get_the_ID(), 'db_featured_artist_id', true);
-	?>
-	
-
-	<label>Featured Artist:</label>
-	<input style="padding:5px; width:100%; margin:5px auto;" autocomplete="off" id="db_feat_artist" name="db_featured_artist" type="text" value="<?php echo $db_featured_artist; ?>" />
-	<label>Featured ID: <em>find by searching above</em></label>
-	<input style="padding:5px; width:100%; margin:5px auto;" autocomplete="off" id="db_featured_artist_id" name="db_featured_artist_id" type="text" value="<?php echo $db_featured_artist_id; ?>" />
-
-	<?php
-
-	$blogID = get_blog_by_name('artists');
-	switch_to_blog($blogID);
-
-	$args = array(
-		'posts_per_page' => -1,
-		'post_type' => 'artists',
-		'post_status' => 'publish'
-		);
-
-	$artists = get_posts($args);
-
-	echo '<ul id="artist_database" style="display:none;">';
-
-	foreach($artists as $artist) {
-		$artist_name = get_post_meta($artist->ID, 'artist_name', true);
-
-		echo '<li data-name="' . $artist_name . '" data-id="' . $artist->ID . '"></li>';
-	}
-
-	restore_current_blog();
-//	reset_blog();
-
-	echo '</ul>';
 }
 
 
@@ -436,43 +396,7 @@ function db_meta($post) {
 }
 
 
-
-// save field
-add_action('save_post', 'db_save_post');
-function db_save_post() {
-	global $post;
-
-	if(isset($post->ID)) {
-		$id = $post->ID;
-
-		foreach($_POST as $key => $val) {
-			if(substr($key, 0, 3) == 'db_' || substr($key, 0, 7) == 'artist_') {
-				update_post_meta($id, $key, trim($val));
-			}
-		}
-
-	}
-}
-
 /* end meta box functions */
-
-
-add_action('admin_enqueue_scripts', 'db_load_scripts');
-function db_load_scripts($hook) {
-
-	if($hook == 'post.php' || $hook == 'post-new.php') {
-		global $post;
-
-		if($post->post_type == 'post' || $post->post_type == 'exclusive') {
-			wp_enqueue_script('jquery-ui-autocomplete');
-
-			wp_enqueue_script('db_admin_js', THEME_DIR . '/js/admin/jquery-posts.js', array('jquery'));
-
-			wp_localize_script('db_admin_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php')));
-			wp_localize_script('db_admin_js', 'DB_Ajax_Call', array('ajaxurl' => admin_url('admin-ajax.php'), 'postCommentNonce' => wp_create_nonce('myajax-post-comment-nonce'),));
-		}
-	}
-}
 
 add_action('admin_print_styles', 'db_load_styles');
 function db_load_styles($hook) {

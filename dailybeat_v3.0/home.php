@@ -71,7 +71,7 @@ get_header();
 
 					<div class="row post-wrapper rr-wrapper">
 						<div class="col-xs-12">		
-							<div class="trending-topic"><span class="svg svg-icon svg-rr-icon-color"></span><span class="trending-slogan rr">Raver Rafting<span>WE ARE THE SCENE</span></span></div>
+							<div class="trending-topic"><span class="svg svg-icon svg-rafting-icon-color"></span><span class="trending-slogan rr">Raver Rafting<span>WE ARE THE SCENE</span></span></div>
 						</div>
 
 						<?php get_brand_posts('rafting'); ?>

@@ -26,8 +26,8 @@ function dbm_navbar() { ?>
 						<span></span>
 					</div>
 				</div>
-				<a class="navbar-brand" href="<?php echo home_url(); ?>">
-					<img src="<?php echo THEME_DIR; ?>/images/svg/db_logo.svg" />
+				<a class="navbar-brand <?php echo get_current_site_subdomain(); ?>" href="<?php echo home_url(); ?>">
+					<span class="svg svg-icon svg-<?php echo get_current_site_subdomain(); ?>-icon-color"></span><img src="<?php echo PLUGIN_DIR; ?>images/svg/logos/logo_color/<?php echo get_current_site_subdomain(); ?>.svg" />
 				</a>
 
 				<ul class="navbar-extras">
@@ -45,7 +45,7 @@ function dbm_navbar() { ?>
 					<li class="h-icon divider">&nbsp;</li>
 					<li class="social-header-icons">
 						<ul>
-							<li class="h-icon facebook"><a href="https://www.facebook.com/groups/torontoravecommunity/" target="_blank"><i class="fa fa-fw fa-facebook"></i></li>
+							<li class="h-icon facebook"><a href="https://www.facebook.com/groups/torontoravecommunity/" target="_blank"><i class="fa fa-fw fa-facebook"></i></a></li>
 							<li class="h-icon twitter"><a href="https://twitter.com/torontorc" target="_blank"><i class="fa fa-fw fa-twitter"></i></a></li>
 							<li class="h-icon instagram"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-instagram"></i></a></li>
 							<li class="h-icon soundcloud"><a href="http://instagram.com/torontoravecommunity" target="_blank"><i class="fa fa-fw fa-soundcloud"></i></a></li>
@@ -82,6 +82,15 @@ function dbm_navbar() { ?>
 
 	<?php }
 
+	function get_current_site_subdomain() {
+		$blogId = get_current_blog_id();
+		if($blogId == 1) { return 'db'; }
+
+		$blog_info = get_blog_details($blogId);
+		$blog_name = explode('.', $blog_info->domain)[0];
+
+		return $blog_name;
+	}
 
 
 
@@ -91,25 +100,28 @@ function dbm_navbar() { ?>
 			<?php
 
 			$channels = array(
-				'0' => array('attack', 'Attack', 'http://daily-beat.com'),
-				'1' => array('beatmersive', 'Beatmersive', 'http://beatmersive.com'),
-				'3' => array('headliners', 'Headliners Tribune', 'http://dailybeatmedia.com'),
-				'2' => array('fnt', 'Fresh New Tracks', 'http://freshnewtracks.com'),
-				'4' => array('rr', 'Raver Rafting', 'http://raverrafting.daily-beat.com'),
-				'5' => array('trc', 'Toronto Rave Community', 'http://trc.daily-beat.com')
+				'db' => array('Daily Beat', 'http://daily-beat.com'),
+				'attack' => array('Attack', 'http://daily-beat.com'),
+				'beatmersive' => array('Beatmersive', 'http://beatmersive.com'),
+				'headliners' => array('Headliners Tribune', 'http://dailybeatmedia.com'),
+				'fnt' => array('Fresh New Tracks', 'http://freshnewtracks.com'),
+				'rafting' => array('Raver Rafting', 'http://raverrafting.daily-beat.com'),
+				'trc' => array('Toronto Rave Community', 'http://trc.daily-beat.com')
 				);		
 
 			$corporate = array(
-				'1' => array('dbm', 'Daily Beat Media', 'http://dailybeatmedia.com')
+				'dbm' => array('Daily Beat Media', 'http://dailybeatmedia.com')
 				);
+
+			unset($channels[get_current_site_subdomain()]);
 
 			?>	
 
 			<h2><span>Channels</span></h2>
 			<ul class="sites">
 				<?php foreach($channels as $key => $logo) {
-					echo '<li><a href="' . $logo[2] .'" title="' . $logo[1] . '">';
-					echo '<span class="svg svg-icon svg-' . $logo[0] . '-icon"></span><span class="svg svg-logo svg-' . $logo[0] . '-grey"></span>';		
+					echo '<li><a href="' . $logo[1] .'" title="' . $logo[0] . '">';
+					echo '<span class="svg svg-icon svg-' . $key . '-icon-grey"></span><span class="svg svg-logo svg-' . $key . '-logo-grey"></span>';		
 					echo '</a></li>';
 					echo '<li class="divider"></li>';
 				}
@@ -119,8 +131,8 @@ function dbm_navbar() { ?>
 			<h2><span>Corporate</span></h2>
 			<ul class="sites">
 				<?php foreach($corporate as $key => $logo) {
-					echo '<li><a href="' . $logo[2] .'" title="' . $logo[1] . '">';
-					echo '<span class="svg svg-icon svg-' . $logo[0] . '-icon"></span><span class="svg svg-logo svg-' . $logo[0] . '-grey"></span>';		
+					echo '<li><a href="' . $logo[1] .'" title="' . $logo[0] . '">';
+					echo '<span class="svg svg-icon svg-' . $key . '-icon-grey"></span><span class="svg svg-logo svg-' . $key . '-logo-grey"></span>';		
 					echo '</a></li>';
 					echo '<li class="divider"></li>';
 				}
@@ -190,6 +202,7 @@ function dbm_navbar() { ?>
 
 			<?php
 		}
+
 
 
 		?>

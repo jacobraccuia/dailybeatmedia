@@ -1,0 +1,38 @@
+/*
+Theme Name: FNT Channel Theme
+Description: Fresh New Tracks
+Author: Jacob
+Template: Channel
+*/
+
+$pink: #FE626A;
+$blue: #00E2CF;
+$darkblue: #5784E0;
+$black: #303030;
+$gradient-gray: #2b2b2b;
+$gradient-black: #010101;
+$body-gray: #E8EDF7;
+
+$attack: #999;
+$attack-dark: #454545;
+$beatmersive: #00E2CF;
+$beatmersive-dark: #5784E0;
+$headliners: #00B3DD;
+$headliners-dark: #0068DD;
+$trc: #E81A1A;
+$trc-dark: #9C1A1A;
+$fnt: #007A73;
+$fnt-dark: #007A73;
+$rr: #6CBD4D;
+$rr-dark: #53913B;
+
+
+/* set gradients */
+.nav-border { background:linear-gradient(to right, $fnt, $fnt-dark); }
+#page-progress { background:linear-gradient(to right, $fnt, $fnt-dark); }
+#veggie.menu-active { background:$fnt; background-image:linear-gradient(to bottom, $fnt-dark, $fnt); }
+#cabinet h2 span { background: -webkit-gradient(linear, 0 0, 100% 100%, from($fnt), to($fnt-dark)); }
+#player_button:hover, #player_button.open { background:$blue; background-image:linear-gradient(to bottom, $fnt, $fnt-dark); }
+.h-icon.divider { background:$fnt-dark; background-image:linear-gradient(to bottom, $fnt, $fnt-dark); }
+.footer-border { background-color:$fnt; background:linear-gradient(to right, $fnt, $fnt-dark); }
+footer .divider { background:linear-gradient(to right, $fnt, $fnt-dark); }

@@ -4,15 +4,15 @@
 
 
 function dbm_player() { ?>
-	<div id="player">
-		<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>
-		<div class="sc-player-wrapper">
-			<?php get_fnt_for_player(); ?>
-		</div>
-		<div class="offpage-fa-fix"><i class="fa fa-pause-circle"></i></div>
+<div id="player">
+	<div class="loading"><i class="fa fa-spinner fa-pulse"></i></div>
+	<div class="sc-player-wrapper">
+		<?php get_fnt_for_player(); ?>
 	</div>
+	<div class="offpage-fa-fix"><i class="fa fa-pause-circle"></i></div>
+</div>
 
-	<?php }
+<?php }
 
 
 
@@ -27,75 +27,73 @@ function build_track_data($track_url = '', $track = '', $artist = '', $artist_me
 	$artist_soundcloud = isset($artist_meta['artist_soundcloud']) ? $artist_meta['artist_soundcloud'] : '';
 
 	return 'data-track-url="' . $track_url 
-		. '" data-track="' . $track
-		. '" data-title="' . $track
-		. '" data-artist="' . $artist
-		. '" data-thumb-url="' . $thumb_url
-		. '" data-artist-instagram="' . $artist_instagram
-		. '" data-artist-twitter="' . $artist_twitter
-		. '" data-artist-soundcloud="' . $artist_soundcloud
-		. '"';
+	. '" data-track="' . $track
+	. '" data-title="' . $track
+	. '" data-artist="' . $artist
+	. '" data-thumb-url="' . $thumb_url
+	. '" data-artist-instagram="' . $artist_instagram
+	. '" data-artist-twitter="' . $artist_twitter
+	. '" data-artist-soundcloud="' . $artist_soundcloud
+	. '"';
 }
-	
+
 
 
 // maybe eventually merge with fresh new tracks content call so we don't make two calls for same data
-	function get_fnt_for_player($args = array()) {
-		global $exclude_posts;
+function get_fnt_for_player($args = array()) {
 
-		$defaults = array(
-			'offset' => 0,
-			'posts_per_page' => 10,
-			);
+	$defaults = array(
+		'offset' => 0,
+		'posts_per_page' => 10,
+		);
 
 	// merge arguments with defaults && set keys as variables
-		$args = array_merge($defaults, $args);
-		foreach($args as $key => $val) { ${$key} = $val; }
+	$args = array_merge($defaults, $args);
+	foreach($args as $key => $val) { ${$key} = $val; }
 
-		$blogID = get_blog_by_name('freshnewtracks');
-		switch_to_blog($blogID);
+	$blogID = get_blog_by_name('freshnewtracks');
+	switch_to_blog($blogID);
 
-		$exclude = $exclude_posts[$blogID];
-		$args = array(
-			'posts_per_page' => $posts_per_page,
+	$args = array(
+		'posts_per_page' => $posts_per_page,
 		//'offset' => $offset,
-			'post_status' => 'publish',
-			'post_type' => 'tracks',
-			);
+		'post_status' => 'publish',
+		'post_type' => 'tracks',
+		);
 
-		$i = '';
-		$query = new WP_Query($args);
-		while($query->have_posts()) { $query->the_post();
+	$i = '';
+	$query = new WP_Query($args);
+	while($query->have_posts()) { $query->the_post();
 
-			$id = get_the_ID();
+		$id = get_the_ID();
 
-			$artist = get_post_meta($id, 'track_artist_name', true);
-			$track = get_post_meta($id, 'track_name', true);
-			$remixer = get_post_meta($id, 'track_remixer', true);
-			$track_url = get_post_meta($id, 'track_url', true);
-			$track_artist_id = get_post_meta($id, 'db_featured_artist_id', true);
+		$artist = get_post_meta($id, 'track_artist_name', true);
+		$track = get_post_meta($id, 'track_name', true);
+		$remixer = get_post_meta($id, 'track_remixer', true);
+		$track_url = get_post_meta($id, 'track_url', true);
+		$track_artist_id = get_post_meta($id, 'db_featured_artist_id', true);
 
-			$artist_meta = array();
-			if(is_numeric($track_artist_id)) {
-				$artist_meta = get_artist_fields($track_artist_id, $blogID);
-			}
-
-			if($remixer != '') {
-				$track .= ' (' . $remixer . ' Remix)';
-			}
-
-			$class = 'queue_track';
-			if($i == '') {
-				$class = 'sc-player';
-			}
-
-			echo '<a href="' . $track_url . '" ' . build_track_data($track_url, $track, $artist, $artist_meta) . ' class="' . $class . '">' . $track . '</a>';
-
-			$i++;	
+		$artist_meta = array();
+		if(is_numeric($track_artist_id)) {
+			$artist_meta = get_artist_fields($track_artist_id, $blogID);
 		}
 
-		reset_blog();
+		if($remixer != '') {
+			$track .= ' (' . $remixer . ' Remix)';
+		}
+
+		$class = 'queue_track';
+		if($i == '') {
+			$class = 'sc-player';
+		}
+
+		echo '<a href="' . $track_url . '" ' . build_track_data($track_url, $track, $artist, $artist_meta) . ' class="' . $class . '">' . $track . '</a>';
+
+		$i++;	
 	}
+
+	reset_blog();
+}
 
 
 
@@ -132,9 +130,9 @@ function single_artist_widget($id) {
 	<div class="single-artist-widget">
 		<?php if($artist_sponsor != '') { ?>
 		<div class="artist-sponsor">Presented by <img src="<?php echo $artist_sponsor; ?>" /></div>
-			<?php } ?>
+		<?php } ?>
 		<h2>Featured Artist <span><?php echo $artist_name; ?></span></h2>
-		<div class="artist-image"><img src="<?php echo $thumb_url; ?>" /></div>
+		<div class="artist-image" style="background-image:url('<?php echo $thumb_url; ?>');"></div>
 		<ul class="social">
 			<?php if($artist_instagram != '') { echo '<li class="instagram">' . social_media('instagram', $artist_instagram) . '</li>'; } ?>
 			<?php if($artist_twitter != '') { echo '<li class="twitter">' . social_media('twitter', $artist_twitter) . '</li>'; } ?>
@@ -158,63 +156,64 @@ function single_artist_widget($id) {
 
 						// stripping separately just in case
 					$display = strstr($date->displayName, ' (', true);
-						$display = strstr($display, ' at ', true);
+					$display = strstr($display, ' at ', true);
 
-						$permalink = $date->uri;
+					$permalink = $date->uri;
 
-						if($display == '') { continue; }
+					if($display == '') { continue; }
 
-						$start = DateTime::createFromFormat('Y-m-d', $date->start->date);
-						$start_month = $start->format('M');
-						$start_day = $start->format('d');
+					$start = DateTime::createFromFormat('Y-m-d', $date->start->date);
+					$start_month = $start->format('M');
+					$start_day = $start->format('d');
 
-						echo '<li>';
-						echo '<div class="date"><div class="month">' . $start_month . '</div>' . $start_day . '</div>';
-						echo '<div class="details">';
-						echo '<a href="' . $permalink . '">' . $display . '</a>';
-						echo '<div class="location">at ' . $venue . '</div>';
-						echo '</div>';
-						echo '</li>';
-						$i++;
-						if($i > 4) { break; }
-					} 
-					?>
-				</ul>
-				<?php 
-			}
+					echo '<li>';
+					echo '<div class="date"><div class="month">' . $start_month . '</div>' . $start_day . '</div>';
+					echo '<div class="details">';
+					echo '<a href="' . $permalink . '">' . $display . '</a>';
+					echo '<div class="location">at ' . $venue . '</div>';
+					echo '</div>';
+					echo '</li>';
+					$i++;
+					if($i > 4) { break; }
+				} 
+				?>
+			</ul>
+			<?php
 			if($i > 4) {
 				?>
 				<a class="view-all" href="http://www.songkick.com/artists/<?php echo $artist_id; ?>" target="_blank">View All Tour Dates</a>
 				<?php } ?>
-			</div>
+				<?php 	
+			}		
+			?> 			
+		</div>
+		<?php
+	}
 
-			<?php 	
-		}
 
 
+	function get_artist_fields($id, $oldBlogID = 1) {
 
-function get_artist_fields($id, $oldBlogID = 1) {
-
-	$blogID = get_blog_by_name('artists');
-	min_switch_to_blog($blogID);
+		$blogID = get_blog_by_name('artists');
+		min_switch_to_blog($blogID);
 
 	// create array to return
-	$artist_vars = array();
-	
-	$artist = get_post($id);
+		$artist_vars = array();
 
-	$artist_vars['thumb_url'] =  wp_get_attachment_image_src(get_post_thumbnail_id($id), array(300,300))[0];
+		$artist = get_post($id);
 
-	$post_meta = get_post_custom($id);
+		$artist_vars['thumb_url'] =  wp_get_attachment_image_src(get_post_thumbnail_id($id), array(300,300))[0];
+
+		$post_meta = get_post_custom($id);
 
 	// assign all columns to variable
-	$artist_columns = artist_columns();
+		$artist_columns = artist_columns();
 
 	// in case value isn't set in database, set required variables to ''
-	foreach($artist_columns as $column) { $artist_vars[$column] = ''; }
+		foreach($artist_columns as $column) { $artist_vars[$column] = ''; }
 
 	// assign all fields
-	foreach($post_meta as $key => $meta) {
+		foreach($post_meta as $key => $meta) {
 		if(array_key_exists($key, array_flip($artist_columns))) { // if we want this key
 			if(isset($key) && !empty($key)) { $artist_vars[$key] = trim($meta[0]); } else $artist_vars[$key] = '';
 		}
@@ -226,49 +225,49 @@ function get_artist_fields($id, $oldBlogID = 1) {
 }
 
 function artist_columns() {
-		return array(
-			'artist_name',
-			'artist_id',
-			'artist_tour_dates',
-			'artist_twitter',
-			'artist_soundcloud',
-			'artist_instagram',
-			'artist_sponsor'
-			);
-	}
+	return array(
+		'artist_name',
+		'artist_id',
+		'artist_tour_dates',
+		'artist_twitter',
+		'artist_soundcloud',
+		'artist_instagram',
+		'artist_sponsor'
+		);
+}
 
-		add_action('init', 'db_ad_cpt');
-		function db_ad_cpt() {
-			register_post_type('ad_display',
-				array(
-					'labels' => array(
-						'name' => __('Advertisement'),
-						'singular_name' => __( 'Advertisements' ),
-						'menu_name' => __( 'Ads' ),
-						'all_items' => __( 'All Ads' ),
-						'add_new' => __( 'Add New Ad' ),
-						'add_new_item' => __( 'Add New Advertisement' ),
-						'edit_item' => __( 'Edit Ad' ),
-						'new_item' => __( 'New Ad' ),
-						'view_item' => __( 'View Ad' ),
-						'search_items' => __( 'Search Ad' ),
-						'not_found' => __( 'Ad Not Found' ),
-						'not_found_in_trash' => __( 'Ad Not Found In Trash' ),
-						),
-					'public' => true,
-					'description' => 'Shows a new ad!',
-					'show_ui' => true,
-					'show_in_menu' => true,
-					'capability_type' => 'post',
-					'hierarchical' => false,
-					'rewrite' => array('slug' => 'ads'),
-					'query_var' => true,
-					'supports' => array('title', 'thumbnail'),
-					'menu_position' => 10,
-					'has_archive' => true,
-					)
-				);
-		}
+add_action('init', 'db_ad_cpt');
+function db_ad_cpt() {
+	register_post_type('ad_display',
+		array(
+			'labels' => array(
+				'name' => __('Advertisement'),
+				'singular_name' => __( 'Advertisements' ),
+				'menu_name' => __( 'Ads' ),
+				'all_items' => __( 'All Ads' ),
+				'add_new' => __( 'Add New Ad' ),
+				'add_new_item' => __( 'Add New Advertisement' ),
+				'edit_item' => __( 'Edit Ad' ),
+				'new_item' => __( 'New Ad' ),
+				'view_item' => __( 'View Ad' ),
+				'search_items' => __( 'Search Ad' ),
+				'not_found' => __( 'Ad Not Found' ),
+				'not_found_in_trash' => __( 'Ad Not Found In Trash' ),
+				),
+			'public' => true,
+			'description' => 'Shows a new ad!',
+			'show_ui' => true,
+			'show_in_menu' => true,
+			'capability_type' => 'post',
+			'hierarchical' => false,
+			'rewrite' => array('slug' => 'ads'),
+			'query_var' => true,
+			'supports' => array('title', 'thumbnail'),
+			'menu_position' => 10,
+			'has_archive' => true,
+			)
+		);
+}
 
 
-	?>
+?>

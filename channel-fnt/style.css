@@ -1,0 +1,17 @@
+/*
+Theme Name: FNT Channel Theme
+Description: Fresh New Tracks
+Author: Jacob
+Template: Channel
+*/
+
+
+/* set gradients */
+.nav-border { background:-webkit-linear-gradient(left, #007A73, #007A73); background:linear-gradient(to right, #007A73, #007A73); }
+#page-progress { background:-webkit-linear-gradient(left, #007A73, #007A73); background:linear-gradient(to right, #007A73, #007A73); }
+#veggie.menu-active { background:#007A73; background-image:-webkit-linear-gradient(top, #007A73, #007A73); background-image:linear-gradient(to bottom, #007A73, #007A73); }
+#cabinet h2 span { background: -webkit-gradient(linear, 0 0, 100% 100%, from(#007A73), to(#007A73)); }
+#player_button:hover, #player_button.open { background:#00E2CF; background-image:-webkit-linear-gradient(top, #007A73, #007A73); background-image:linear-gradient(to bottom, #007A73, #007A73); }
+.h-icon.divider { background:#007A73; background-image:-webkit-linear-gradient(top, #007A73, #007A73); background-image:linear-gradient(to bottom, #007A73, #007A73); }
+.footer-border { background-color:#007A73; background:-webkit-linear-gradient(left, #007A73, #007A73); background:linear-gradient(to right, #007A73, #007A73); }
+footer .divider { background:-webkit-linear-gradient(left, #007A73, #007A73); background:linear-gradient(to right, #007A73, #007A73); }

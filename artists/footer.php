@@ -22,7 +22,7 @@
 	<ul class="brand-wrapper">
 		<li class="svg svg-dbm"></li>
 		<li class="svg svg-trc"></li>
-		<li class="svg svg-rr"></li>
+		<li class="svg svg-rafting"></li>
 		<li class="svg svg-beatsxtra"></li>
 		<li class="svg svg-db"></li>
 	</ul>

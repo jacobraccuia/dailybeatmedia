@@ -9,14 +9,15 @@ if(have_posts()): while(have_posts()): the_post();
 
 $id = get_the_ID();
 
-$category = get_primary_category($id);
+$cat = new WPSEO_Primary_Term('category', get_the_ID());
+$category = get_term($cat->get_primary_term());
 
 $author_id = get_the_author_meta('ID');
 $author_username = get_the_author_meta('display_name');
 
 $artist_id = get_post_meta($id, 'db_featured_artist_id', true);
 
-exclude_this_post(1, $id);
+exclude_this_post($id);
 
 $permalink = get_permalink();
 
@@ -102,7 +103,7 @@ $permalink = get_permalink();
 				$tag_ids = '';
 				$tags = get_the_tags();
 				foreach((array) $tags as $tag) {
-					$tag_ids = $tag->name . ',';
+				//	$tag_ids = $tag->name . ',';
 				}
 
 				$x = 'edm, avicii';

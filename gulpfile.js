@@ -3,6 +3,9 @@ var notify = require('gulp-notify');
 var gutil = require('gulp-util');
 var ftp = require('vinyl-ftp');
 
+var path = require('path');
+var merge = require('merge-stream');
+
 var runSequence = require('run-sequence');
 
 // CSS
@@ -17,7 +20,15 @@ var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 
+
 // NOTE re work gulp watches for each stage.
+
+// currently have to call each one to get it to work.
+// chaining here. my god this is awful
+
+// for dbv3 theme work
+gulp.task('all', ['plugin', 'default', 'channel'], function() {});
+
 
 // for dbv3 theme work
 gulp.task('default', ['deploy', 'css', 'db_js'], function() {
@@ -74,12 +85,43 @@ gulp.task('ch_css', function() {
 
 // js
 gulp.task('ch_js', function() {
-    return gulp.src(['channel/src/js/scripts.js'])
+    return gulp.src(['channel/src/js/*.js'])
         .pipe(concat('concat.js'))
         .pipe(rename('scripts.js'))
         //.pipe(uglify())
         .pipe(gulp.dest('channel/js'));
 });
+
+
+
+
+var folders = ['channel-rafting', 'channel-fnt'];
+
+// for channel theme work
+gulp.task('children', ['deploy_children', 'children-css'], function() {
+    gulp.watch('channel-rafting/src/css/*.css', {debounceDelay: 2000}, ['children-css']);
+    gulp.watch('channel-fnt/src/css/*.css', {debounceDelay: 2000}, ['children-css']);
+    gulp.watch('**',  {debounceDelay: 2000}, ['deploy_children']);
+
+});
+
+gulp.task('children-css', function(){
+
+    var tasks = folders.map(function(element){
+
+      var processors = [
+            autoprefixer({ browsers: ['> 5%'] }),
+            precss
+        ];
+
+        return gulp.src(element + '/src/css/*.css')
+        .pipe(postcss(processors))
+        .pipe(gulp.dest(element));
+    });
+
+    return merge(tasks);
+});
+
 
 
 
@@ -259,6 +301,37 @@ gulp.task('deploy_channel', function() {
     var globs = [
     'channel/**',
     'channel',
+    '!dailybeat_v3.0/**',
+    '!dailybeat_v3.0',
+    '!gulpfile.js',
+    '!node_modules/**',
+    '!node_modules',
+    '!package.json',
+    '!README.md',
+    '!dbm.sublime-project',
+    '!.gitignore'
+    ];
+
+
+    return gulp.src(globs, { base: '.', buffer: false })
+        .pipe(conn.newer('/dev/wp-content/themes/')) // only upload newer files 
+        .pipe(conn.dest('/dev/wp-content/themes/'))
+        .pipe(conn.mode('/dev/wp-content/themes/', '0664'));
+
+});
+
+
+
+gulp.task('deploy_children', function() {
+
+    // using base = '.' will transfer everything to /public_html correctly 
+    // turn off buffering in gulp.src for best performance     
+
+    var globs = [
+    'channel-rafting/**',
+    'channel-rafting',
+    'channel-fnt/**',
+    'channel-fnt',
     '!dailybeat_v3.0/**',
     '!dailybeat_v3.0',
     '!gulpfile.js',

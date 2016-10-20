@@ -138,7 +138,7 @@ input {}
 /* svg alignment */
 .sites .svg-trc-grey { padding-left:75px; }
 .sites .svg-dbm-grey { padding-left:130px; margin-top:2px; }
-.sites .svg-rr-grey { padding-left:120px; }
+.sites .svg-rafting-grey { padding-left:120px; }
 .sites .svg-beatmersive-grey { padding-left:126px; }
 .sites .svg-fnt-grey { padding-left:125px; }
 .sites .svg-headliners-grey { padding-left:110px; vertical-align:bottom; }
@@ -590,14 +590,14 @@ ul.brand-wrapper { display:block; width:100%; background:white; height:30px; lis
 .svg-trc { background-image:url(images/svg/torontorc_logo.svg); background-color:black; width:98px; height:15px; }
 .svg-db { background-image:url(images/svg/db_logo.svg); width:50px; height:14px; }
 .svg-dbm { background-image:url(images/svg/dbm_logo.svg); width:55px; }
-.svg-rr { background-image:url(images/svg/raverrafting_logo_teal.svg); width:84px; height:15px; }
+.svg-rafting { background-image:url(images/svg/raverrafting_logo_teal.svg); width:84px; height:15px; }
 
 .post-meta .svg-trc { height:13px; width:106px; margin-left:-2px; }
 .trending-topic .svg-trc { height:22px; width:180px; margin-left:-2px; }
 .read-more .svg-trc { height:14px; width:115px; margin-left:1px; }
 
-.post-meta .svg-rr { height:13px; width:75px; }
-.trending-topic .svg-rr { height:25px; width:140px; }
+.post-meta .svg-rafting { height:13px; width:75px; }
+.trending-topic .svg-rafting { height:25px; width:140px; }
 
 .svg-trending { background:url(images/svg/trending.svg) no-repeat transparent; background-size:contain; }
 
@@ -605,7 +605,7 @@ ul.brand-wrapper { display:block; width:100%; background:white; height:30px; lis
 
 .svg-trc-grey { background-image:url(images/svg/logos/grey/trc.svg); }
 .svg-dbm-grey { background-image:url(images/svg/logos/grey/dbm.svg); }
-.svg-rr-grey { background-image:url(images/svg/logos/grey/raverrafting.svg); }
+.svg-rafting-grey { background-image:url(images/svg/logos/grey/raverrafting.svg); }
 .svg-beatmersive-grey { background-image:url(images/svg/logos/grey/beatmersive.svg); }
 .svg-fnt-grey { background-image:url(images/svg/logos/grey/freshnewtracks.svg); }
 .svg-headliners-grey { background-image:url(images/svg/logos/grey/headliners.svg); }
@@ -613,7 +613,7 @@ ul.brand-wrapper { display:block; width:100%; background:white; height:30px; lis
 
 .svg-trc-icon { background-image:url(images/svg/logos/icon/trc.svg); }
 .svg-dbm-icon { background-image:url(images/svg/logos/icon/dbm.svg); }
-.svg-rr-icon { background-image:url(images/svg/logos/icon/raverrafting.svg); }
+.svg-rafting-icon { background-image:url(images/svg/logos/icon/raverrafting.svg); }
 .svg-beatmersive-icon { background-image:url(images/svg/logos/icon/beatmersive.svg); }
 .svg-fnt-icon { background-image:url(images/svg/logos/icon/freshnewtracks.svg); }
 .svg-headliners-icon { background-image:url(images/svg/logos/icon/headliners.svg); }

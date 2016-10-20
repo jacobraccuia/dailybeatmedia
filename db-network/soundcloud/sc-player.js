@@ -1104,9 +1104,6 @@ function big_waveform(track_position, mouse_position) {
 
   if(typeof mouse_position == 'undefined') { mouse_position = window.mouse_position_x; }
 
-  var color = '00E2CF';
-  color = hex_to_rgb(color);
-
   var peaks = 1;
   if(typeof window.sc_data !== 'undefined' && window.sc_data !== null && window.sc_data.length) {
     peaks = 1 / window.sc_data.length;
@@ -1122,28 +1119,28 @@ function big_waveform(track_position, mouse_position) {
         // if mouse is ahead of song
         if(mouse_position > waveform_position) {
           if(track_position > waveform_position) {
-            return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .8)';
+            return 'rgba(' + getGradientColor(window.color_light, window.color_dark, track_position) + ', .8)';
           } else if(track_position < mouse_position) { 
-            return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .6)';
+            return 'rgba(' + getGradientColor(window.color_light, window.color_dark, track_position) + ', .6)';
           }
         } else {
           // if mouse is not on the waveform 
           if(mouse_position == 0) {
             if(track_position > waveform_position) {
 
-              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .8)';
+              return 'rgba(' + getGradientColor(window.color_light, window.color_dark, track_position) + ', .8)';
              // return 'rgba(' + color + ', .9)';
             } else if(track_position + peaks > waveform_position) { // super transparent one bar ahead of song
-              return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .4)';
+              return 'rgba(' + getGradientColor(window.color_light, window.color_dark, track_position) + ', .4)';
             } else {
               return 'unplayed'; //rgba(255, 255, 255, 0.3)'; // unplayed
             }
           }
           // if mouse is stationary
           else if(track_position > waveform_position) {
-            return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .6)';
+            return 'rgba(' + getGradientColor(window.color_light, window.color_dark, track_position) + ', .6)';
           } else if(track_position + peaks > waveform_position) { // super transparent one bar ahead of song
-            return 'rgba(' + getGradientColor('00E2CF', '5784E0', track_position) + ', .4)';
+            return 'rgba(' + getGradientColor(window.color_light, window.color_dark, track_position) + ', .4)';
           } else {
             return 'unplayed'; //rgba(255, 255, 255, 0.3)'; // unplayed
           }
@@ -1167,6 +1164,7 @@ function get_cursor_position(canvas, event) {
 
 
 getGradientColor = function(start_color, end_color, percent) {
+
    // strip the leading # if it's there
    start_color = start_color.replace(/^\s*#|\s*$/g, '');
    end_color = end_color.replace(/^\s*#|\s*$/g, '');
@@ -1209,6 +1207,7 @@ getGradientColor = function(start_color, end_color, percent) {
      diff_blue = '0' + diff_blue
 
    return hex_to_rgb('#' + diff_red + diff_green + diff_blue);
+
  };
 
 
@@ -1225,7 +1224,8 @@ getGradientColor = function(start_color, end_color, percent) {
   return r + "," + g + "," + b;
 }
 
-
+window.color_light = sc_params.color_light;
+window.color_dark = sc_params.color_dark;
 
 function c(x) {
 	console.log(x);	

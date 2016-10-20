@@ -14,6 +14,24 @@ get_header();
 
 ?>
 
-<?php echo get_current_blog_id(); ?>
+<section id="content" class="news">
+	<?php get_sidebar(); ?>
+
+	<div class="col-offset-center">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="row post-wrapper exclusive-wrapper full-width-wrapper">
+					<?php get_exclusive_post(); ?>
+				</div>
+
+				<?php category_filter_posts(); ?>
+			</div>
+		</div>
+	</div>
+
+
+
+</section>
+
 
 <?php get_footer(); ?>

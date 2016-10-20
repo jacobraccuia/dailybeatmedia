@@ -1,54 +1,74 @@
 <?php
-// all post views
-
-global $exclude_posts;
-$exclude_posts = array();
-
-for($i = 1; $i <= 8; $i++) {
-	$exclude_posts[$i] = array(0);
-}
 
 // standard post layout
-function classic_post($blogID = 1, $args = array()) {
-	min_switch_to_blog($blogID);
+function classic_post($args = array()) {
 	$id = get_the_ID();
-	exclude_this_post($blogID, $id);
+	exclude_this_post($id);
 
 	$defaults = array(
-		'show_via' => true,
+		'blazy' => true,
 		);
 
 	// merge arguments with defaults && set keys as variables
 	$args = array_merge($defaults, $args);
 	foreach($args as $key => $val) { ${$key} = $val; }
 
-	$external = '';
-	if($blogID > 1) { $external = 'external-link'; }
-
-	$blog_name = blog_name($blogID);
-	$short_blog_name = short_blog_name($blog_name);
+	$cat = new WPSEO_Primary_Term('category', get_the_ID());
+	$cat = $cat->get_primary_term();
+	$cat_name = get_cat_name($cat);
+	$cat_link = get_category_link($cat);
+	
 
 	?>
 
 	<article class="classic-post">
 		<a href="<?php the_permalink(); ?>">
+			<?php if($blazy) { ?> 
 			<div class="featured-image" data-src="<?php echo get_thumb_url(350, 350); ?>"></div>
+			<?php } else { ?>
+			<div class="featured-image no-blazy b-loaded" style="background-image:url('<?php echo get_thumb_url(700, 700); ?>');"></div>
+			<?php } ?>
 		</a>
-		<?php if(1 == 1) { ?>
-		<div class="via-bar <?php echo $short_blog_name; ?>"><?php echo $blog_name; ?></div>
-		<?php } ?>
 		<div class="post-info">
 			<a href="<?php the_permalink(); ?>">
-				<h3 class="dotdotdot <?php echo $external; ?>"><?php the_title(); ?></h3>
+				<h3 class="dotdotdot"><?php the_title(); ?></h3>
 			</a>
 			<h6 class="post-meta">
-				<span class="timestamp"><?php the_timestamp(); ?></span> - <span class="author"><?php the_author_posts_link(); ?></span>
+				<span class="timestamp"><?php the_timestamp(); ?></span> - <span class="author"><?php the_author_posts_link(); ?> / <?php echo $cat_name; ?></span>
 			</h6>
 		</div>
 	</article>
 
 	<?php
 }
+
+
+
+// full post layout, image spans full width with text overlay
+function exclusive_post() {
+	$id = get_the_ID();
+	exclude_this_post($id);
+
+	$title = get_the_title();
+
+	?>
+
+	<article class="exclusive-post">
+		<a href="<?php the_permalink(); ?>">
+			<div class="featured-image" data-src="<?php echo get_thumb_url(900, 900); ?>"><?php /* <div class="spotlight-bg"></div> */ ?></div>
+		</a>
+		<div class="caption">
+			<h1><?php the_title(); ?></h1>
+			<h2><span class="author"><?php the_author_posts_link(); ?></h2>
+		</div>
+	</article>
+
+	<?php
+
+}
+
+
+
 
 // variant post layout
 function variant_post($blogID = 1, $args = array()) {
@@ -210,27 +230,6 @@ function video_post($blogID = 1, $args = array()) {
 	<?php
 }
 
-function exclusive_post($blogID = 1) {
-	min_switch_to_blog($blogID);
-	$id = get_the_ID();
-	exclude_this_post($blogID, $id);
-
-	$external = '';
-	if($blogID > 1) { $external = 'external-link'; }
-	?>
-
-	<article class="exclusive-post">
-		<a href="<?php the_permalink(); ?>">
-			<div class="featured-image" data-src="<?php echo get_thumb_url(900, 900); ?>"><?php /* <div class="spotlight-bg"></div> */ ?></div>
-		</a>
-		<div class="caption">
-			<h1 class="<?php echo $external; ?>"><?php the_title(); ?></h1>
-			<h2>by <span class="author"><?php the_author_posts_link(); if($blogID > 1) { ?> via <?php echo blog_svg($blogID); } ?></h2>
-		</div>
-	</article>
-	<?php
-}
-
 
 function list_post($blogID = 1) {
 	min_switch_to_blog($blogID);
@@ -372,6 +371,14 @@ function blog_svg($blogID = 1, $link = 1) {
 	echo '</div>';
 
 }
+/*
+function exclude_this_post($post_id) {
+	global $exclude_posts;
+	if($post_id == 0) { return; }
+	$exclude_posts[] = $post_id;
+}
+*/
+
 
 function blog_name($blogID = 1) {
 	$blog_details = get_blog_details($blogID);
@@ -389,18 +396,5 @@ function short_blog_name($blog_name) {
 	return strtolower($acronym);
 }
 
-
-
-function exclude_this_post($blogID, $post_id) {
-	global $exclude_posts;
-
-	if($blogID == 0 || $post_id == 0) { return; }
-
-	if(!isset($exclude_posts[$blogID])) {
-		$exclude_posts[$blogID] = array();
-	}
-
-	$exclude_posts[$blogID] = array_merge($exclude_posts[$blogID], array($post_id));
-}
 
 ?>

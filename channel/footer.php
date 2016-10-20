@@ -1,9 +1,4 @@
-<?php
-
-	//if(is_home()) {
-	//	get_ad('skin');
-	//}
-?>
+<?php dbm_footer(); ?>
 
 <?php /* tests...????
 global $broken_switch_posts, $reason, $exclude_posts; 

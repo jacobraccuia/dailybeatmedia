@@ -1,5 +1,49 @@
 jQuery(document).ready(function($) {
 
+
+	/** this code was on daily-beat but i moved here.. **/
+
+	// scripts that need to be called on every page load
+	window.global_scripts = function(reload) {
+
+		$('#navbar').affix({
+			offset: { top: 0 }
+		});
+
+		bLazy = new Blazy({
+		    selector: '.featured-image:not(.no-blazy), .blazy', // all images
+		    offset: 100
+		});
+
+		// what does this do.
+		$('.handle').on('click', function(e) {
+			e.stopPropagation();
+			if($('.nav-slide').hasClass('open')) { 
+				$('.nav-slide').removeClass('open');
+				return;
+			}
+			
+			$('.nav-slide').addClass('open');
+
+		});
+
+		/* truncate meeeee */
+		$('.post-wrapper .post-info .dotdotdot').dotdotdot({
+			watch: 'window'
+		});
+
+	}
+
+	global_scripts();
+
+	setInterval(function() {
+		// refresh images every 5 min
+		bLazy.revalidate();
+	}, 5 * 60 * 1000);
+
+
+
+
 	setTimeout(function() {
 		$.post(
 			DB_Ajax.ajaxurl, {

@@ -89,7 +89,7 @@ get_header();
 
 					<div class="row post-wrapper rr-wrapper">
 						<div class="col-xs-12">		
-							<div class="trending-topic"><span class="svg <?php echo 'svg-rr'; //$svg; ?>"></span><span class="trending-slogan">WE ARE THE SCENE</span></div>
+							<div class="trending-topic"><span class="svg <?php echo 'svg-rafting'; //$svg; ?>"></span><span class="trending-slogan">WE ARE THE SCENE</span></div>
 						</div>
 
 						<?php get_brand_posts('raver'); ?>
@@ -135,7 +135,7 @@ get_header();
 
 				<div class="row post-wrapper rr-wrapper">
 					<div class="col-xs-12">		
-						<div class="trending-topic"><span class="svg <?php echo 'svg-rr'; //$svg; ?>"></span><span class="trending-slogan">HEADLINERS TRIBUNE</span></div>
+						<div class="trending-topic"><span class="svg <?php echo 'svg-rafting'; //$svg; ?>"></span><span class="trending-slogan">HEADLINERS TRIBUNE</span></div>
 					</div>
 
 					<?php get_brand_posts('daily-beat'); ?>
